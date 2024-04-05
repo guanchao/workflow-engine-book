@@ -1,9 +1,10 @@
 module.exports = {
   title: '流程引擎原理与实践',
   description: '国内首本从工程角度系统性介绍流程引擎的技术体系',
+  base: '/workflow-engine-book/',
   themeConfig: {
     logo: '/favicon.png',
-    lastUpdated: 'Last Updated',
+    lastUpdated: '最后更新',
     nav: [
        {
           text: '目录',
