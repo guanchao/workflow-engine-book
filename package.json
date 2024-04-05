@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "vuepress": "^1.9.10"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "dependencies": {
+    "vuepress-theme-sidebar": "^0.1.0"
+  }
+}
