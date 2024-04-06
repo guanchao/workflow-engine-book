@@ -10,7 +10,7 @@ jobs:
     - name: vuepress-deploy
       uses: jenkey2011/vuepress-deploy@master
       env:
-        ACCESS_TOKEN: ${{ secrets.WORKFLOW_ENGINE_BOOK }}
+        ACCESS_TOKEN: WORKFLOW_ENGINE_BOOK
         TARGET_REPO: guanchao/workflow-engine-book
         TARGET_BRANCH: main
         BUILD_SCRIPT: yarn && yarn docs:build
