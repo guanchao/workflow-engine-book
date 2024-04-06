@@ -8,10 +8,10 @@ jobs:
       uses: actions/checkout@main
 
     - name: vuepress-deploy
-      uses: jenkey2011/vuepress-deploy@main
+      uses: guanchao/workflow-engine-book@main
       env:
         ACCESS_TOKEN: ${{ secrets.WORKFLOW_ENGINE_BOOK }}
         TARGET_REPO: guanchao/workflow-engine-book
         TARGET_BRANCH: main
-        BUILD_SCRIPT: yarn && yarn docs:build
+        BUILD_SCRIPT: yarn docs:build
         BUILD_DIR: docs/.vuepress/dist
