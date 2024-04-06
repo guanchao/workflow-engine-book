@@ -5,13 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@master
 
     - name: vuepress-deploy
-      uses: guanchao/workflow-engine-book@main
+      uses: jenkey2011/vuepress-deploy@master
       env:
         ACCESS_TOKEN: ${{ secrets.WORKFLOW_ENGINE_BOOK }}
         TARGET_REPO: guanchao/workflow-engine-book
         TARGET_BRANCH: main
-        BUILD_SCRIPT: yarn docs:build
+        BUILD_SCRIPT: yarn && yarn docs:build
         BUILD_DIR: docs/.vuepress/dist
