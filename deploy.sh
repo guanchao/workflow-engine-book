@@ -14,6 +14,6 @@ git add -A
 git commit -m 'deploy'
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:guanchao/workflow-engine-book.git master:pages
+git push -f git@github.com:guanchao/workflow-engine-book.git main:pages
 
 cd -

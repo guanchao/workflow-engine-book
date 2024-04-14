@@ -2,6 +2,19 @@ module.exports = {
   title: '流程引擎原理与实践',
   description: '国内首本从工程角度系统性介绍流程引擎的技术体系',
   base: '/',
+  head: [
+      [
+        'script', {}, `
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>`
+      ]
+    ],
   themeConfig: {
     logo: '/favicon.png',
     lastUpdated: '最后更新',
