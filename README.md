@@ -6,7 +6,7 @@
 
 # 第一部份：流程引擎基础
 
-##  1 引言
+##  1 [引言](https://workflow-engine-book.shuwoom.com/1-%E5%BC%95%E8%A8%80.html)
 
 ### 1.1 流程引擎的发展历史
 
@@ -18,7 +18,7 @@
 
 
 
-## 2 概念
+## 2 [概念](https://workflow-engine-book.shuwoom.com/2-%E6%A6%82%E5%BF%B5.html)
 
 ### 2.1 基础概念
 
@@ -28,25 +28,25 @@
 
 ## 3 流程建模和解析
 
-### 3.1 流程建模语言发展概述
+### 3.1 [流程建模语言发展概述](https://workflow-engine-book.shuwoom.com/3.1-%E6%B5%81%E7%A8%8B%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80%E5%8F%91%E5%B1%95%E6%A6%82%E8%BF%B0.html)
 
 ### 3.2 流程建模
 
-#### 3.2.1 流程定义
+#### 3.2.1 [流程定义](https://workflow-engine-book.shuwoom.com/3.2-%E6%B5%81%E7%A8%8B%E5%BB%BA%E6%A8%A1-%E6%B5%81%E7%A8%8B%E5%AE%9A%E4%B9%89.html)
 
-#### 3.2.2 事件节点定义
+#### 3.2.2 [事件节点定义](https://workflow-engine-book.shuwoom.com/3.2-%E6%B5%81%E7%A8%8B%E5%BB%BA%E6%A8%A1-%E4%BA%8B%E4%BB%B6%E8%8A%82%E7%82%B9%E5%AE%9A%E4%B9%89.html)
 
-#### 3.2.3 任务节点定义
+#### 3.2.3 [任务节点定义](https://workflow-engine-book.shuwoom.com/3.2-%E6%B5%81%E7%A8%8B%E5%BB%BA%E6%A8%A1-%E4%BB%BB%E5%8A%A1%E8%8A%82%E7%82%B9%E5%AE%9A%E4%B9%89.html)
 
-#### 3.2.4 网关节点定义
+#### 3.2.4 [网关节点定义](https://workflow-engine-book.shuwoom.com/3.2-%E6%B5%81%E7%A8%8B%E5%BB%BA%E6%A8%A1-%E7%BD%91%E5%85%B3%E8%8A%82%E7%82%B9%E5%AE%9A%E4%B9%89.html)
 
-### 3.3 生命周期
+### 3.3 [生命周期](https://workflow-engine-book.shuwoom.com/3.3-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.html)
 
 #### 3.3.1 任务的生命周期
 
 #### 3.3.2 流程的生命周期
 
-### 3.4 流程模型的解析
+### 3.4 [流程模型的解析](https://workflow-engine-book.shuwoom.com/3.4-%E6%B5%81%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%A7%A3%E6%9E%90.html)
 
 ### 3.5 与BPMN的比较
 
@@ -57,27 +57,27 @@
 
 ## 4 流程引擎的核心组件
 
-### 4.1 WFMC工作流参考模型
+### 4.1 [WFMC工作流参考模型](https://workflow-engine-book.shuwoom.com/4.1-WFMC%E5%B7%A5%E4%BD%9C%E6%B5%81%E5%8F%82%E8%80%83%E6%A8%A1%E5%9E%8B.html)
 
 ### 4.2 任务调度机制
 
-#### 4.2.1 DAG调度算法原理与实践
+#### 4.2.1 [DAG调度算法原理与实践](https://workflow-engine-book.shuwoom.com/4.2.1-DAG%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5.html)
 
-#### 4.2.2 开源Airflow DAG调度算法剖析
+#### 4.2.2 [开源Airflow DAG调度算法剖析](https://workflow-engine-book.shuwoom.com/4.2.2-%E5%BC%80%E6%BA%90Airflow%20DAG%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E5%89%96%E6%9E%90.html)
 
-#### 4.2.3 FSM调度算法原理与实践
+#### 4.2.3 [FSM调度算法原理与实践](https://workflow-engine-book.shuwoom.com/4.2.3-FSM%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5.html)
 
-#### 4.2.4 开源OSWorkflow FSM调度算法剖析
+#### 4.2.4 [开源OSWorkflow FSM调度算法剖析](https://workflow-engine-book.shuwoom.com/4.2.4-%E5%BC%80%E6%BA%90OSWorkflow%20FSM%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E5%89%96%E6%9E%90.html)
 
-#### 4.2.5 Petri网调度算法原理与实践
+#### 4.2.5 [Petri网调度算法原理与实践](https://workflow-engine-book.shuwoom.com/4.2.5-Petri%E7%BD%91%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5.html)
 
-#### 4.2.6 开源YAWL Petri网调度算法剖析
+#### 4.2.6 [开源YAWL Petri网调度算法剖析](https://workflow-engine-book.shuwoom.com/4.2.6-%E5%BC%80%E6%BA%90YAWL%20Petri%E7%BD%91%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E5%89%96%E6%9E%90.html)
 
-### 4.3 工作流模式-控制流模式
+### 4.3 [工作流模式-控制流模式](https://workflow-engine-book.shuwoom.com/4.3-%E5%B7%A5%E4%BD%9C%E6%B5%81%E6%A8%A1%E5%BC%8F-%E6%8E%A7%E5%88%B6%E6%B5%81%E6%A8%A1%E5%BC%8F.html)
 
-### 4.4 资源调度机制-资源模式
+### 4.4 [资源调度机制-资源模式](https://workflow-engine-book.shuwoom.com/4.4-%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E6%9C%BA%E5%88%B6-%E8%B5%84%E6%BA%90%E6%A8%A1%E5%BC%8F.html)
 
-### 4.5 数据管理机制-数据模式
+### 4.5 [数据管理机制-数据模式](https://workflow-engine-book.shuwoom.com/4.5-%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%BC%8F.html)
 
 ### 4.6 异常处理机制-异常处理模式
 
@@ -198,6 +198,3 @@
 
 
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>
-
-本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可。
