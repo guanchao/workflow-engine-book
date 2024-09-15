@@ -79,9 +79,9 @@
 
 ### 4.5 [数据管理机制-数据模式](https://workflow-engine-book.shuwoom.com/4.5-%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%BC%8F.html)
 
-### 4.6 异常处理机制-异常处理模式
+### 4.6 [异常处理机制-异常处理模式](https://workflow-engine-book.shuwoom.com/4.6-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F.html)
 
-### 4.7 引擎执行模式
+### 4.7 [引擎执行模式](https://workflow-engine-book.shuwoom.com/4.7-%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%BC%8F.html)
 
 
 
