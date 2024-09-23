@@ -84,24 +84,10 @@
 ### 4.7 [引擎执行模式](https://workflow-engine-book.shuwoom.com/4.7-%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%BC%8F.html)
 
 
+## 5 [事件驱动机制](https://workflow-engine-book.shuwoom.com/5-%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%9C%BA%E5%88%B6.html)
 
-## 5 事件驱动机制
+## 6 [核心表结构与接口设计](https://workflow-engine-book.shuwoom.com/6-%E6%A0%B8%E5%BF%83%E8%A1%A8%E7%BB%93%E6%9E%84%E4%B8%8E%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1.html)
 
-### 5.1 事件驱动架构
-
-### 5.2 基于Redis的轻量级综合实践
-
-### 5.3 基于Kafka的高性能综合实践
-
-
-
-
-
-## 6 核心表结构与接口设计
-
-### 6.1 核心表结构
-
-### 6.2 核心接口
 
 
 
