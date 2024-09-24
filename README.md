@@ -91,25 +91,25 @@
 
 
 
-## 7 权限系统设计
+## 7 [权限系统设计](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html)
 
-### 7.1 ACL权限模型
+### 7.1 [ACL权限模型](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#acl%E6%9D%83%E9%99%90%E6%A8%A1%E5%9E%8B)
 
-### 7.2 RBAC权限模型
+### 7.2 [RBAC权限模型](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#rbac%E6%9D%83%E9%99%90%E6%A8%A1%E5%9E%8B)
 
-### 7.3 ABAC权限模型
+### 7.3 [ABAC权限模型](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#abac%E6%9D%83%E9%99%90%E6%A8%A1%E5%9E%8B)
 
-### 7.4 PERM权限模型
+### 7.4 [PERM权限模型](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#perm%E5%85%83%E6%A8%A1%E5%9E%8B)
 
-### 7.5 Casbin框架应用实践
+### 7.5 [Casbin框架应用实践](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#casbin%E6%A1%86%E6%9E%B6%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5)
 
-#### 7.5.1 Casbin的ACL实现
+#### 7.5.1 [Casbin的ACL实现](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#casbin%E7%9A%84acl%E5%AE%9E%E7%8E%B0)
 
-#### 7.5.2 Casbin的RBAC实现
+#### 7.5.2 [Casbin的RBAC实现](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#casbin%E7%9A%84rbac%E5%AE%9E%E7%8E%B0)
 
-#### 7.5.3 Casbin的ABAC实现
+#### 7.5.3 [Casbin的ABAC实现](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#casbin%E7%9A%84abac%E5%AE%9E%E7%8E%B0)
 
-#### 7.5.4 Casbin综合实践
+#### 7.5.4 [Casbin综合实践](https://workflow-engine-book.shuwoom.com/7-%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.html#casbin%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5)
 
 
 
