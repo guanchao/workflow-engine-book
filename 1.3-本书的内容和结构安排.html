@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.cad7ee82.js" as="script"><link rel="preload" href="/assets/js/2.6d1207f6.js" as="script"><link rel="preload" href="/assets/js/1.9dc4310f.js" as="script"><link rel="preload" href="/assets/js/57.63a0c607.js" as="script"><link rel="prefetch" href="/assets/js/10.322914a7.js"><link rel="prefetch" href="/assets/js/11.3be26b53.js"><link rel="prefetch" href="/assets/js/12.abccfd39.js"><link rel="prefetch" href="/assets/js/13.fec8e956.js"><link rel="prefetch" href="/assets/js/14.fb03f9c1.js"><link rel="prefetch" href="/assets/js/15.20888fee.js"><link rel="prefetch" href="/assets/js/16.c4e2a388.js"><link rel="prefetch" href="/assets/js/17.4fdcf5f5.js"><link rel="prefetch" href="/assets/js/18.b558579e.js"><link rel="prefetch" href="/assets/js/19.6e25394b.js"><link rel="prefetch" href="/assets/js/20.74ea48d4.js"><link rel="prefetch" href="/assets/js/21.9c310e17.js"><link rel="prefetch" href="/assets/js/22.852f2e6d.js"><link rel="prefetch" href="/assets/js/23.f153b111.js"><link rel="prefetch" href="/assets/js/24.fdd0449c.js"><link rel="prefetch" href="/assets/js/25.3db3e984.js"><link rel="prefetch" href="/assets/js/26.0b32f992.js"><link rel="prefetch" href="/assets/js/27.7523e503.js"><link rel="prefetch" href="/assets/js/28.45b49bb6.js"><link rel="prefetch" href="/assets/js/29.65c0d5f3.js"><link rel="prefetch" href="/assets/js/3.2047be29.js"><link rel="prefetch" href="/assets/js/30.f5069c62.js"><link rel="prefetch" href="/assets/js/31.5963d3bc.js"><link rel="prefetch" href="/assets/js/32.44021e20.js"><link rel="prefetch" href="/assets/js/33.680150bf.js"><link rel="prefetch" href="/assets/js/34.a87714ae.js"><link rel="prefetch" href="/assets/js/35.53ab8098.js"><link rel="prefetch" href="/assets/js/36.4cf15f88.js"><link rel="prefetch" href="/assets/js/37.935235e9.js"><link rel="prefetch" href="/assets/js/38.2c053e2a.js"><link rel="prefetch" href="/assets/js/39.3c37bd7c.js"><link rel="prefetch" href="/assets/js/4.39274dfa.js"><link rel="prefetch" href="/assets/js/40.d4072cf6.js"><link rel="prefetch" href="/assets/js/41.9fa44c59.js"><link rel="prefetch" href="/assets/js/42.332ef5e0.js"><link rel="prefetch" href="/assets/js/43.b2965412.js"><link rel="prefetch" href="/assets/js/44.282637eb.js"><link rel="prefetch" href="/assets/js/45.eb31b3eb.js"><link rel="prefetch" href="/assets/js/46.ca8d116b.js"><link rel="prefetch" href="/assets/js/47.dadba939.js"><link rel="prefetch" href="/assets/js/48.77880bac.js"><link rel="prefetch" href="/assets/js/49.5d64cd7e.js"><link rel="prefetch" href="/assets/js/5.2eb05b66.js"><link rel="prefetch" href="/assets/js/50.76015ed7.js"><link rel="prefetch" href="/assets/js/51.3dffd9fd.js"><link rel="prefetch" href="/assets/js/52.e691b988.js"><link rel="prefetch" href="/assets/js/53.38a1d9e7.js"><link rel="prefetch" href="/assets/js/54.3d4e4f4c.js"><link rel="prefetch" href="/assets/js/55.e1ae5437.js"><link rel="prefetch" href="/assets/js/56.2e96c164.js"><link rel="prefetch" href="/assets/js/58.c6e79114.js"><link rel="prefetch" href="/assets/js/59.4737a468.js"><link rel="prefetch" href="/assets/js/6.8d91dcb2.js"><link rel="prefetch" href="/assets/js/60.bc9b442a.js"><link rel="prefetch" href="/assets/js/61.e1a6ffa2.js"><link rel="prefetch" href="/assets/js/62.933fe390.js"><link rel="prefetch" href="/assets/js/63.3aa0be70.js"><link rel="prefetch" href="/assets/js/64.5d9d0d00.js"><link rel="prefetch" href="/assets/js/65.44efa9dd.js"><link rel="prefetch" href="/assets/js/66.cacd15fd.js"><link rel="prefetch" href="/assets/js/67.4b090cb8.js"><link rel="prefetch" href="/assets/js/68.01fa3371.js"><link rel="prefetch" href="/assets/js/69.fb6f5565.js"><link rel="prefetch" href="/assets/js/7.719aeeb5.js"><link rel="prefetch" href="/assets/js/70.d5b49a5f.js"><link rel="prefetch" href="/assets/js/71.acbf3b4c.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.6604a8fd.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第一部份：流程引擎基础</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/1-引言.html" class="sidebar-link">1 引言</a></li><li><a href="/2-概念.html" class="sidebar-link">2 概念</a></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>3 流程建模和解析</span> <span class="arrow right"></span></p> <!----></section></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>1.3 本书的内容和结构安排.md</p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">4/6/2024, 8:27:42 AM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.cad7ee82.js" defer></script><script src="/assets/js/2.6d1207f6.js" defer></script><script src="/assets/js/1.9dc4310f.js" defer></script><script src="/assets/js/57.63a0c607.js" defer></script>
+  </body>
+</html>
