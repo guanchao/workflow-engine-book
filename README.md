@@ -158,7 +158,7 @@
 
 ### 11.4 [全局唯一ID生成器](https://workflow-engine-book.shuwoom.com/11.4-%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID%E7%94%9F%E6%88%90%E5%99%A8.html)
 
-### 11.5 缓存技术
+### 11.5 [缓存技术](https://workflow-engine-book.shuwoom.com/11.5-%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF.html)
 
 ### 11.6 异步化技术
 
