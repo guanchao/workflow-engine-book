@@ -162,7 +162,7 @@
 
 ### 11.6 [异步化技术](https://workflow-engine-book.shuwoom.com/11.6-%E5%BC%82%E6%AD%A5%E5%8C%96%E6%8A%80%E6%9C%AF.html)
 
-### 11.7 池化技术
+### 11.7 [池化技术](https://workflow-engine-book.shuwoom.com/11.7-%E6%B1%A0%E5%8C%96%E6%8A%80%E6%9C%AF.html)
 
 ### 11.8 Linux参数优化
 
