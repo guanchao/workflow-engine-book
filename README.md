@@ -164,7 +164,7 @@
 
 ### 11.7 [池化技术](https://workflow-engine-book.shuwoom.com/11.7-%E6%B1%A0%E5%8C%96%E6%8A%80%E6%9C%AF.html)
 
-### 11.8 Linux参数优化
+### 11.8 [分布式锁](https://workflow-engine-book.shuwoom.com/11.8-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81.html) 
 
 ### 11.9 限流
 
@@ -172,7 +172,7 @@
 
 ### 11.11 故障转移
 
-### 11.12 分布式锁
+### 11.12 Linux参数优化
 
 
 
