@@ -166,13 +166,7 @@
 
 ### 11.8 [分布式锁](https://workflow-engine-book.shuwoom.com/11.8-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81.html) 
 
-### 11.9 限流
-
-### 11.10 降级和熔断
-
-### 11.11 故障转移
-
-### 11.12 Linux参数优化
+### 11.9 [限流](https://workflow-engine-book.shuwoom.com/11.9-%E9%99%90%E6%B5%81.html)
 
 
 
