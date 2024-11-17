@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/41.98d7d1f0.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第三部份：流程引擎进阶</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/9-流程分析.html" class="sidebar-link">9 流程分析</a></li><li><a href="/10-云原生工作流.html" class="sidebar-link">10 云原生工作流</a></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>11 多引擎分布式系统实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/11.1-系统架构.html" class="sidebar-link">11.1 系统架构</a></li><li><a href="/11.2-分布式系统基础.html" class="sidebar-link">11.2 分布式系统基础</a></li><li><a href="/11.3-数据库架构与优化.html" class="sidebar-link">11.3 数据库架构与优化</a></li><li><a href="/11.4-全局唯一ID生成器.html" class="sidebar-link">11.4 全局唯一ID生成器</a></li><li><a href="/11.5-缓存技术.html" class="sidebar-link">11.5 缓存技术</a></li><li><a href="/11.6-异步化技术.html" class="sidebar-link">11.6 异步化技术</a></li><li><a href="/11.7-池化技术.html" class="sidebar-link">11.7 池化技术</a></li><li><a href="/11.8-分布式锁.html" class="sidebar-link">11.8 分布式锁</a></li><li><a href="/11.9-限流.html" class="active sidebar-link">11.9 限流</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.9-限流.html#令牌桶算法" class="sidebar-link">令牌桶算法</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.9-限流.html#单机限流实现" class="sidebar-link">单机限流实现</a></li><li class="sidebar-sub-header"><a href="/11.9-限流.html#分布式限流实现" class="sidebar-link">分布式限流实现</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.9-限流.html#漏桶算法" class="sidebar-link">漏桶算法</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.9-限流.html#单机限流实现-2" class="sidebar-link">单机限流实现</a></li><li class="sidebar-sub-header"><a href="/11.9-限流.html#分布式限流实现-2" class="sidebar-link">分布式限流实现</a></li></ul></li></ul></li></ul></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>分布式系统中，为了保障高可用性，通常需要采取限流措施，以防止系统因过载而崩溃或性能下降。</p> <p>在实际业务中，如果我们的服务器不上限流功能，会发现http的流量请求体波动很大，例如下面的某个系统。图中的尖峰点很容易超出系统的最大负载，直接导致系统出现崩溃不可用的问题出现。</p> <img src="/assets/img/11.4.1-http限流前.ced5f89c.png" alt="image-20241105093455521" style="zoom:33%;"> <p>而如果我们采用限流算法之后，可以讲请求流量控制在一定范围内，不超过系统的最大负载，例如每秒1200以下：</p> <img src="/assets/img/11.4.1-http限流后.ab46bcd4.png" alt="image-20241105093721906" style="zoom:33%;"> <p>根据限流的范围，可以分为：</p> <ul><li><p>单机限流</p> <p>主要应用于单个服务器或应用实例。限流是在一个独立的机器上完成的，适用于较小规模的应用，不能全局限流。</p></li> <li><p>分布式限流</p> <p>需要在多个服务器或节点上协同工作，用于处理大规模的流量，可以进行全局限流。</p></li></ul> <p>在流程引擎中，由于我们生成了同步和异步API，所以这里需要对API的调用进行控制和限流，避免一些恶意的或高并发的调用导致整个系统的异常不可用。</p> <p>以下是一些常见的限流方法及其实现方式：</p> <h2 id="令牌桶算法"><a href="#令牌桶算法" class="header-anchor">#</a> 令牌桶算法</h2> <p>令牌桶算法是一种用于控制访问速率的算法，常用于限制请求的频率。它通过维护一个令牌桶来实现，其中令牌以固定的速率被添加到桶中。系统中的请求需要获取令牌才能被处理，而获取令牌的速率由算法定义。</p> <p>以下是令牌桶算法的基本工作原理：</p> <ol><li><strong>令牌生成：</strong> 系统以固定的速率生成令牌，将其放入令牌桶中。生成的速率决定了系统允许的最大处理请求速率。</li> <li><strong>令牌消耗：</strong> 当一个请求到达时，需要从令牌桶中获取一个令牌。如果令牌桶中没有足够的令牌，请求将被暂时阻塞或拒绝。否则，请求将被处理，并且相应数量的令牌将从桶中消耗。</li> <li><strong>限速控制：</strong> 通过调整令牌生成的速率，可以灵活地控制系统的处理速率。如果系统需要处理更多请求，可以增加令牌生成的速率；如果需要限制处理速率，可以降低令牌生成的速率。</li> <li><strong>平滑处理：</strong> 令牌桶算法具有平滑处理的特性，即请求的处理速率可以在一定程度上平滑变化，而不是出现突然的流量峰值。</li></ol> <img src="/assets/img/11.4.1-令牌桶算法.da5360ab.png" alt="image-20241111093152606" style="zoom:50%;"> <h3 id="单机限流实现"><a href="#单机限流实现" class="header-anchor">#</a> 单机限流实现</h3> <p>我们模拟在单机机器上进行限流，如下是具体的代码实现：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">type</span> TokenBucket <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	tokens        <span class="token keyword">chan</span> <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+	fillInterval  time<span class="token punctuation">.</span>Duration
+	maxTokens     <span class="token builtin">int</span>
+	tokensPerFill <span class="token builtin">int</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">NewTokenBucket</span><span class="token punctuation">(</span>fillInterval time<span class="token punctuation">.</span>Duration<span class="token punctuation">,</span> maxTokens <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">*</span>TokenBucket <span class="token punctuation">{</span>
+	tb <span class="token operator">:=</span> <span class="token operator">&amp;</span>TokenBucket<span class="token punctuation">{</span>
+		tokens<span class="token punctuation">:</span>        <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> maxTokens<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		fillInterval<span class="token punctuation">:</span>  fillInterval<span class="token punctuation">,</span>
+		maxTokens<span class="token punctuation">:</span>     maxTokens<span class="token punctuation">,</span>
+		tokensPerFill<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">go</span> tb<span class="token punctuation">.</span><span class="token function">fillToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">return</span> tb
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>tb <span class="token operator">*</span>TokenBucket<span class="token punctuation">)</span> <span class="token function">fillToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span>tb<span class="token punctuation">.</span>fillInterval<span class="token punctuation">)</span>
+		<span class="token keyword">select</span> <span class="token punctuation">{</span>
+		<span class="token keyword">case</span> tb<span class="token punctuation">.</span>tokens <span class="token operator">&lt;-</span> <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">:</span>
+		<span class="token keyword">default</span><span class="token punctuation">:</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>tb <span class="token operator">*</span>TokenBucket<span class="token punctuation">)</span> <span class="token function">getToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+	<span class="token keyword">select</span> <span class="token punctuation">{</span>
+	<span class="token keyword">case</span> <span class="token operator">&lt;-</span>tb<span class="token punctuation">.</span>tokens<span class="token punctuation">:</span>
+		<span class="token keyword">return</span> <span class="token boolean">true</span>
+	<span class="token keyword">default</span><span class="token punctuation">:</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	fillInterval <span class="token operator">:=</span> time<span class="token punctuation">.</span>Millisecond <span class="token operator">*</span> <span class="token number">500</span>
+	maxTokens <span class="token operator">:=</span> <span class="token number">3</span>
+
+	tb <span class="token operator">:=</span> <span class="token function">NewTokenBucket</span><span class="token punctuation">(</span>fillInterval<span class="token punctuation">,</span> maxTokens<span class="token punctuation">)</span>
+
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> tb<span class="token punctuation">.</span><span class="token function">getToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Processing request &quot;</span><span class="token punctuation">,</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Dropping request &quot;</span><span class="token punctuation">,</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+		time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>Millisecond <span class="token operator">*</span> <span class="token number">200</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>在这个示例中，<code>TokenBucket</code> 结构体包含一个用于存放令牌的 channel（<code>tokens</code>），填充间隔时间（<code>fillInterval</code>），最大令牌数（<code>maxTokens</code>），以及每次填充的令牌数（<code>tokensPerFill</code>）。<code>NewTokenBucket</code> 函数用于初始化令牌桶，并启动一个 goroutine 来定期填充令牌。</p> <p><code>getToken</code> 函数用于尝试获取一个令牌，如果成功获取则返回 true，否则返回 false。在 <code>main</code> 函数中，通过循环模拟了多个请求，每次请求前都会尝试获取一个令牌，如果获取成功则处理请求，否则丢弃请求。</p> <p>执行后输出结果如下：</p> <div class="language- extra-class"><pre class="language-text"><code>go run token_bucket.go             
+Dropping request  1
+Dropping request  2
+Dropping request  3
+Processing request  4
+Dropping request  5
+</code></pre></div><h3 id="分布式限流实现"><a href="#分布式限流实现" class="header-anchor">#</a> 分布式限流实现</h3> <p>在分布式环境下，要实现全局性的限流，需要要保证数据操作的原子性，否则会造成数据竞争的问题。所以这里需要基于Lua脚本在Redis中执行原子操作。</p> <p>下面是实现令牌桶算法的逻辑：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+
+	<span class="token string">&quot;github.com/go-redis/redis/v8&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> ctx <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> luaScript <span class="token operator">=</span> <span class="token string">`
+local key = KEYS[1]                                -- 令牌桶在Redis中的键
+local capacity = tonumber(ARGV[1])                 -- 令牌桶容量
+local rate = tonumber(ARGV[2])                     -- 令牌生成速率
+local currentTokens = tonumber(redis.call('get', key) or 0)  -- 当前令牌数量
+
+local currentTimestamp = tonumber(ARGV[3])         -- 当前时间戳
+local lastTimestamp = tonumber(redis.call('get', key .. ':lastTimestamp') or 0)  -- 上次更新时间戳
+
+local elapsedTime = currentTimestamp - lastTimestamp    -- 两次更新之间的时间差
+local newTokens = elapsedTime * rate               -- 计算在时间差内生成的新令牌数量
+
+-- 如果新令牌数量大于1，更新令牌桶状态
+if newTokens &gt; 1 then
+    currentTokens = math.min(capacity, currentTokens + newTokens)
+    redis.call('set', key, currentTokens)
+    redis.call('set', key .. ':lastTimestamp', currentTimestamp)
+end
+
+-- 如果当前令牌数量大于等于1，消耗一个令牌并返回允许
+if currentTokens &gt;= 1 then
+    redis.call('decrby', key, 1)
+    return 1
+else
+    return 0  -- 令牌不足，返回拒绝
+end
+`</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 初始化Redis客户端</span>
+	client <span class="token operator">:=</span> redis<span class="token punctuation">.</span><span class="token function">NewClient</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>redis<span class="token punctuation">.</span>Options<span class="token punctuation">{</span>
+		Addr<span class="token punctuation">:</span>     <span class="token string">&quot;localhost:6379&quot;</span><span class="token punctuation">,</span>
+		Password<span class="token punctuation">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span> <span class="token comment">// 如果有密码，填写密码</span>
+		DB<span class="token punctuation">:</span>       <span class="token number">0</span><span class="token punctuation">,</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 设置初始令牌桶容量和速率</span>
+	key <span class="token operator">:=</span> <span class="token string">&quot;myTokenBucket&quot;</span>
+	capacity <span class="token operator">:=</span> <span class="token number">10</span>
+	rate <span class="token operator">:=</span> <span class="token number">0.5</span> <span class="token comment">// 每秒生成0.5个令牌</span>
+
+	<span class="token comment">// 初始化令牌桶</span>
+	client<span class="token punctuation">.</span><span class="token function">Set</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> key<span class="token punctuation">,</span> capacity<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+	client<span class="token punctuation">.</span><span class="token function">Set</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> key<span class="token operator">+</span><span class="token string">&quot;:lastTimestamp&quot;</span><span class="token punctuation">,</span> time<span class="token punctuation">.</span><span class="token function">Now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Unix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 模拟请求</span>
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">15</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		allowed<span class="token punctuation">,</span> err <span class="token operator">:=</span> <span class="token function">acquireToken</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> key<span class="token punctuation">,</span> capacity<span class="token punctuation">,</span> rate<span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token keyword">if</span> allowed <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Request&quot;</span><span class="token punctuation">,</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">&quot;allowed&quot;</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Request&quot;</span><span class="token punctuation">,</span> i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">&quot;rejected&quot;</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">200</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Millisecond<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">acquireToken</span><span class="token punctuation">(</span>client <span class="token operator">*</span>redis<span class="token punctuation">.</span>Client<span class="token punctuation">,</span> key <span class="token builtin">string</span><span class="token punctuation">,</span> capacity <span class="token builtin">int</span><span class="token punctuation">,</span> rate <span class="token builtin">float64</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token builtin">bool</span><span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	currentTimestamp <span class="token operator">:=</span> time<span class="token punctuation">.</span><span class="token function">Now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Unix</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	result<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Eval</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> luaScript<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span>key<span class="token punctuation">}</span><span class="token punctuation">,</span> capacity<span class="token punctuation">,</span> rate<span class="token punctuation">,</span> currentTimestamp<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Result</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">,</span> err
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span> result <span class="token operator">==</span> <span class="token function">int64</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>这个例子中，令牌桶的容量是10，速率是每秒生成0.5个令牌。在模拟的15次请求中，根据令牌桶算法，前10次请求应该被允许，而后面的5次请求应该被拒绝。你可以根据实际需求调整令牌桶的容量和速率。</p> <p>通过执行，得到如下的输出结果：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>go run token_bucket_v2.go          
+Request <span class="token number">1</span> allowed
+Request <span class="token number">2</span> allowed
+Request <span class="token number">3</span> allowed
+Request <span class="token number">4</span> allowed
+Request <span class="token number">5</span> allowed
+Request <span class="token number">6</span> allowed
+Request <span class="token number">7</span> allowed
+Request <span class="token number">8</span> allowed
+Request <span class="token number">9</span> allowed
+Request <span class="token number">10</span> allowed
+Request <span class="token number">11</span> rejected
+Request <span class="token number">12</span> rejected
+</code></pre></div><h2 id="漏桶算法"><a href="#漏桶算法" class="header-anchor">#</a> 漏桶算法</h2> <p>漏桶算法（Leaky Bucket Algorithm）是一种用于流量控制和限流的算法。它通过以固定的速率从漏桶中以恒定速率漏水的方式来控制输入流量。如果流量过大，超出漏桶容量，多余的流量将被丢弃或缓存。跟令牌桶算法相反的是，漏洞算法是控制“出令牌”的速率来实现限流。这个请求就像水龙头，我不管你水龙头的流量多少，但是我总是保证漏桶滴水的速度的恒定的。</p> <p>可以看出漏桶算法能强行限制数据的传输速率。</p> <img src="/assets/img/14.4.1-漏桶算法.d788fc4f.png" alt="image-20241116100430282" style="zoom:50%;"> <h3 id="单机限流实现-2"><a href="#单机限流实现-2" class="header-anchor">#</a> 单机限流实现</h3> <p>这个Go程序实现了一个基于漏桶算法的流量控制，主要用于API接口的请求限流，防止服务器被过量的请求压垮。它限制了每个客户端IP每秒钟只能发送特定数量的请求。</p> <p>在这个程序中，每个客户端IP都有一个对应的MutexLimiter对象，这个对象记录了上一次请求的时间，每个请求的间隔时间，以及下一次请求需要等待的时间。当一个新的请求到来时，程序会根据这个IP地址获取对应的MutexLimiter对象，然后通过MutexLimiter的Take()方法来计算这个请求是否可以立即处理，还是需要等待一段时间。</p> <p>在Take()方法中，程序首先会获取当前的时间，然后计算距离上一次请求的时间间隔，并与每个请求的间隔时间进行比较，如果当前时间距离上一次请求的时间间隔小于每个请求的间隔时间，那么程序会让当前的请求等待一段时间，直到达到每个请求的间隔时间，然后再处理这个请求。如果当前时间距离上一次请求的时间间隔大于或等于每个请求的间隔时间，那么程序会立即处理这个请求。</p> <p>在main函数中，程序初始化了一个全局的sync.Map对象，用来存储每个客户端IP对应的MutexLimiter对象。然后，程序创建了一个Gin引擎，并使用NewLimiter(10)中间件来限制每秒钟只能处理10个请求。最后，程序启动了Gin引擎，开始监听8888端口的HTTP请求。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;github.com/benbjohnson/clock&quot;</span>
+	<span class="token string">&quot;github.com/gin-gonic/gin&quot;</span>
+	<span class="token string">&quot;net/http&quot;</span>
+	<span class="token string">&quot;sync&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment">// 定义全局限流器对象</span>
+<span class="token keyword">var</span> limiters <span class="token operator">*</span>sync<span class="token punctuation">.</span>Map
+
+<span class="token keyword">func</span> <span class="token function">NewLimiter</span><span class="token punctuation">(</span>rps <span class="token builtin">int</span><span class="token punctuation">)</span> gin<span class="token punctuation">.</span>HandlerFunc <span class="token punctuation">{</span>
+
+	<span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+		<span class="token comment">// key可以针对ip或者用户来进行限速，如下是对每个来源的IP限制最大的并发速率</span>
+		key <span class="token operator">:=</span> c<span class="token punctuation">.</span><span class="token function">ClientIP</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		<span class="token comment">// 获取限速器</span>
+		l<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> limiters<span class="token punctuation">.</span><span class="token function">LoadOrStore</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token function">NewMutexBased</span><span class="token punctuation">(</span>rps<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		now <span class="token operator">:=</span> l<span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token operator">*</span>MutexLimiter<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Take</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;now: %s, key:%s\n&quot;</span><span class="token punctuation">,</span> now<span class="token punctuation">,</span> key<span class="token punctuation">)</span>
+		c<span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> MutexLimiter <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	sync<span class="token punctuation">.</span>Mutex
+	last       time<span class="token punctuation">.</span>Time
+	sleepFor   time<span class="token punctuation">.</span>Duration
+	perRequest time<span class="token punctuation">.</span>Duration
+	per        time<span class="token punctuation">.</span>Duration <span class="token comment">// 每个请求的间隔</span>
+	clock      clock<span class="token punctuation">.</span>Clock
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">NewMutexBased</span><span class="token punctuation">(</span>rate <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">*</span>MutexLimiter <span class="token punctuation">{</span>
+	perRequest <span class="token operator">:=</span> time<span class="token punctuation">.</span>Second <span class="token operator">/</span> time<span class="token punctuation">.</span><span class="token function">Duration</span><span class="token punctuation">(</span>rate<span class="token punctuation">)</span> <span class="token comment">// 每个请求的间隔</span>
+	l <span class="token operator">:=</span> <span class="token operator">&amp;</span>MutexLimiter<span class="token punctuation">{</span>
+		perRequest<span class="token punctuation">:</span> perRequest<span class="token punctuation">,</span>
+		clock<span class="token punctuation">:</span>      clock<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> l
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>t <span class="token operator">*</span>MutexLimiter<span class="token punctuation">)</span> <span class="token function">Take</span><span class="token punctuation">(</span><span class="token punctuation">)</span> time<span class="token punctuation">.</span>Time <span class="token punctuation">{</span>
+	t<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">defer</span> t<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	now <span class="token operator">:=</span> t<span class="token punctuation">.</span>clock<span class="token punctuation">.</span><span class="token function">Now</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 第一次请求</span>
+	<span class="token keyword">if</span> t<span class="token punctuation">.</span>last<span class="token punctuation">.</span><span class="token function">IsZero</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		t<span class="token punctuation">.</span>last <span class="token operator">=</span> now
+		<span class="token keyword">return</span> t<span class="token punctuation">.</span>last
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 对比上一次的请求时间和请求间隔，计算下一次许可发放的等待时间</span>
+	t<span class="token punctuation">.</span>sleepFor <span class="token operator">+=</span> t<span class="token punctuation">.</span>perRequest <span class="token operator">-</span> now<span class="token punctuation">.</span><span class="token function">Sub</span><span class="token punctuation">(</span>t<span class="token punctuation">.</span>last<span class="token punctuation">)</span>
+
+	<span class="token keyword">if</span> t<span class="token punctuation">.</span>sleepFor <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		t<span class="token punctuation">.</span>clock<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span>t<span class="token punctuation">.</span>sleepFor<span class="token punctuation">)</span>
+		t<span class="token punctuation">.</span>last <span class="token operator">=</span> now<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>t<span class="token punctuation">.</span>sleepFor<span class="token punctuation">)</span>
+		t<span class="token punctuation">.</span>sleepFor <span class="token operator">=</span> <span class="token number">0</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+		<span class="token comment">// 有可能上一次请求的时间比较早，大于请求间隔</span>
+		t<span class="token punctuation">.</span>last <span class="token operator">=</span> now
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span> t<span class="token punctuation">.</span>last
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	limiters <span class="token operator">=</span> <span class="token operator">&amp;</span>sync<span class="token punctuation">.</span>Map<span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+	e <span class="token operator">:=</span> gin<span class="token punctuation">.</span><span class="token function">Default</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	e<span class="token punctuation">.</span><span class="token function">Use</span><span class="token punctuation">(</span><span class="token function">NewLimiter</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// 每秒处理10个并发请求</span>
+	e<span class="token punctuation">.</span><span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">&quot;ping&quot;</span><span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		c<span class="token punctuation">.</span><span class="token function">String</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusOK<span class="token punctuation">,</span> <span class="token string">&quot;pong&quot;</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	e<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token string">&quot;:8888&quot;</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>我们通过ab工具压测，虽然设置的并发请求是100，总共100个请求，但是通过限速器后每秒就只处理10个并发请求，如下图QPS为10.10。</p> <div class="language-wiki extra-class"><pre class="language-wiki"><code>&gt;&gt; ab -n 100 -c 100 http://localhost:8888/ping
+This is ApacheBench, Version 2.3 &lt;$Revision: 1903618 $&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:
+Server Hostname:        localhost
+Server Port:            8888
+
+Document Path:          /ping
+Document Length:        4 bytes
+
+Concurrency Level:      100
+Time taken for tests:   9.902 seconds
+Complete requests:      100
+Failed requests:        0
+Total transferred:      12000 bytes
+HTML transferred:       400 bytes
+Requests per second:    10.10 <span class="token url">[#/sec]</span> (mean)
+Time per request:       9902.379 <span class="token url">[ms]</span> (mean)
+Time per request:       99.024 <span class="token url">[ms]</span> (mean, across all concurrent requests)
+Transfer rate:          1.18 <span class="token url">[Kbytes/sec]</span> received
+
+Connection Times (ms)
+              min  mean<span class="token url">[+/-sd]</span> median   max
+Connect:        0    2   1.0      2       4
+Processing:     5 4946 2900.7   4996    9896
+Waiting:        1 4946 2900.8   4996    9896
+Total:          6 4949 2899.9   4999    9897
+
+Percentage of the requests served within a certain time (ms)
+  50%   4999
+  66%   6598
+  75%   7498
+  80%   7997
+  90%   8997
+  95%   9497
+  98%   9797
+  99%   9897
+ 100%   9897 (longest request)
+</code></pre></div><h3 id="分布式限流实现-2"><a href="#分布式限流实现-2" class="header-anchor">#</a> 分布式限流实现</h3> <p>如下是基于Redis和Golang实现的分布式限流器。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;net/http&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+
+	<span class="token string">&quot;github.com/gin-gonic/gin&quot;</span>
+	<span class="token string">&quot;github.com/go-redis/redis/v8&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> rdb <span class="token operator">*</span>redis<span class="token punctuation">.</span>Client
+<span class="token keyword">var</span> ctx <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> <span class="token punctuation">(</span>
+	QPS_LIMIT      <span class="token operator">=</span> <span class="token number">10</span>              <span class="token comment">// 每秒请求限制</span>
+	LEAK_INTERVAL  <span class="token operator">=</span> <span class="token number">1</span>               <span class="token comment">// 漏桶的出水间隔，单位为秒</span>
+	REQUEST_BUCKET <span class="token operator">=</span> <span class="token string">&quot;leaky_bucket:&quot;</span> <span class="token comment">// 漏桶前缀</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">initRedis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	rdb <span class="token operator">=</span> redis<span class="token punctuation">.</span><span class="token function">NewClient</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>redis<span class="token punctuation">.</span>Options<span class="token punctuation">{</span>
+		Addr<span class="token punctuation">:</span>     <span class="token string">&quot;localhost:6379&quot;</span><span class="token punctuation">,</span>
+		Password<span class="token punctuation">:</span> <span class="token string">&quot;test:test&quot;</span><span class="token punctuation">,</span> <span class="token comment">// Redis密码</span>
+		DB<span class="token punctuation">:</span>       <span class="token number">0</span><span class="token punctuation">,</span>           <span class="token comment">// Redis数据库</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">:=</span> rdb<span class="token punctuation">.</span><span class="token function">Ping</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Result</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatalf</span><span class="token punctuation">(</span><span class="token string">&quot;无法连接到Redis: %v&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Redis连接成功&quot;</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token function">initRedis</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	r <span class="token operator">:=</span> gin<span class="token punctuation">.</span><span class="token function">Default</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 定义限流中间件</span>
+	r<span class="token punctuation">.</span><span class="token function">Use</span><span class="token punctuation">(</span><span class="token function">rateLimiterMiddleware</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 路由和处理函数</span>
+	r<span class="token punctuation">.</span><span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">&quot;/ping&quot;</span><span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		c<span class="token punctuation">.</span><span class="token function">JSON</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusOK<span class="token punctuation">,</span> gin<span class="token punctuation">.</span>H<span class="token punctuation">{</span>
+			<span class="token string">&quot;message&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;pong&quot;</span><span class="token punctuation">,</span>
+		<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 启动服务</span>
+	r<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token string">&quot;:8080&quot;</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// Lua脚本，实现漏桶算法的原子操作，确保了多个请求并发执行时数据不会出现竞态条件。</span>
+<span class="token keyword">var</span> leakyBucketScript <span class="token operator">=</span> redis<span class="token punctuation">.</span><span class="token function">NewScript</span><span class="token punctuation">(</span><span class="token string">`
+local bucket_key = KEYS[1]
+local limit = tonumber(ARGV[1])
+local interval = tonumber(ARGV[2])
+
+-- 获取当前时间戳和请求计数
+local count = tonumber(redis.call(&quot;HGET&quot;, bucket_key, &quot;count&quot;) or &quot;0&quot;)
+local last_time = tonumber(redis.call(&quot;HGET&quot;, bucket_key, &quot;last_time&quot;) or &quot;0&quot;)
+
+-- 当前时间
+local now = tonumber(ARGV[3])
+
+-- 计算衰减量
+local elapsed = now - last_time
+
+-- 这行代码计算了“漏水”的总数 leaked
+local leaked = math.floor(elapsed * limit / interval)
+count = math.max(0, count - leaked)
+
+-- 更新计数器和时间戳
+if count &lt; limit then
+    count = count + 1
+    redis.call(&quot;HMSET&quot;, bucket_key, &quot;count&quot;, count, &quot;last_time&quot;, now)
+    return 1  -- 允许请求
+else
+    return 0  -- 拒绝请求
+end
+`</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">rateLimiterMiddleware</span><span class="token punctuation">(</span><span class="token punctuation">)</span> gin<span class="token punctuation">.</span>HandlerFunc <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		ip <span class="token operator">:=</span> c<span class="token punctuation">.</span><span class="token function">ClientIP</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		bucketKey <span class="token operator">:=</span> REQUEST_BUCKET <span class="token operator">+</span> ip
+		now <span class="token operator">:=</span> time<span class="token punctuation">.</span><span class="token function">Now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Unix</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		<span class="token comment">// 执行 Lua 脚本</span>
+		allowed<span class="token punctuation">,</span> err <span class="token operator">:=</span> leakyBucketScript<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> rdb<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span>bucketKey<span class="token punctuation">}</span><span class="token punctuation">,</span> QPS_LIMIT<span class="token punctuation">,</span> LEAK_INTERVAL<span class="token punctuation">,</span> now<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Int</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Redis错误: %v&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+			c<span class="token punctuation">.</span><span class="token function">JSON</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusInternalServerError<span class="token punctuation">,</span> gin<span class="token punctuation">.</span>H<span class="token punctuation">{</span><span class="token string">&quot;error&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;服务器错误&quot;</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+			c<span class="token punctuation">.</span><span class="token function">Abort</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token keyword">if</span> allowed <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">{</span>
+			<span class="token comment">// 允许请求</span>
+			c<span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			<span class="token comment">// 拒绝请求并返回 429 状态码</span>
+			c<span class="token punctuation">.</span><span class="token function">JSON</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusTooManyRequests<span class="token punctuation">,</span> gin<span class="token punctuation">.</span>H<span class="token punctuation">{</span><span class="token string">&quot;error&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;请求过多&quot;</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+			c<span class="token punctuation">.</span><span class="token function">Abort</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><blockquote><p>代码解释</p></blockquote> <ol><li><strong>计数衰减</strong>：当有新的请求到达时，先计算自上次请求以来的时间差，然后按比例减少计数，模拟漏桶的出水。</li> <li><strong>计数更新</strong>：如果新的计数值小于设定的限额 <code>QPS_LIMIT</code>，则允许请求并增加计数值，同时更新 Redis 中的时间戳；否则，拒绝请求。</li> <li><strong>使用 HMSET 存储计数和时间戳</strong>：<code>HMSET</code> 用于存储和更新 IP 的计数和时间戳。</li></ol> <p>这样实现后，可以更准确地控制每秒的请求速率。</p> <blockquote><p>关键变量解释</p></blockquote> <div class="language-lua extra-class"><pre class="language-lua"><code><span class="token comment">-- elapsed * QPS_LIMIT：表示在 elapsed 秒内，按 QPS 限制，理论上可以“漏掉”的总量。</span>
+<span class="token comment">-- 除以 LEAK_INTERVAL.Seconds() 的值（1 秒），保持单位一致，得到实际应漏掉的“水滴”量</span>
+<span class="token keyword">local</span> leaked <span class="token operator">=</span> math<span class="token punctuation">.</span><span class="token function">floor</span><span class="token punctuation">(</span>elapsed <span class="token operator">*</span> limit <span class="token operator">/</span> interval<span class="token punctuation">)</span>
+</code></pre></div><ol><li><code>elapsed</code>：当前时间和上次请求时间之间的时间差，单位是秒。这表示自上次请求到当前请求之间经过了多少秒。</li> <li><code>QPS_LIMIT</code>：每秒的请求限制，即我们允许的最大 QPS。在这里我们设定了 <code>QPS_LIMIT = 10</code>。</li> <li><code>LEAK_INTERVAL.Seconds()</code>：漏桶的“漏水”间隔时间（<code>LEAK_INTERVAL</code>）转为秒单位，假设是 1 秒。</li></ol> <blockquote><p>计算过程</p></blockquote> <p>假设 <code>QPS_LIMIT = 10</code>，<code>LEAK_INTERVAL = 1 秒</code>：</p> <ul><li><code>elapsed * QPS_LIMIT</code>：表示在 <code>elapsed</code> 秒内，按 QPS 限制，理论上可以“漏掉”的总量。</li> <li>除以 <code>LEAK_INTERVAL.Seconds()</code> 的值（1 秒），保持单位一致，得到实际应漏掉的“水滴”量。</li></ul> <p>因此，这行代码计算了“漏水”的总数 <code>leaked</code>。随着时间推移，如果没有新的请求，计数值 <code>count</code> 将逐步减少，直到归零。</p> <blockquote><p>测试效果</p></blockquote> <p>如下我们通过ab命令模拟压测限流的情况，一共100个请求100个并发。可以看到所有请求在1秒内完成，而只有10个请求是成功的，生效的90个是492请求过多的错误状态码。</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token operator">&gt;&gt;</span> ab <span class="token parameter variable">-n</span> <span class="token number">100</span> <span class="token parameter variable">-c</span> <span class="token number">100</span> http://localhost:8080/ping
+This is ApacheBench, Version <span class="token number">2.3</span> <span class="token operator">&lt;</span><span class="token variable">$Revision</span><span class="token builtin class-name">:</span> <span class="token number">1903618</span> $<span class="token operator">&gt;</span>
+Copyright <span class="token number">1996</span> Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost <span class="token punctuation">(</span>be patient<span class="token punctuation">)</span><span class="token punctuation">..</span><span class="token punctuation">..</span>.done
+
+
+Server Software:
+Server Hostname:        localhost
+Server Port:            <span class="token number">8080</span>
+
+Document Path:          /ping
+Document Length:        <span class="token number">18</span> bytes
+
+Concurrency Level:      <span class="token number">100</span>
+Time taken <span class="token keyword">for</span> tests:   <span class="token number">0.030</span> seconds
+Complete requests:      <span class="token number">100</span>
+Failed requests:        <span class="token number">90</span>
+   <span class="token punctuation">(</span>Connect: <span class="token number">0</span>, Receive: <span class="token number">0</span>, Length: <span class="token number">90</span>, Exceptions: <span class="token number">0</span><span class="token punctuation">)</span>
+Non-2xx responses:      <span class="token number">90</span>
+Total transferred:      <span class="token number">15990</span> bytes
+HTML transferred:       <span class="token number">2340</span> bytes
+Requests per second:    <span class="token number">3342.47</span> <span class="token punctuation">[</span><span class="token comment">#/sec] (mean)</span>
+Time per request:       <span class="token number">29.918</span> <span class="token punctuation">[</span>ms<span class="token punctuation">]</span> <span class="token punctuation">(</span>mean<span class="token punctuation">)</span>
+Time per request:       <span class="token number">0.299</span> <span class="token punctuation">[</span>ms<span class="token punctuation">]</span> <span class="token punctuation">(</span>mean, across all concurrent requests<span class="token punctuation">)</span>
+Transfer rate:          <span class="token number">521.93</span> <span class="token punctuation">[</span>Kbytes/sec<span class="token punctuation">]</span> received
+
+Connection Times <span class="token punctuation">(</span>ms<span class="token punctuation">)</span>
+              min  mean<span class="token punctuation">[</span>+/-sd<span class="token punctuation">]</span> median   max
+Connect:        <span class="token number">1</span>    <span class="token number">3</span>   <span class="token number">0.4</span>      <span class="token number">3</span>       <span class="token number">4</span>
+Processing:     <span class="token number">2</span>   <span class="token number">13</span>   <span class="token number">2.9</span>     <span class="token number">13</span>      <span class="token number">16</span>
+Waiting:        <span class="token number">2</span>   <span class="token number">12</span>   <span class="token number">2.9</span>     <span class="token number">13</span>      <span class="token number">16</span>
+Total:          <span class="token number">5</span>   <span class="token number">16</span>   <span class="token number">2.8</span>     <span class="token number">16</span>      <span class="token number">19</span>
+
+Percentage of the requests served within a certain <span class="token function">time</span> <span class="token punctuation">(</span>ms<span class="token punctuation">)</span>
+  <span class="token number">50</span>%     <span class="token number">16</span>
+  <span class="token number">66</span>%     <span class="token number">17</span>
+  <span class="token number">75</span>%     <span class="token number">17</span>
+  <span class="token number">80</span>%     <span class="token number">17</span>
+  <span class="token number">90</span>%     <span class="token number">18</span>
+  <span class="token number">95</span>%     <span class="token number">18</span>
+  <span class="token number">98</span>%     <span class="token number">19</span>
+  <span class="token number">99</span>%     <span class="token number">19</span>
+ <span class="token number">100</span>%     <span class="token number">19</span> <span class="token punctuation">(</span>longest request<span class="token punctuation">)</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/11.8-分布式锁.html" class="prev">
+        11.8 分布式锁
+      </a></span> <!----></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/41.98d7d1f0.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/31.76245b5d.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第三部份：流程引擎进阶</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/9-流程分析.html" class="sidebar-link">9 流程分析</a></li><li><a href="/10-云原生工作流.html" class="active sidebar-link">10 云原生工作流</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#k8s上部署工作流原理" class="sidebar-link">k8s上部署工作流原理</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#kubernetes介绍" class="sidebar-link">Kubernetes介绍</a></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#k8s容器化部署实践" class="sidebar-link">k8s容器化部署实践</a></li></ul></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#k8s上运行工作流任务原理" class="sidebar-link">k8s上运行工作流任务原理</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#概览" class="sidebar-link">概览</a></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#执行入口" class="sidebar-link">执行入口</a></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#创建pod" class="sidebar-link">创建Pod</a></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#获取执行日志" class="sidebar-link">获取执行日志</a></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#销毁pod" class="sidebar-link">销毁Pod</a></li></ul></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#k8s上工作流任务运行综合实践" class="sidebar-link">k8s上工作流任务运行综合实践</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#k8s本地环境部署" class="sidebar-link">k8s本地环境部署</a></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#k8s-基础命令" class="sidebar-link">k8s 基础命令</a></li><li class="sidebar-sub-header"><a href="/10-云原生工作流.html#k8s-python-sdk调用" class="sidebar-link">k8s python SDK调用</a></li></ul></li></ul></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>11 多引擎分布式系统实现</span> <span class="arrow right"></span></p> <!----></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>云原生工作流是一种基于云原生理念构建的、在云环境中运行的工作流系统。云原生工作流利用云计算的弹性、可伸缩性和容器化等特性，使工作流程更加灵活、可靠和易于管理。下面是关于云原生工作流的一些基本信息：</p> <blockquote><p>云原生工作流的特点：</p></blockquote> <ol><li><strong>容器化：</strong> 云原生工作流通常采用容器技术，将工作流中的各个组件打包成独立的容器，以便在不同环境中运行。</li> <li><strong>弹性伸缩：</strong> 云原生工作流能够根据负载的变化自动伸缩，以保持系统的高可用性和性能。</li> <li><strong>微服务架构：</strong> 采用微服务的架构，将工作流拆分成小的、独立的服务，每个服务负责一个特定的功能。</li> <li><strong>自动化：</strong> 云原生工作流强调自动化，通过自动执行、监控和调整工作流程，提高效率和减少人工干预。</li></ol> <blockquote><p>云原生工作流的实现：</p></blockquote> <ol><li><strong>Kubernetes：</strong> Kubernetes是一个开源的容器编排平台，被广泛用于云原生应用的部署和管理。云原生工作流可以直接利用Kubernetes的特性，例如Pod、Service、ReplicaSet等，来实现容器化和弹性伸缩。</li> <li><strong>Argo Workflow：</strong> Argo Workflow是一个基于Kubernetes的开源工作流引擎，专门用于管理和执行容器化工作流。它支持定义复杂的工作流，包括并行和串行的任务，适用于各种场景。</li> <li><strong>Tekton：</strong> Tekton是一个云原生的持续交付（CI/CD）框架，也可以用于构建云原生工作流。它提供了定义、运行和监控容器化工作流的能力，可以与Kubernetes和其他CI/CD工具集成。</li> <li><strong>Apache Airflow：</strong> Apache Airflow是一个流行的开源工作流调度系统，支持定义、调度和监控工作流。它可以在云环境中运行，并且具有扩展性和灵活性。</li> <li><strong>Serverless 架构：</strong> 通过采用无服务器（Serverless）架构，可以进一步简化工作流的管理和扩展。服务如AWS Step Functions、Azure Logic Apps和Google Cloud Composer等提供了云原生的无服务器工作流解决方案。</li></ol> <p>实现云原生工作流的关键在于选择合适的工作流引擎，结合云原生基础设施和服务，以满足应用程序的需求，并充分发挥云计算的优势。</p> <h2 id="k8s上部署工作流原理"><a href="#k8s上部署工作流原理" class="header-anchor">#</a> k8s上部署工作流原理</h2> <p>前面，我们看到的云原生的诸多优点。下面我们来了解下Kubernetes这个最出名的容器编排平台，以及如何基于Kubernetes实现容器化部署。</p> <p>Kubernetes（简称 K8s）是一个开源的容器编排平台，用于自动化容器应用程序的部署、扩展和管理。它最初是由 Google 设计和开发的，现在由 Cloud Native Computing Foundation（CNCF）维护。Kubernetes 提供了一种跨集群的容器管理解决方案，让您能够在公有云、私有云或混合云环境中运行、管理和扩展容器化应用程序。</p> <h3 id="kubernetes介绍"><a href="#kubernetes介绍" class="header-anchor">#</a> Kubernetes介绍</h3> <p>Kubernetes 的主要特性和优势包括：</p> <ol><li>自动化部署和滚动更新：Kubernetes 可以根据预定义的配置自动部署应用程序，并在更新时进行滚动更新，以确保零停机时间和持续可用性。</li> <li>自动扩展：Kubernetes 可以根据资源使用情况（如 CPU 和内存）自动扩展或收缩应用程序实例数量，以满足不断变化的负载需求。</li> <li>负载均衡和服务发现：Kubernetes 提供了内置的负载均衡器和服务发现机制，允许容器之间以及外部客户端访问容器应用程序。</li> <li>自我修复：Kubernetes 可以检测到容器故障并自动重新启动容器，确保应用程序始终保持运行状态。</li> <li>存储编排：Kubernetes 允许自动挂载所需的存储系统（例如本地存储、公有云提供商的存储服务等），以满足应用程序的存储需求。</li> <li>安全和访问控制：Kubernetes 提供了多种安全特性，如网络策略、TLS、身份验证和授权，以确保应用程序和集群的安全。</li> <li>多云和混合云支持：Kubernetes 可以在各种环境中运行，包括公有云、私有云、混合云和本地数据中心，实现真正的混合云部署。</li> <li>声明式配置：Kubernetes 使用声明式配置，允许描述应用程序的期望状态，而 Kubernetes 则负责实现和维护这个状态。</li></ol> <p>Kubernetes 提供了一种强大、灵活且可扩展的容器管理平台，使企业能够更好地利用容器技术，提高应用程序的可靠性、可用性和安全性，降低运维成本。</p> <h3 id="k8s容器化部署实践"><a href="#k8s容器化部署实践" class="header-anchor">#</a> k8s容器化部署实践</h3> <p>假设我们要将一个Golang实现的API服务进行容器化部署。</p> <p>假设项目目录结构如下：</p> <div class="language- extra-class"><pre class="language-text"><code>main.go
+</code></pre></div><blockquote><p>main.go</p></blockquote> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+  <span class="token string">&quot;net/http&quot;</span>
+
+  <span class="token string">&quot;github.com/gin-gonic/gin&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  r <span class="token operator">:=</span> gin<span class="token punctuation">.</span><span class="token function">Default</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  r<span class="token punctuation">.</span><span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">&quot;/ping&quot;</span><span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    c<span class="token punctuation">.</span><span class="token function">JSON</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusOK<span class="token punctuation">,</span> gin<span class="token punctuation">.</span>H<span class="token punctuation">{</span>
+      <span class="token string">&quot;message&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;pong&quot;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  r<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// listen and serve on 0.0.0.0:8080 </span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><blockquote><p>创建Docker镜像</p></blockquote> <p>创建 Docker 镜像 首先，需要为 Golang API 服务创建一个 Docker 镜像。创建一个名为 <code>Dockerfile</code> 的文件，将其放在您的项目根目录中，并添加以下内容：</p> <div class="language-dockerfile extra-class"><pre class="language-dockerfile"><code><span class="token comment"># 使用官方 Golang 镜像作为基础镜像</span>
+<span class="token instruction"><span class="token keyword">FROM</span> golang:1.20</span>
+
+<span class="token comment"># 将工作目录设置为 /app</span>
+<span class="token instruction"><span class="token keyword">WORKDIR</span> /app</span>
+  
+<span class="token comment"># 设置 Go 环境变量 GO111MODULE 为 on，启用 Go Modules 功能。</span>
+<span class="token instruction"><span class="token keyword">RUN</span> go env -w GO111MODULE=on</span>
+
+<span class="token comment"># 设置 Go 环境变量 GOPROXY，使用中国镜像站点 goproxy.cn 作为 Go Modules 的代理。</span>
+<span class="token instruction"><span class="token keyword">RUN</span> go env -w GOPROXY=https://goproxy.cn,direct</span>
+
+<span class="token comment"># 设置镜像的维护者信息。</span>
+<span class="token instruction"><span class="token keyword">MAINTAINER</span> <span class="token string">&quot;test&quot;</span></span>
+
+<span class="token comment"># 复制项目源代码到工作目录</span>
+<span class="token instruction"><span class="token keyword">COPY</span> . .</span>
+
+<span class="token comment"># 初始化一个新的 Go Modules 项目</span>
+<span class="token instruction"><span class="token keyword">RUN</span> go mod init api-server</span>
+
+<span class="token comment"># 下载并安装项目所需的依赖项</span>
+<span class="token instruction"><span class="token keyword">RUN</span> go mod tidy</span>
+
+<span class="token comment"># 安装并升级 Golang Gin Web 框架。</span>
+<span class="token instruction"><span class="token keyword">RUN</span> go get -u github.com/gin-gonic/gin</span>
+
+<span class="token comment"># 构建 Golang API 服务</span>
+<span class="token instruction"><span class="token keyword">RUN</span> go build main.go</span>
+
+<span class="token comment"># 暴露端口（请根据您的实际端口进行修改）</span>
+<span class="token instruction"><span class="token keyword">EXPOSE</span> 8080</span>
+
+<span class="token comment"># 运行 Golang API 服务</span>
+<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">&quot;./main&quot;</span>]</span>
+</code></pre></div><blockquote><p>构建Docker镜像</p></blockquote> <p>构建 Docker 镜像 在项目根目录中运行以下命令，将您的 Golang API 服务打包成一个 Docker 镜像：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">docker</span> build <span class="token parameter variable">-t</span> your-dockerhub-username/golang-api-service:v1.0 <span class="token builtin class-name">.</span>
+</code></pre></div><blockquote><p>推送到镜像仓库</p></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">docker</span> login
+<span class="token function">docker</span> push your-dockerhub-username/golang-api-service:v1.0
+</code></pre></div><blockquote><p>创建yaml部署文件</p></blockquote> <p>创建 Kubernetes 部署和服务 接下来，您需要创建一个 Kubernetes 部署和服务来运行和暴露您的 Golang API 服务。创建一个名为 <code>deployment.yaml</code> 的文件，并添加以下内容：</p> <div class="language-dockerfile extra-class"><pre class="language-dockerfile"><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golang-api-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: golang-api-service
+  template:
+    metadata:
+      labels:
+        app: golang-api-service
+    spec:
+      containers:
+      - name: golang-api-service
+        image: your-dockerhub-username/golang-api-service:v1.0
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: golang-api-service
+spec:
+  selector:
+    app: golang-api-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+</code></pre></div><blockquote><p>部署到Kubernetes集群</p></blockquote> <p>部署到 Kubernetes 集群 确保您已连接到正确的 Kubernetes 集群，并运行以下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl apply -f deployment.yaml
+</code></pre></div><blockquote><p>查看部署状态</p></blockquote> <p>使用以下命令查看部署状态：</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl get pods
+NAME                                  READY   STATUS      RESTARTS   AGE
+golang-api-service-6df899b897-kvkcg   1/1     Running     0          5s
+golang-api-service-6df899b897-l9qnl   1/1     Running     0          5s
+golang-api-service-6df899b897-nk9r2   1/1     Running     0          5s
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>kubectl get svc
+NAME                 TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+golang-api-service   LoadBalancer   10.107.173.31   localhost     80:32636/TCP   20s
+</code></pre></div><p>当 Golang API 服务成功部署到 Kubernetes 集群后，您可以通过服务的 IP 地址和端口访问它。如果您使用的是 LoadBalancer 服务类型，您还可以通过负载均衡器提供的公共 IP 地址访问您的 API 服务。</p> <div class="language- extra-class"><pre class="language-text"><code>curl http://localhost/ping
+{&quot;message&quot;:&quot;pong&quot;}
+</code></pre></div><h2 id="k8s上运行工作流任务原理"><a href="#k8s上运行工作流任务原理" class="header-anchor">#</a> k8s上运行工作流任务原理</h2> <h3 id="概览"><a href="#概览" class="header-anchor">#</a> 概览</h3> <p>如下图，当 DAG 提交任务时，KubernetesExecutor 从 Kubernetes API 请求工作单元 pod。然后，worker pod 运行任务、报告结果并终止。下面，我们尝试分析Airflow中Kubernetes创建和销毁Pod的流程原理，并在下一环节中手动实现这一过程。</p> <img src="/assets/img/11 arch-diag-kubernetes.6fa43d58.png" style="zoom:67%;"> <p>下面我们通过分析Airflow的KubernetesPodOperator了解其实现原理，如下是KubernetesPodOperator的使用方法。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">from</span> airflow<span class="token punctuation">.</span>providers<span class="token punctuation">.</span>cncf<span class="token punctuation">.</span>kubernetes<span class="token punctuation">.</span>operators<span class="token punctuation">.</span>pod <span class="token keyword">import</span> KubernetesPodOperator
+
+k <span class="token operator">=</span> KubernetesPodOperator<span class="token punctuation">(</span>
+    name<span class="token operator">=</span><span class="token string">&quot;hello-dry-run&quot;</span><span class="token punctuation">,</span>
+    image<span class="token operator">=</span><span class="token string">&quot;debian&quot;</span><span class="token punctuation">,</span>
+    cmds<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">&quot;bash&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;-cx&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    arguments<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">&quot;echo&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;10&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    labels<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">&quot;foo&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;bar&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    task_id<span class="token operator">=</span><span class="token string">&quot;dry_run_demo&quot;</span><span class="token punctuation">,</span>
+    do_xcom_push<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+
+k<span class="token punctuation">.</span>dry_run<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><h3 id="执行入口"><a href="#执行入口" class="header-anchor">#</a> 执行入口</h3> <p>KubernetesPodOperator的入口函数是execute方法：</p> <blockquote><p>源码位置：airflow/airflow/providers/cncf/kubernetes/operators/pod.py</p></blockquote> <p>该方法会调用execute_sync同步执行或execute_async异步执行来创建Pod，这里我们分析execute_sync同步执行的代码</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">execute</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> context<span class="token punctuation">:</span> Context<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">&quot;&quot;&quot;Based on the deferrable parameter runs the pod asynchronously or synchronously.&quot;&quot;&quot;</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>deferrable<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>execute_async<span class="token punctuation">(</span>context<span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> self<span class="token punctuation">.</span>execute_sync<span class="token punctuation">(</span>context<span class="token punctuation">)</span> 
+</code></pre></div><p>如下是execute_sync源码：</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">execute_sync</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> context<span class="token punctuation">:</span> Context<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    result <span class="token operator">=</span> <span class="token boolean">None</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token comment"># 函数会检查是否已经有一个Pod请求对象，如果没有，就会创建一个。</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>pod_request_obj <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>pod_request_obj <span class="token operator">=</span> self<span class="token punctuation">.</span>build_pod_request_obj<span class="token punctuation">(</span>context<span class="token punctuation">)</span>
+        <span class="token comment"># 函数会检查是否已经有一个Pod对象，如果没有，就会获取或创建一个。</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>pod <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>pod <span class="token operator">=</span> self<span class="token punctuation">.</span>get_or_create_pod<span class="token punctuation">(</span>  <span class="token comment"># must set `self.pod` for `on_kill`</span>
+                pod_request_obj<span class="token operator">=</span>self<span class="token punctuation">.</span>pod_request_obj<span class="token punctuation">,</span>
+                context<span class="token operator">=</span>context<span class="token punctuation">,</span>
+            <span class="token punctuation">)</span>
+        <span class="token comment"># 函数会将Pod的名称和命名空间推送到xcom，以便在出现错误时仍然可以获取这些值</span>
+        ti <span class="token operator">=</span> context<span class="token punctuation">[</span><span class="token string">&quot;ti&quot;</span><span class="token punctuation">]</span>
+        ti<span class="token punctuation">.</span>xcom_push<span class="token punctuation">(</span>key<span class="token operator">=</span><span class="token string">&quot;pod_name&quot;</span><span class="token punctuation">,</span> value<span class="token operator">=</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+        ti<span class="token punctuation">.</span>xcom_push<span class="token punctuation">(</span>key<span class="token operator">=</span><span class="token string">&quot;pod_namespace&quot;</span><span class="token punctuation">,</span> value<span class="token operator">=</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">)</span>
+
+        <span class="token comment"># 函数会获取远程Pod，以便在清理方法中使用</span>
+        self<span class="token punctuation">.</span>remote_pod <span class="token operator">=</span> self<span class="token punctuation">.</span>find_pod<span class="token punctuation">(</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">,</span> context<span class="token operator">=</span>context<span class="token punctuation">)</span>
+        
+        <span class="token comment"># 如果定义了回调函数，函数会在Pod创建和启动时调用相应的回调函数</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>callbacks<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>callbacks<span class="token punctuation">.</span>on_pod_creation<span class="token punctuation">(</span>
+                pod<span class="token operator">=</span>self<span class="token punctuation">.</span>remote_pod<span class="token punctuation">,</span> client<span class="token operator">=</span>self<span class="token punctuation">.</span>client<span class="token punctuation">,</span> mode<span class="token operator">=</span>ExecutionMode<span class="token punctuation">.</span>SYNC
+            <span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>await_pod_start<span class="token punctuation">(</span>pod<span class="token operator">=</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>callbacks<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>callbacks<span class="token punctuation">.</span>on_pod_starting<span class="token punctuation">(</span>
+                pod<span class="token operator">=</span>self<span class="token punctuation">.</span>find_pod<span class="token punctuation">(</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">,</span> context<span class="token operator">=</span>context<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                client<span class="token operator">=</span>self<span class="token punctuation">.</span>client<span class="token punctuation">,</span>
+                mode<span class="token operator">=</span>ExecutionMode<span class="token punctuation">.</span>SYNC<span class="token punctuation">,</span>
+            <span class="token punctuation">)</span>
+
+        <span class="token comment"># 如果需要获取日志，函数会获取Pod的日志。</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>get_logs<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>pod_manager<span class="token punctuation">.</span>fetch_requested_container_logs<span class="token punctuation">(</span>
+                pod<span class="token operator">=</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">,</span>
+                containers<span class="token operator">=</span>self<span class="token punctuation">.</span>container_logs<span class="token punctuation">,</span>
+                follow_logs<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+            <span class="token punctuation">)</span>
+        <span class="token comment"># 如果不需要获取日志，或者基础容器的名称不在容器日志中，函数会等待容器完成</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>get_logs <span class="token keyword">or</span> <span class="token punctuation">(</span>
+            self<span class="token punctuation">.</span>container_logs <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">True</span> <span class="token keyword">and</span> self<span class="token punctuation">.</span>base_container_name <span class="token keyword">not</span> <span class="token keyword">in</span> self<span class="token punctuation">.</span>container_logs
+        <span class="token punctuation">)</span><span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>pod_manager<span class="token punctuation">.</span>await_container_completion<span class="token punctuation">(</span>
+                pod<span class="token operator">=</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">,</span> container_name<span class="token operator">=</span>self<span class="token punctuation">.</span>base_container_name
+            <span class="token punctuation">)</span>
+        <span class="token comment"># 如果定义了回调函数，函数会在Pod完成时调用相应的回调函数</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>callbacks<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>callbacks<span class="token punctuation">.</span>on_pod_completion<span class="token punctuation">(</span>
+                pod<span class="token operator">=</span>self<span class="token punctuation">.</span>find_pod<span class="token punctuation">(</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">,</span> context<span class="token operator">=</span>context<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                client<span class="token operator">=</span>self<span class="token punctuation">.</span>client<span class="token punctuation">,</span>
+                mode<span class="token operator">=</span>ExecutionMode<span class="token punctuation">.</span>SYNC<span class="token punctuation">,</span>
+            <span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>do_xcom_push<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>pod_manager<span class="token punctuation">.</span>await_xcom_sidecar_container_start<span class="token punctuation">(</span>pod<span class="token operator">=</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">)</span>
+            result <span class="token operator">=</span> self<span class="token punctuation">.</span>extract_xcom<span class="token punctuation">(</span>pod<span class="token operator">=</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">)</span>
+        istio_enabled <span class="token operator">=</span> self<span class="token punctuation">.</span>is_istio_enabled<span class="token punctuation">(</span>self<span class="token punctuation">.</span>pod<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>remote_pod <span class="token operator">=</span> self<span class="token punctuation">.</span>pod_manager<span class="token punctuation">.</span>await_pod_completion<span class="token punctuation">(</span>
+            self<span class="token punctuation">.</span>pod<span class="token punctuation">,</span> istio_enabled<span class="token punctuation">,</span> self<span class="token punctuation">.</span>base_container_name
+        <span class="token punctuation">)</span>
+    <span class="token keyword">finally</span><span class="token punctuation">:</span>
+        <span class="token comment"># 最后，函数会清理Pod，并在清理完成后调用相应的回调函数</span>
+        pod_to_clean <span class="token operator">=</span> self<span class="token punctuation">.</span>pod <span class="token keyword">or</span> self<span class="token punctuation">.</span>pod_request_obj
+        self<span class="token punctuation">.</span>cleanup<span class="token punctuation">(</span>
+            pod<span class="token operator">=</span>pod_to_clean<span class="token punctuation">,</span>
+            remote_pod<span class="token operator">=</span>self<span class="token punctuation">.</span>remote_pod<span class="token punctuation">,</span>
+        <span class="token punctuation">)</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>callbacks<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>callbacks<span class="token punctuation">.</span>on_pod_cleanup<span class="token punctuation">(</span>pod<span class="token operator">=</span>pod_to_clean<span class="token punctuation">,</span> client<span class="token operator">=</span>self<span class="token punctuation">.</span>client<span class="token punctuation">,</span> mode<span class="token operator">=</span>ExecutionMode<span class="token punctuation">.</span>SYNC<span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>do_xcom_push<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> result
+</code></pre></div><p>这段代码里，有几个关键的被调用函数：</p> <ul><li>get_or_create_pod：创建Pod</li> <li>fetch_requested_container_logs：获取Pod执行日志</li> <li>cleanup：销毁Pod</li></ul> <h3 id="创建pod"><a href="#创建pod" class="header-anchor">#</a> 创建Pod</h3> <p>我们先分析创建Pod的函数调用过程：</p> <blockquote><p>源码位置：airflow/airflow/providers/cncf/kubernetes/operators/pod.py</p></blockquote> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">get_or_create_pod</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> pod_request_obj<span class="token punctuation">:</span> k8s<span class="token punctuation">.</span>V1Pod<span class="token punctuation">,</span> context<span class="token punctuation">:</span> Context<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> k8s<span class="token punctuation">.</span>V1Pod<span class="token punctuation">:</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>reattach_on_restart<span class="token punctuation">:</span>
+        pod <span class="token operator">=</span> self<span class="token punctuation">.</span>find_pod<span class="token punctuation">(</span>self<span class="token punctuation">.</span>namespace <span class="token keyword">or</span> pod_request_obj<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">,</span> context<span class="token operator">=</span>context<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> pod<span class="token punctuation">:</span>
+            <span class="token keyword">return</span> pod
+
+    self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">&quot;Starting pod:\n%s&quot;</span><span class="token punctuation">,</span> yaml<span class="token punctuation">.</span>safe_dump<span class="token punctuation">(</span>pod_request_obj<span class="token punctuation">.</span>to_dict<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>pod_manager<span class="token punctuation">.</span>create_pod<span class="token punctuation">(</span>pod<span class="token operator">=</span>pod_request_obj<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> pod_request_obj
+</code></pre></div><p>该方法通过调用pod_manager对象的create_pod方法创建Pod。</p> <blockquote><p>源码位置：airflow/airflow/providers/cncf/kubernetes/utils/pod_manager.py</p></blockquote> <p>在PodManager类中，我们可以看到各种调用Kubernetes接口的python SDK的代码。</p> <p>run_pod_async方法通过调用Kubernetes的python SDK中的create_namespaced_pod函数实现创建Pod。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">create_pod</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> pod<span class="token punctuation">:</span> V1Pod<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> V1Pod<span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">&quot;&quot;&quot;Launch the pod asynchronously.&quot;&quot;&quot;</span>
+    <span class="token keyword">return</span> self<span class="token punctuation">.</span>run_pod_async<span class="token punctuation">(</span>pod<span class="token punctuation">)</span>
+  
+  
+<span class="token keyword">def</span> <span class="token function">run_pod_async</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> pod<span class="token punctuation">:</span> V1Pod<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> V1Pod<span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">&quot;&quot;&quot;Run POD asynchronously.&quot;&quot;&quot;</span>
+    sanitized_pod <span class="token operator">=</span> self<span class="token punctuation">.</span>_client<span class="token punctuation">.</span>api_client<span class="token punctuation">.</span>sanitize_for_serialization<span class="token punctuation">(</span>pod<span class="token punctuation">)</span>
+    json_pod <span class="token operator">=</span> json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>sanitized_pod<span class="token punctuation">,</span> indent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+
+    self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">&quot;Pod Creation Request: \n%s&quot;</span><span class="token punctuation">,</span> json_pod<span class="token punctuation">)</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        resp <span class="token operator">=</span> self<span class="token punctuation">.</span>_client<span class="token punctuation">.</span>create_namespaced_pod<span class="token punctuation">(</span>
+            body<span class="token operator">=</span>sanitized_pod<span class="token punctuation">,</span> namespace<span class="token operator">=</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs
+        <span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">&quot;Pod Creation Response: %s&quot;</span><span class="token punctuation">,</span> resp<span class="token punctuation">)</span>
+    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>exception<span class="token punctuation">(</span>
+            <span class="token string">&quot;Exception when attempting to create Namespaced Pod: %s&quot;</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>json_pod<span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">&quot;\n&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot; &quot;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+        <span class="token keyword">raise</span> e
+    <span class="token keyword">return</span> resp
+  
+
+</code></pre></div><h3 id="获取执行日志"><a href="#获取执行日志" class="header-anchor">#</a> 获取执行日志</h3> <p>execute_sync调用pod_manager的fetch_requested_container_logs方法。</p> <blockquote><p>源码位置：airflow/airflow/providers/cncf/kubernetes/utils/pod_manager.py</p></blockquote> <p>该方法的主要功能是获取Kubernetes Pod中指定容器的日志，并将日志流式传输到Airflow的日志系统。以下是该方法的主要工作流程：</p> <ul><li>首先，初始化一个名为<code>pod_logging_statuses</code>的列表，用于存储每个容器的日志获取状态。</li> <li>然后，使用<code>get_container_names</code>方法获取Pod中所有容器的名称。</li> <li>使用<code>_reconcile_requested_log_containers</code>方法，根据请求的容器名称和实际的容器名称，确定需要获取日志的容器。</li> <li>对于每个需要获取日志的容器，调用<code>fetch_container_logs</code>方法获取容器的日志，并将日志获取的状态添加到<code>pod_logging_statuses</code>列表中。</li> <li>最后，返回<code>pod_logging_statuses</code>列表。</li></ul> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">fetch_requested_container_logs</span><span class="token punctuation">(</span>
+    self<span class="token punctuation">,</span> pod<span class="token punctuation">:</span> V1Pod<span class="token punctuation">,</span> containers<span class="token punctuation">:</span> Iterable<span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">]</span> <span class="token operator">|</span> <span class="token builtin">str</span> <span class="token operator">|</span> Literal<span class="token punctuation">[</span><span class="token boolean">True</span><span class="token punctuation">]</span><span class="token punctuation">,</span> follow_logs<span class="token operator">=</span><span class="token boolean">False</span>
+<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">list</span><span class="token punctuation">[</span>PodLoggingStatus<span class="token punctuation">]</span><span class="token punctuation">:</span>
+    pod_logging_statuses <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    all_containers <span class="token operator">=</span> self<span class="token punctuation">.</span>get_container_names<span class="token punctuation">(</span>pod<span class="token punctuation">)</span>
+    containers_to_log <span class="token operator">=</span> self<span class="token punctuation">.</span>_reconcile_requested_log_containers<span class="token punctuation">(</span>
+        requested<span class="token operator">=</span>containers<span class="token punctuation">,</span>
+        actual<span class="token operator">=</span>all_containers<span class="token punctuation">,</span>
+        pod_name<span class="token operator">=</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+    <span class="token keyword">for</span> c <span class="token keyword">in</span> containers_to_log<span class="token punctuation">:</span>
+        status <span class="token operator">=</span> self<span class="token punctuation">.</span>fetch_container_logs<span class="token punctuation">(</span>pod<span class="token operator">=</span>pod<span class="token punctuation">,</span> container_name<span class="token operator">=</span>c<span class="token punctuation">,</span> follow<span class="token operator">=</span>follow_logs<span class="token punctuation">)</span>
+        pod_logging_statuses<span class="token punctuation">.</span>append<span class="token punctuation">(</span>status<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> pod_logging_statuses
+</code></pre></div><blockquote><p>源码位置：airflow/airflow/providers/cncf/kubernetes/utils/pod_manager.py</p></blockquote> <p>该方法的主要功能是获取Kubernetes Pod中特定容器的日志，并将日志流式传输到Airflow的日志系统。以下是该方法的主要工作流程：</p> <ul><li>定义一个名为<code>consume_logs</code>的内部函数，用于尝试获取容器日志并处理日志中的每一行。这里最关键的方法是调用read_pod_logs函数。</li> <li>然后，使用一个无限循环来调用<code>consume_logs</code>函数。在每次循环中，都会尝试获取并处理容器日志</li></ul> <div class="language-python extra-class"><pre class="language-python"><code> <span class="token keyword">def</span> <span class="token function">fetch_container_logs</span><span class="token punctuation">(</span>
+        self<span class="token punctuation">,</span>
+        pod<span class="token punctuation">:</span> V1Pod<span class="token punctuation">,</span>
+        container_name<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span>
+        <span class="token operator">*</span><span class="token punctuation">,</span>
+        follow<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>
+        since_time<span class="token punctuation">:</span> DateTime <span class="token operator">|</span> <span class="token boolean">None</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+        post_termination_timeout<span class="token punctuation">:</span> <span class="token builtin">int</span> <span class="token operator">=</span> <span class="token number">120</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> PodLoggingStatus<span class="token punctuation">:</span>
+    
+
+        <span class="token keyword">def</span> <span class="token function">consume_logs</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">,</span> since_time<span class="token punctuation">:</span> DateTime <span class="token operator">|</span> <span class="token boolean">None</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">tuple</span><span class="token punctuation">[</span>DateTime <span class="token operator">|</span> <span class="token boolean">None</span><span class="token punctuation">,</span> Exception <span class="token operator">|</span> <span class="token boolean">None</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+            exception <span class="token operator">=</span> <span class="token boolean">None</span>
+            last_captured_timestamp <span class="token operator">=</span> <span class="token boolean">None</span>
+            connection_timeout <span class="token operator">=</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">30</span>
+            read_timeout <span class="token operator">=</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">5</span>
+            <span class="token keyword">try</span><span class="token punctuation">:</span>
+                logs <span class="token operator">=</span> self<span class="token punctuation">.</span>read_pod_logs<span class="token punctuation">(</span>
+                    pod<span class="token operator">=</span>pod<span class="token punctuation">,</span>
+                    container_name<span class="token operator">=</span>container_name<span class="token punctuation">,</span>
+                    timestamps<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+                    since_seconds<span class="token operator">=</span><span class="token punctuation">(</span>
+                        math<span class="token punctuation">.</span>ceil<span class="token punctuation">(</span><span class="token punctuation">(</span>pendulum<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> since_time<span class="token punctuation">)</span><span class="token punctuation">.</span>total_seconds<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">if</span> since_time <span class="token keyword">else</span> <span class="token boolean">None</span>
+                    <span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    follow<span class="token operator">=</span>follow<span class="token punctuation">,</span>
+                    post_termination_timeout<span class="token operator">=</span>post_termination_timeout<span class="token punctuation">,</span>
+                    _request_timeout<span class="token operator">=</span><span class="token punctuation">(</span>connection_timeout<span class="token punctuation">,</span> read_timeout<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                
+            <span class="token keyword">except</span> TimeoutError <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+                <span class="token comment"># in case of timeout, increment return time by 2 seconds to avoid</span>
+                <span class="token comment"># duplicate log entries</span>
+                <span class="token keyword">if</span> val <span class="token operator">:=</span> <span class="token punctuation">(</span>last_captured_timestamp <span class="token keyword">or</span> since_time<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    <span class="token keyword">return</span> val<span class="token punctuation">.</span>add<span class="token punctuation">(</span>seconds<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> e
+            <span class="token keyword">except</span> HTTPError <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+                exception <span class="token operator">=</span> e
+                self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>exception<span class="token punctuation">(</span>
+                    <span class="token string">&quot;Reading of logs interrupted for container %r; will retry.&quot;</span><span class="token punctuation">,</span>
+                    container_name<span class="token punctuation">,</span>
+                <span class="token punctuation">)</span>
+            <span class="token keyword">return</span> last_captured_timestamp <span class="token keyword">or</span> since_time<span class="token punctuation">,</span> exception
+
+
+        last_log_time <span class="token operator">=</span> since_time
+        <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+            last_log_time<span class="token punctuation">,</span> exc <span class="token operator">=</span> consume_logs<span class="token punctuation">(</span>since_time<span class="token operator">=</span>last_log_time<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>container_is_running<span class="token punctuation">(</span>pod<span class="token punctuation">,</span> container_name<span class="token operator">=</span>container_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">return</span> PodLoggingStatus<span class="token punctuation">(</span>running<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> last_log_time<span class="token operator">=</span>last_log_time<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token keyword">not</span> follow<span class="token punctuation">:</span>
+                <span class="token keyword">return</span> PodLoggingStatus<span class="token punctuation">(</span>running<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> last_log_time<span class="token operator">=</span>last_log_time<span class="token punctuation">)</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                <span class="token comment"># a timeout is a normal thing and we ignore it and resume following logs</span>
+                <span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>exc<span class="token punctuation">,</span> TimeoutError<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>warning<span class="token punctuation">(</span>
+                        <span class="token string">&quot;Pod %s log read interrupted but container %s still running&quot;</span><span class="token punctuation">,</span>
+                        pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+                        container_name<span class="token punctuation">,</span>
+                    <span class="token punctuation">)</span>
+                time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre></div><p>我们再看看read_pod_logs源码：</p> <blockquote><p>源码位置：airflow/airflow/providers/cncf/kubernetes/utils/pod_manager.py</p></blockquote> <p>可以看到该方法最终是通过调用Kubernetes的Python SDK的read_namespaced_pod_log函数实现读取日志。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token decorator annotation punctuation">@tenacity<span class="token punctuation">.</span>retry</span><span class="token punctuation">(</span>stop<span class="token operator">=</span>tenacity<span class="token punctuation">.</span>stop_after_attempt<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span> wait<span class="token operator">=</span>tenacity<span class="token punctuation">.</span>wait_exponential<span class="token punctuation">(</span><span class="token builtin">max</span><span class="token operator">=</span><span class="token number">15</span><span class="token punctuation">)</span><span class="token punctuation">,</span> reraise<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">read_pod_logs</span><span class="token punctuation">(</span>
+    self<span class="token punctuation">,</span>
+    pod<span class="token punctuation">:</span> V1Pod<span class="token punctuation">,</span>
+    container_name<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span>
+    tail_lines<span class="token punctuation">:</span> <span class="token builtin">int</span> <span class="token operator">|</span> <span class="token boolean">None</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+    timestamps<span class="token punctuation">:</span> <span class="token builtin">bool</span> <span class="token operator">=</span> <span class="token boolean">False</span><span class="token punctuation">,</span>
+    since_seconds<span class="token punctuation">:</span> <span class="token builtin">int</span> <span class="token operator">|</span> <span class="token boolean">None</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+    follow<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+    post_termination_timeout<span class="token punctuation">:</span> <span class="token builtin">int</span> <span class="token operator">=</span> <span class="token number">120</span><span class="token punctuation">,</span>
+    <span class="token operator">**</span>kwargs<span class="token punctuation">,</span>
+<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> PodLogsConsumer<span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">&quot;&quot;&quot;Read log from the POD.&quot;&quot;&quot;</span>
+    additional_kwargs <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">if</span> since_seconds<span class="token punctuation">:</span>
+        additional_kwargs<span class="token punctuation">[</span><span class="token string">&quot;since_seconds&quot;</span><span class="token punctuation">]</span> <span class="token operator">=</span> since_seconds
+
+    <span class="token keyword">if</span> tail_lines<span class="token punctuation">:</span>
+        additional_kwargs<span class="token punctuation">[</span><span class="token string">&quot;tail_lines&quot;</span><span class="token punctuation">]</span> <span class="token operator">=</span> tail_lines
+    additional_kwargs<span class="token punctuation">.</span>update<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        logs <span class="token operator">=</span> self<span class="token punctuation">.</span>_client<span class="token punctuation">.</span>read_namespaced_pod_log<span class="token punctuation">(</span>
+            name<span class="token operator">=</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+            namespace<span class="token operator">=</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">,</span>
+            container<span class="token operator">=</span>container_name<span class="token punctuation">,</span>
+            follow<span class="token operator">=</span>follow<span class="token punctuation">,</span>
+            timestamps<span class="token operator">=</span>timestamps<span class="token punctuation">,</span>
+            _preload_content<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>
+            <span class="token operator">**</span>additional_kwargs<span class="token punctuation">,</span>
+        <span class="token punctuation">)</span>
+    <span class="token keyword">except</span> HTTPError<span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>exception<span class="token punctuation">(</span><span class="token string">&quot;There was an error reading the kubernetes API.&quot;</span><span class="token punctuation">)</span>
+        <span class="token keyword">raise</span>
+
+    <span class="token keyword">return</span> PodLogsConsumer<span class="token punctuation">(</span>
+        response<span class="token operator">=</span>logs<span class="token punctuation">,</span>
+        pod<span class="token operator">=</span>pod<span class="token punctuation">,</span>
+        pod_manager<span class="token operator">=</span>self<span class="token punctuation">,</span>
+        container_name<span class="token operator">=</span>container_name<span class="token punctuation">,</span>
+        post_termination_timeout<span class="token operator">=</span>post_termination_timeout<span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+</code></pre></div><h3 id="销毁pod"><a href="#销毁pod" class="header-anchor">#</a> 销毁Pod</h3> <p>接下来，我们分析销毁Pod的流程：</p> <blockquote><p>源码位置：airflow/airflow/providers/cncf/kubernetes/operators/pod.py</p></blockquote> <p>cleanup函数最终也是调用pod_manager对象的delete_pod方法来删除Pod。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">cleanup</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> pod<span class="token punctuation">:</span> k8s<span class="token punctuation">.</span>V1Pod<span class="token punctuation">,</span> remote_pod<span class="token punctuation">:</span> k8s<span class="token punctuation">.</span>V1Pod<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    self<span class="token punctuation">.</span>process_pod_deletion<span class="token punctuation">(</span>remote_pod<span class="token punctuation">,</span> reraise<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+    
+<span class="token keyword">def</span> <span class="token function">process_pod_deletion</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> pod<span class="token punctuation">:</span> k8s<span class="token punctuation">.</span>V1Pod<span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">,</span> reraise<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">with</span> _optionally_suppress<span class="token punctuation">(</span>reraise<span class="token operator">=</span>reraise<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> pod <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            should_delete_pod <span class="token operator">=</span> <span class="token punctuation">(</span>
+                <span class="token punctuation">(</span>self<span class="token punctuation">.</span>on_finish_action <span class="token operator">==</span> OnFinishAction<span class="token punctuation">.</span>DELETE_POD<span class="token punctuation">)</span>
+                <span class="token keyword">or</span> <span class="token punctuation">(</span>
+                    self<span class="token punctuation">.</span>on_finish_action <span class="token operator">==</span> OnFinishAction<span class="token punctuation">.</span>DELETE_SUCCEEDED_POD
+                    <span class="token keyword">and</span> pod<span class="token punctuation">.</span>status<span class="token punctuation">.</span>phase <span class="token operator">==</span> PodPhase<span class="token punctuation">.</span>SUCCEEDED
+                <span class="token punctuation">)</span>
+                <span class="token keyword">or</span> <span class="token punctuation">(</span>
+                    self<span class="token punctuation">.</span>on_finish_action <span class="token operator">==</span> OnFinishAction<span class="token punctuation">.</span>DELETE_SUCCEEDED_POD
+                    <span class="token keyword">and</span> container_is_succeeded<span class="token punctuation">(</span>pod<span class="token punctuation">,</span> self<span class="token punctuation">.</span>base_container_name<span class="token punctuation">)</span>
+                <span class="token punctuation">)</span>
+            <span class="token punctuation">)</span>
+            <span class="token keyword">if</span> should_delete_pod<span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">&quot;Deleting pod: %s&quot;</span><span class="token punctuation">,</span> pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+                self<span class="token punctuation">.</span>pod_manager<span class="token punctuation">.</span>delete_pod<span class="token punctuation">(</span>pod<span class="token punctuation">)</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">&quot;Skipping deleting pod: %s&quot;</span><span class="token punctuation">,</span> pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>源码位置：airflow/airflow/providers/cncf/kubernetes/utils/pod_manager.py</p></blockquote> <p>如下是delete_pod的源码，最终是通过调用Kubernetes的Python SDK中的delete_namespaced_pod方法实现。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">delete_pod</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> pod<span class="token punctuation">:</span> V1Pod<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">&quot;&quot;&quot;Delete POD.&quot;&quot;&quot;</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>_client<span class="token punctuation">.</span>delete_namespaced_pod<span class="token punctuation">(</span>
+            pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>name<span class="token punctuation">,</span> pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">,</span> body<span class="token operator">=</span>client<span class="token punctuation">.</span>V1DeleteOptions<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+    <span class="token keyword">except</span> ApiException <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        <span class="token comment"># If the pod is already deleted</span>
+        <span class="token keyword">if</span> <span class="token builtin">str</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>status<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token string">&quot;404&quot;</span><span class="token punctuation">:</span>
+            <span class="token keyword">raise</span>
+</code></pre></div><h2 id="k8s上工作流任务运行综合实践"><a href="#k8s上工作流任务运行综合实践" class="header-anchor">#</a> k8s上工作流任务运行综合实践</h2> <h3 id="k8s本地环境部署"><a href="#k8s本地环境部署" class="header-anchor">#</a> k8s本地环境部署</h3> <p>下面我们部署的环境是在mac上直接通过docker desktop版本进行快速部署。</p> <p>这里我们借助Github上一个开源的项目进行快速部署。</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> clone https://github.com/AliyunContainerService/k8s-for-docker-desktop.git
+<span class="token builtin class-name">cd</span> k8s-for-docker-desktop
+</code></pre></div><p>接着下载docker desktop，该软件支持启用Kubernetes服务。</p> <img src="/assets/img/11 k8s-docker-desktop-1.48c38e4f.png" alt="image-20240227193430955" style="zoom:50%;"> <p>然后在设置页面启用Kubernetes服务。</p> <img src="/assets/img/11 k8s启用docker-desktop的k8s.1a692bf7.png" alt="image-20240227193550828" style="zoom:50%;"> <p>当Kubernetes服务运行成功后，我们可以在Mac右上角的Docker图标点击后可以看到绿色状态，显示【Kubernetes is running】。</p> <img src="/assets/img/11 docker-desktop k8s服务启动成功.23a6abd2.png" alt="image-20240227193741011" style="zoom:50%;"> <p>接下来我们切换Kubernetes运行上下文至 docker-desktop：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># kubectl config use-context docker-desktop</span>
+</code></pre></div><p>至此，我们就成功部署了Kubernetes服务，我们可以通过kubectl命令验证Kubernetes集群状态：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># kubectl cluster-info</span>
+
+Kubernetes control plane is running at https://127.0.0.1:6443
+CoreDNS is running at https://127.0.0.1:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use <span class="token string">'kubectl cluster-info dump'</span><span class="token builtin class-name">.</span>
+</code></pre></div><div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># kubectl get nodes</span>
+
+NAME             STATUS   ROLES           AGE   VERSION
+docker-desktop   Ready    control-plane   9h    v1.25.9
+</code></pre></div><blockquote><p>配置Kubernetes控制台</p></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.1/aio/deploy/recommended.yaml</span>
+namespace/kubernetes-dashboard created
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+</code></pre></div><blockquote><p>检查 kubernetes-dashboard 服务状态</p></blockquote> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># kubectl get pod -n kubernetes-dashboard</span>
+
+NAME                                         READY   STATUS    RESTARTS   AGE
+dashboard-metrics-scraper-748b4f5b9d-npkrb   <span class="token number">1</span>/1     Running   <span class="token number">0</span>          29s
+kubernetes-dashboard-86b687bd84-9k8wv        <span class="token number">1</span>/1     Running   <span class="token number">0</span>          29s
+</code></pre></div><blockquote><p>开启API Server访问代理</p></blockquote> <p>如下表示服务启动成功，我们可以直接访问。</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># kubectl proxy</span>
+Starting to serve on <span class="token number">127.0</span>.0.1:8001
+</code></pre></div><blockquote><p>访问控制台</p></blockquote> <p>在访问之前，需要授权<code>kube-system</code>默认服务账号</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> kube-system-default.yaml
+clusterrolebinding.rbac.authorization.k8s.io/kube-system-default created
+secret/default created
+</code></pre></div><p>获取TOKEN</p> <div class="language- extra-class"><pre class="language-text"><code>TOKEN=$(kubectl -n kube-system describe secret default| awk '$1==&quot;token:&quot;{print $2}')
+kubectl config set-credentials docker-desktop --token=&quot;${TOKEN}&quot;
+echo $TOKEN
+</code></pre></div><p>此时会输出一长串的TOKEN，通过该TOKEN我们就可以进入K8s控制台。</p> <div class="language- extra-class"><pre class="language-text"><code>eyJhbGciOiJSUzI1NiIsImtpZCI6IjVyMk0tQmp2bXFhbXVfN3dxanROM0tuZWdldm5iSFo1cy1VaVJWdk5OMDQifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImRlZmF1bHQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIwODZjOGM1Yy1iY2ZiLTRhNjQtOWRjYy03NTFjNmMzYzVjNmIiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06ZGVmYXVsdCJ9.UOKWuKm68X9Q2frJ_3XqZyGyLuHPHM6fvrweT-DtO2-uXmmcmYjw5d9Si3gU6tFkug5xTAXTqBWRlIGw8ohXPvAO5m9fkyxN2YIEOCrXOOpjrP3exS6K65E8V33x7XQ_SuCj42rqQKd1rPw2NVRLMZM17SrUe0Y424IsF1IEZZ_-Q7dBOPbC2xvMpoAbs1rNC5vlsWj-vY6_DyuPb7R0DuAXNuWByyjhyHDz4dw0-Y-dd02J7QWBHJEPVFRwGgcvJguikRbQEgmszRgq7Spc1TyVN0MHXR5XRNxeo1-8vnqI030YaDqJ_TQ7EWi7QXucU-iIvbQInOXe1bfwnsOpQg
+</code></pre></div><p>通过访问如下地址并输入前面生成的TOKEN。</p> <div class="language- extra-class"><pre class="language-text"><code>http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
+</code></pre></div><img src="/assets/img/11 k8s访问.10037c5e.png" alt="image-20240227195535937" style="zoom:50%;"> <p>接着我们就可以看到Kubernetes的控制台，后面我们通过Kubernetes的API进行Pod的创建和删除，都可以在控制台上看到。</p> <img src="/assets/img/11 k8s控制台访问.1a7ac2fc.png" alt="image-20240227195629928" style="zoom:50%;"> <p>至此，我们就成功部署了K8s的服务。</p> <h3 id="k8s-基础命令"><a href="#k8s-基础命令" class="header-anchor">#</a> k8s 基础命令</h3> <blockquote><p>get</p></blockquote> <p><code>kubectl get</code> 是一个用于从Kubernetes集群中获取资源信息的命令。它可以用于查询各种类型的Kubernetes资源，如pod、service、deployment等。</p> <p>例如，查看集群中所有节点。</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl get nodes
+</code></pre></div><p>例如，获取集群中所有pod。</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl get pods
+</code></pre></div><blockquote><p>create</p></blockquote> <p><code>kubectl create</code>命令用于根据文件或输入创建集群resource。</p> <p>例如，根据yaml配置文件创建resource。</p> <p>code/test.py</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">import</span> time
+<span class="token keyword">import</span> os
+
+os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'echo &quot;hello world&quot; &gt; /app/output.txt'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'ok'</span><span class="token punctuation">)</span>
+
+</code></pre></div><p>文件：python_code.yaml</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> my<span class="token punctuation">-</span>python<span class="token punctuation">-</span>app<span class="token punctuation">-</span>pod
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> my<span class="token punctuation">-</span>python<span class="token punctuation">-</span>app
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> my<span class="token punctuation">-</span>python<span class="token punctuation">-</span>app
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> python<span class="token punctuation">:</span><span class="token number">3</span>
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;python&quot;</span><span class="token punctuation">]</span>
+    <span class="token key atrule">args</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;/app/test.py&quot;</span><span class="token punctuation">]</span>
+    <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> host<span class="token punctuation">-</span>volume
+      <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /app
+  <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> host<span class="token punctuation">-</span>volume
+    <span class="token key atrule">hostPath</span><span class="token punctuation">:</span>
+      <span class="token key atrule">path</span><span class="token punctuation">:</span> /Users/shuwoom/Desktop/k8s<span class="token punctuation">-</span>api<span class="token punctuation">-</span>demo/code
+      <span class="token key atrule">type</span><span class="token punctuation">:</span> Directory
+  <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> Never
+</code></pre></div><p>现在，使用<code>kubectl create -f python_code.yaml</code>命令创建Pod时，一旦Python应用程序运行结束，Pod将自动退出并不再运行。</p> <p>此时，通过get命令可以看到刚刚创建的资源。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+my-python-app   <span class="token number">1</span>/1     Running   <span class="token number">0</span>          37s
+</code></pre></div><p>如果想获取python脚本的输出结果，可以通过如下命令实现：</p> <p>我们可以通过logs命令查看pod的运行输出：</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl logs my-python-app-pod
+ok
+</code></pre></div><p>并且可以看到code目录下成功创建了一个output.txt的文件</p> <div class="language- extra-class"><pre class="language-text"><code>ll code
+total 16
+-rw-r--r--  1 shuwoom  staff    12B  2 27 20:45 output.txt
+-rw-r--r--@ 1 shuwoom  staff    85B  2 27 20:45 test.py
+</code></pre></div><blockquote><p>run</p></blockquote> <p>也可以直接通过指定镜像直接通过<code>kubectl run</code>命令直接运行：</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl run my-nginx --image=nginx:latest
+</code></pre></div><p>我们可以看到一个叫<code>my-nginx</code>的资源成功创建运行了。</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+apple-app   <span class="token number">1</span>/1     Running   <span class="token number">0</span>          4m56s
+my-nginx    <span class="token number">1</span>/1     Running   <span class="token number">0</span>          6s
+</code></pre></div><blockquote><p>logs</p></blockquote> <p>如果想查看Pod运行输出的日志，可以通过logs命令，例如：</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl logs [POD名称]
+</code></pre></div><p>在后面实现的k8s上通过POD执行脚本任务，我们也可以通过该命令，来获取POD中执行脚本的输出结果。</p> <blockquote><p>delete</p></blockquote> <p>根据resource名删除resource</p> <p>例如，删除pod：</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl delete po my-nginx
+</code></pre></div><p>也可以通过之前指定的yaml文件来删除pod：</p> <div class="language- extra-class"><pre class="language-text"><code>kubectl delete -f sample/apple.yaml
+</code></pre></div><h3 id="k8s-python-sdk调用"><a href="#k8s-python-sdk调用" class="header-anchor">#</a> k8s python SDK调用</h3> <p>创建Pod有两种方式，一种是通过yaml文件创建，另一种是在代码中构造对象创建。</p> <blockquote><p>基于yaml创建Pod</p></blockquote> <p>python_code.yml复用上一节的文件。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">import</span> yaml
+<span class="token keyword">from</span> kubernetes <span class="token keyword">import</span> utils
+<span class="token keyword">from</span> kubernetes <span class="token keyword">import</span> client<span class="token punctuation">,</span> config
+
+<span class="token keyword">def</span> <span class="token function">create_from_yaml</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 读取yaml文件</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">&quot;python_code.yaml&quot;</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        yaml_file <span class="token operator">=</span> yaml<span class="token punctuation">.</span>safe_load<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+
+    <span class="token comment"># 读取配置文件</span>
+    config<span class="token punctuation">.</span>load_kube_config<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    k8s_client <span class="token operator">=</span> client<span class="token punctuation">.</span>ApiClient<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 创建pods</span>
+    utils<span class="token punctuation">.</span>create_from_yaml<span class="token punctuation">(</span>k8s_client<span class="token punctuation">,</span> yaml_objects<span class="token operator">=</span><span class="token punctuation">[</span>yaml_file<span class="token punctuation">]</span><span class="token punctuation">,</span> namespace<span class="token operator">=</span><span class="token string">&quot;default&quot;</span><span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>基于对象创建Pod</p></blockquote> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">import</span> datetime
+<span class="token keyword">import</span> pytz
+<span class="token keyword">import</span> yaml
+<span class="token keyword">import</span> time
+<span class="token keyword">from</span> kubernetes <span class="token keyword">import</span> utils
+<span class="token keyword">from</span> kubernetes<span class="token punctuation">.</span>client<span class="token punctuation">.</span>rest <span class="token keyword">import</span> ApiException
+<span class="token keyword">from</span> kubernetes <span class="token keyword">import</span> client<span class="token punctuation">,</span> config
+
+DEPLOYMENT_NAME <span class="token operator">=</span> <span class="token string">&quot;pod-deployment&quot;</span>
+
+<span class="token keyword">def</span> <span class="token function">create_pod_by_object</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 加载kubeconfig文件</span>
+    config<span class="token punctuation">.</span>load_kube_config<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 创建Kubernetes API客户端实例</span>
+    api_instance <span class="token operator">=</span> client<span class="token punctuation">.</span>CoreV1Api<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 定义Pod的元数据</span>
+    metadata <span class="token operator">=</span> client<span class="token punctuation">.</span>V1ObjectMeta<span class="token punctuation">(</span>
+        name<span class="token operator">=</span>name<span class="token punctuation">,</span>
+        labels<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">&quot;app&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;my-python-app&quot;</span><span class="token punctuation">}</span>
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># 定义容器的配置</span>
+    container <span class="token operator">=</span> client<span class="token punctuation">.</span>V1Container<span class="token punctuation">(</span>
+        name<span class="token operator">=</span>name<span class="token punctuation">,</span>
+        image<span class="token operator">=</span><span class="token string">&quot;python:3&quot;</span><span class="token punctuation">,</span>
+        command<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">&quot;python&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        args<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">&quot;/app/test.py&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        volume_mounts<span class="token operator">=</span><span class="token punctuation">[</span>
+            client<span class="token punctuation">.</span>V1VolumeMount<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">&quot;host-volume&quot;</span><span class="token punctuation">,</span> mount_path<span class="token operator">=</span><span class="token string">&quot;/app&quot;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        resources<span class="token operator">=</span>client<span class="token punctuation">.</span>V1ResourceRequirements<span class="token punctuation">(</span>
+            requests<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">&quot;cpu&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;100m&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;memory&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;200Mi&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+            limits<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">&quot;cpu&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;500m&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;memory&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;500Mi&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># 定义HostPath卷的配置</span>
+    <span class="token comment"># 将宿主机上的code目录挂载的pod上的/app路径</span>
+    host_path_volume <span class="token operator">=</span> client<span class="token punctuation">.</span>V1HostPathVolumeSource<span class="token punctuation">(</span>
+        path<span class="token operator">=</span><span class="token string">&quot;/Users/shuwoom/Desktop/k8s-api-demo/code&quot;</span><span class="token punctuation">,</span>
+        <span class="token builtin">type</span><span class="token operator">=</span><span class="token string">&quot;Directory&quot;</span>
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># 定义卷的配置</span>
+    volume <span class="token operator">=</span> client<span class="token punctuation">.</span>V1Volume<span class="token punctuation">(</span>
+        name<span class="token operator">=</span><span class="token string">&quot;host-volume&quot;</span><span class="token punctuation">,</span>
+        host_path<span class="token operator">=</span>host_path_volume
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># 定义Pod的配置</span>
+    pod_spec <span class="token operator">=</span> client<span class="token punctuation">.</span>V1PodSpec<span class="token punctuation">(</span>
+        containers<span class="token operator">=</span><span class="token punctuation">[</span>container<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        volumes<span class="token operator">=</span><span class="token punctuation">[</span>volume<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        restart_policy<span class="token operator">=</span><span class="token string">&quot;Never&quot;</span>
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># 创建Pod对象</span>
+    pod <span class="token operator">=</span> client<span class="token punctuation">.</span>V1Pod<span class="token punctuation">(</span>
+        api_version<span class="token operator">=</span><span class="token string">&quot;v1&quot;</span><span class="token punctuation">,</span>
+        kind<span class="token operator">=</span><span class="token string">&quot;Pod&quot;</span><span class="token punctuation">,</span>
+        metadata<span class="token operator">=</span>metadata<span class="token punctuation">,</span>
+        spec<span class="token operator">=</span>pod_spec
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># 创建Pod</span>
+    api_instance<span class="token punctuation">.</span>create_namespaced_pod<span class="token punctuation">(</span>namespace<span class="token operator">=</span><span class="token string">&quot;default&quot;</span><span class="token punctuation">,</span> body<span class="token operator">=</span>pod<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Pod created&quot;</span><span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>查看Pod日志</p></blockquote> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">from</span> kubernetes <span class="token keyword">import</span> utils
+<span class="token keyword">from</span> kubernetes<span class="token punctuation">.</span>client<span class="token punctuation">.</span>rest <span class="token keyword">import</span> ApiException
+<span class="token keyword">from</span> kubernetes <span class="token keyword">import</span> client<span class="token punctuation">,</span> config
+
+<span class="token keyword">def</span> <span class="token function">get_pod_log</span><span class="token punctuation">(</span>pod_name<span class="token punctuation">,</span>namespace<span class="token operator">=</span><span class="token string">'default'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    
+    <span class="token triple-quoted-string string">'''
+    可以通过读取pod的日志获取脚本输出
+    '''</span>
+    config<span class="token punctuation">.</span>load_kube_config<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        v1 <span class="token operator">=</span> client<span class="token punctuation">.</span>CoreV1Api<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        api_response <span class="token operator">=</span> v1<span class="token punctuation">.</span>read_namespaced_pod_log<span class="token punctuation">(</span>name<span class="token operator">=</span>pod_name<span class="token punctuation">,</span> namespace<span class="token operator">=</span>namespace<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>api_response<span class="token punctuation">)</span>
+    <span class="token keyword">except</span> ApiException <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Found exception in reading the logs'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>查看Pod列表</p></blockquote> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">from</span> kubernetes <span class="token keyword">import</span> client<span class="token punctuation">,</span> config
+<span class="token keyword">def</span> <span class="token function">list_pods</span><span class="token punctuation">(</span>namespace<span class="token operator">=</span><span class="token string">'default'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    
+    v1 <span class="token operator">=</span> client<span class="token punctuation">.</span>CoreV1Api<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pods <span class="token operator">=</span> v1<span class="token punctuation">.</span>list_namespaced_pod<span class="token punctuation">(</span>namespace<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> pod <span class="token keyword">in</span> pods<span class="token punctuation">.</span>items<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;</span><span class="token interpolation"><span class="token punctuation">{</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>name<span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span>pod<span class="token punctuation">.</span>status<span class="token punctuation">.</span>phase<span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span>pod<span class="token punctuation">.</span>status<span class="token punctuation">.</span>pod_ip<span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span>pod<span class="token punctuation">.</span>metadata<span class="token punctuation">.</span>namespace<span class="token punctuation">}</span></span><span class="token string">&quot;</span></span><span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>删除Pod资源</p></blockquote> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">from</span> kubernetes <span class="token keyword">import</span> client<span class="token punctuation">,</span> config
+
+<span class="token keyword">def</span> <span class="token function">delete_deployment</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> namespace<span class="token operator">=</span><span class="token string">'default'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    config<span class="token punctuation">.</span>load_kube_config<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    v1 <span class="token operator">=</span> client<span class="token punctuation">.</span>CoreV1Api<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    resp <span class="token operator">=</span> v1<span class="token punctuation">.</span>delete_namespaced_pod<span class="token punctuation">(</span>
+        name<span class="token operator">=</span>name<span class="token punctuation">,</span>
+        namespace<span class="token operator">=</span><span class="token string">&quot;default&quot;</span>
+    <span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;\n[INFO] deployment `nginx-deployment` deleted.&quot;</span><span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>流程任务执行过程</p></blockquote> <p>如下图，是基于Kubernetes集群的API接口，通过调用Kubernetes Python SDK实现工作流中脚本任务执行的流程图。</p> <p>在执行脚本之前，首先在挂载的代码目录下创建待执行的脚本，并将该脚本作为Pod的启动执行的命令，然后基于yaml创建Pod运行。</p> <p>运行结束后，引擎通过调用Logs接口获取脚本的输出结果进行存储。最后通过调用Kubernetes的Delete销毁Pod结束该脚本任务的执行。</p> <img src="/assets/img/11 k8s执行脚本任务流程.9dba3c33.png" alt="image-20240228094730327" style="zoom:33%;"></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">4/6/2024, 8:27:42 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/9-流程分析.html" class="prev">
+        9 流程分析
+      </a></span> <span class="next"><a href="/11.1-系统架构.html">
+        11.1 系统架构
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/31.76245b5d.js" defer></script>
+  </body>
+</html>

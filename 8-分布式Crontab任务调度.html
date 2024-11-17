@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/54.ac356f09.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第二部份：流程引擎实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>4 流程引擎的核心组件</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/4.1-WFMC工作流参考模型.html" class="sidebar-link">4.1 WFMC工作流参考模型</a></li><li><section class="sidebar-group collapsable is-sub-group depth-2"><p class="sidebar-heading"><span>4.2 任务调度机制</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/4.3-工作流模式-控制流模式.html" class="sidebar-link">4.3 工作流模式-控制流模式</a></li><li><a href="/4.4-资源调度机制-资源模式.html" class="sidebar-link">4.4 资源调度机制-资源模式</a></li><li><a href="/4.5-数据管理机制-数据模式.html" class="sidebar-link">4.5 数据管理机制-数据模式</a></li><li><a href="/4.6-异常处理机制-异常处理模式.html" class="sidebar-link">4.6 异常处理机制-异常处理模式</a></li><li><a href="/4.7-引擎执行模式.html" class="sidebar-link">4.7 引擎执行模式</a></li></ul></section></li><li><a href="/5-事件驱动机制.html" class="sidebar-link">5 事件驱动机制</a></li><li><a href="/6-核心表结构与接口设计.html" class="sidebar-link">6 核心表结构与接口设计</a></li><li><a href="/7-权限系统设计.html" class="sidebar-link">7 权限系统设计</a></li><li><a href="/8-分布式Crontab任务调度.html" class="active sidebar-link">8 分布式Crontab任务调度</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#crontab表达式介绍" class="sidebar-link">Crontab表达式介绍</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#etcd基础操作" class="sidebar-link">ETCD基础操作</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#key值读、写和删除" class="sidebar-link">key值读、写和删除</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#key值watch操作" class="sidebar-link">key值watch操作</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#lease续租" class="sidebar-link">lease续租</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#keepalive操作" class="sidebar-link">keepAlive操作</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#主节点选举" class="sidebar-link">主节点选举</a></li></ul></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#master-worker主从架构" class="sidebar-link">master-worker主从架构</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#用户添加或移除cron操作" class="sidebar-link">用户添加或移除cron操作</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#加载存量cron服务" class="sidebar-link">加载存量cron服务</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#监听增量cron变化" class="sidebar-link">监听增量cron变化</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#主节点选举-2" class="sidebar-link">主节点选举</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#main入口函数" class="sidebar-link">main入口函数</a></li></ul></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#任务设计的最佳实践" class="sidebar-link">任务设计的最佳实践</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#幂等性" class="sidebar-link">幂等性</a></li><li class="sidebar-sub-header"><a href="/8-分布式Crontab任务调度.html#原子性" class="sidebar-link">原子性</a></li></ul></li></ul></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>在前面的流程建模章节，我们定义了Crontab时间触发器，使用时就是一个任务节点，看似很简单，但是背后要实现就复杂多了。这里的Crontab跟我们在Linux机器上的Cron服务是类似的，都是可以设置周期性的任务。但是不同的是，Linux上的Cron是单机的，而且只支持分钟级别。但是我们要实现的是在分布式集群下的Crontab服务，而且支持秒级别的。这需要通过选举算法选举出主节点，由这个主节点来提供Crontab服务。</p> <img src="/assets/img/8-linux_crontab.46bf166f.png" style="zoom:67%;"> <p>接下来，我们从下面几节内容来介绍一个分布式Crontab任务调度是怎么设计实现的。</p> <img src="/assets/img/8 master-worker架构.e45bca99.png" alt="image-20240309120206122" style="zoom:67%;"> <h2 id="crontab表达式介绍"><a href="#crontab表达式介绍" class="header-anchor">#</a> Crontab表达式介绍</h2> <p>Crontab是Unix和类Unix（包括Linux）操作系统下的任务调度程序，允许用户在固定的时间和日期运行命令或者脚本。但是，传统的Crontab语法并不支持秒级别的任务调度。</p> <div class="language- extra-class"><pre class="language-text"><code>* * * * * *
+- - - - - -
+| | | | | |
+| | | | | +--- 周 (0-6) (Sunday=0)
+| | | | +----- 月 (1 - 12)
+| | | +------- 日 (1 - 31)
+| | +--------- 小时 (0 - 23)
+| +----------- 分钟 (0 - 59)
++------------- 秒 (0 - 59)
+</code></pre></div><p>支持的语法格式包括：</p> <ol><li>星号（*）：表示该字段可以匹配任何值。例如，小时字段中的星号表示每个小时都执行。</li> <li>逗号（,）：表示该字段可以匹配多个值。例如，小时字段中的&quot;1,3,5&quot;表示在第1、3、5小时执行。</li> <li>连字符（-）：表示该字段可以匹配一个范围内的值。例如，小时字段中的&quot;1-3&quot;表示在第1、2、3小时执行。</li> <li>除号（/）：表示该字段可以匹配每隔固定值的时间点。例如，分钟字段中的&quot;*/5&quot;表示每隔5分钟执行一次。</li> <li>星期字段中的特殊值：星期字段中，可以使用0表示周日，1表示周一，以此类推。</li> <li>月份字段中的特殊值：月份字段中，可以使用1-12表示1月至12月。</li></ol> <p>下面是一些例子</p> <table><thead><tr><th>表达式</th> <th>说明</th></tr></thead> <tbody><tr><td>0 30 2 * * *</td> <td>每天的凌晨2点30分执行</td></tr> <tr><td>0 0 17 * * 1,4</td> <td>每周一和周四的下午5点执行</td></tr> <tr><td>0 0 3 1,15 * *</td> <td>每月的1号和15号的凌晨3点执行</td></tr> <tr><td>0 */5 * * * *</td> <td>每隔5分钟执行一次</td></tr> <tr><td>*/5 * * * * *</td> <td>每隔5秒钟执行一次</td></tr> <tr><td>0 0 9-17 * * *</td> <td>每天的9点至17点，每隔1小时执行一次</td></tr></tbody></table> <p>目前github上有很多开源实现的crontab第三方库来实现linux cron服务，下面我们使用beego的crontab工具库来实现：</p> <div class="language- extra-class"><pre class="language-text"><code>go get github.com/beego/beego/v2/task
+</code></pre></div><div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;github.com/beego/beego/v2/task&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	f <span class="token operator">:=</span> <span class="token keyword">func</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;running flow#10001...&quot;</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span>
+	<span class="token punctuation">}</span>
+	tk1 <span class="token operator">:=</span> task<span class="token punctuation">.</span><span class="token function">NewTask</span><span class="token punctuation">(</span><span class="token string">&quot;flow#10001&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;*/4 * * * * *&quot;</span><span class="token punctuation">,</span> f<span class="token punctuation">)</span>
+
+	task<span class="token punctuation">.</span><span class="token function">AddTask</span><span class="token punctuation">(</span><span class="token string">&quot;flow#10001&quot;</span><span class="token punctuation">,</span> tk1<span class="token punctuation">)</span>
+	task<span class="token punctuation">.</span><span class="token function">StartTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">defer</span> task<span class="token punctuation">.</span><span class="token function">StopTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">10</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+
+	task<span class="token punctuation">.</span><span class="token function">DeleteTask</span><span class="token punctuation">(</span><span class="token string">&quot;flow#10001&quot;</span><span class="token punctuation">)</span>
+
+	time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">10</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>上面的示例代码，我们创建启动了一个<code>*/5 * * * * *</code>服务，这个服务每5秒回调用<code>f</code>函数，并在10秒后通过调用DeleteTask删除该cron服务。</p> <p>然后，在命令行中执行以下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>go run main.go
+</code></pre></div><p>如果一切正常，您应该会看到以下输出：</p> <div class="language- extra-class"><pre class="language-text"><code>running flow#10001...
+running flow#10001...
+
+</code></pre></div><h2 id="etcd基础操作"><a href="#etcd基础操作" class="header-anchor">#</a> ETCD基础操作</h2> <p>ETCD是一个开源的、高可用的、分布式的键值存储系统，它用于共享配置和服务发现。ETCD是由CoreOS开发的，用于支持分布式系统的一致性和配置管理。它使用Raft一致性算法来保证数据的一致性和可靠性，提供了简单易用的API和客户端库，使得开发者可以轻松地实现分布式系统的功能。</p> <p>这里介绍ETCD是因为，我们可以基于ETCD实现主节点选举，同时基于其租约(Lease)+KeepAlive机制，可以做到发生故障时，实现主备的快速切换，实现高可用的架构。Lease 是client 和 etcd server 之间存在一个约定， etcd server 保证在约定的有效期内（TTL），不会删除关联到此 Lease 上的 key-value。但如果未在有效期内续租，那么 etcd server 就会删除 Lease 和其关联的 key-value。基于Lease这个特性，就可以在服务发现场景中实现对故障节点的自动剔除。</p> <p>下面我们介绍几个常用的功能：</p> <h3 id="key值读、写和删除"><a href="#key值读、写和删除" class="header-anchor">#</a> key值读、写和删除</h3> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+
+	<span class="token string">&quot;go.etcd.io/etcd/client/v3&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 创建etcd客户端配置</span>
+	config <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span>Config<span class="token punctuation">{</span>
+		Endpoints<span class="token punctuation">:</span>   <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span><span class="token string">&quot;localhost:2379&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+		DialTimeout<span class="token punctuation">:</span> <span class="token number">5</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 连接etcd</span>
+	client<span class="token punctuation">,</span> err <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> client<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 设置键值</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+	<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">Put</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;my-key&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;my-value&quot;</span><span class="token punctuation">)</span>
+	<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 获取键值</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+	resp<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;my-key&quot;</span><span class="token punctuation">)</span>
+	<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 输出获取到的键值</span>
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> kv <span class="token operator">:=</span> <span class="token keyword">range</span> resp<span class="token punctuation">.</span>Kvs <span class="token punctuation">{</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;key: %s, value: %s\n&quot;</span><span class="token punctuation">,</span> kv<span class="token punctuation">.</span>Key<span class="token punctuation">,</span> kv<span class="token punctuation">.</span>Value<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+  
+  <span class="token comment">// 删除键值</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+	<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">Delete</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;my-key&quot;</span><span class="token punctuation">)</span>
+	<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>在此示例中，我们首先创建了一个etcd客户端配置，然后使用配置创建了一个etcd客户端。接下来，我们使用<code>Put</code>方法设置了一个键值对，然后使用<code>Get</code>方法获取该键对应的值，并输出到控制台。</p> <p>然后，在命令行中执行以下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>go run main.go
+</code></pre></div><p>如果一切正常，您应该会看到以下输出：</p> <div class="language- extra-class"><pre class="language-text"><code>key: my-key, value: my-value
+</code></pre></div><h3 id="key值watch操作"><a href="#key值watch操作" class="header-anchor">#</a> key值watch操作</h3> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	clientv3 <span class="token string">&quot;go.etcd.io/etcd/client/v3&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 创建etcd客户端配置</span>
+	config <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span>Config<span class="token punctuation">{</span>
+		Endpoints<span class="token punctuation">:</span>   <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span><span class="token string">&quot;localhost:2379&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+		DialTimeout<span class="token punctuation">:</span> <span class="token number">5</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 连接etcd</span>
+	client<span class="token punctuation">,</span> err <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> client<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建一个watcher</span>
+	watcher <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span><span class="token function">NewWatcher</span><span class="token punctuation">(</span>client<span class="token punctuation">)</span>
+	<span class="token keyword">defer</span> watcher<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 启动一个goroutine，用于模拟键值的变更</span>
+	<span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+			time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+			<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Put</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;watch-key&quot;</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;value-%d&quot;</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span>
+			<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+				log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 监听键值变更</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithCancel</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	watchChan <span class="token operator">:=</span> watcher<span class="token punctuation">.</span><span class="token function">Watch</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;watch-key&quot;</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 处理watch事件</span>
+	<span class="token keyword">for</span> watchResp <span class="token operator">:=</span> <span class="token keyword">range</span> watchChan <span class="token punctuation">{</span>
+		<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> event <span class="token operator">:=</span> <span class="token keyword">range</span> watchResp<span class="token punctuation">.</span>Events <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Event received! Type: %s, Key: %s, Value: %s\n&quot;</span><span class="token punctuation">,</span> event<span class="token punctuation">.</span>Type<span class="token punctuation">,</span> event<span class="token punctuation">.</span>Kv<span class="token punctuation">.</span>Key<span class="token punctuation">,</span> event<span class="token punctuation">.</span>Kv<span class="token punctuation">.</span>Value<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 取消watch</span>
+	<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>在此示例中，我们首先创建了一个etcd客户端配置，然后使用配置创建了一个etcd客户端。接着，我们创建了一个watcher，并在另一个goroutine中模拟键值的变更。最后，我们监听键值变更，并输出watch事件的类型、键和值。</p> <p>然后，在命令行中执行以下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>go run main.go
+</code></pre></div><p>如果一切正常，您应该会看到类似以下的输出：</p> <div class="language- extra-class"><pre class="language-text"><code>Event received! Type: PUT, Key: watch-key, Value: value-0
+Event received! Type: PUT, Key: watch-key, Value: value-1
+Event received! Type: PUT, Key: watch-key, Value: value-2
+Event received! Type: PUT, Key: watch-key, Value: value-3
+Event received! Type: PUT, Key: watch-key, Value: value-4
+</code></pre></div><h3 id="lease续租"><a href="#lease续租" class="header-anchor">#</a> lease续租</h3> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	clientv3 <span class="token string">&quot;go.etcd.io/etcd/client/v3&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 创建etcd客户端配置</span>
+	config <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span>Config<span class="token punctuation">{</span>
+		Endpoints<span class="token punctuation">:</span>   <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span><span class="token string">&quot;localhost:2379&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+		DialTimeout<span class="token punctuation">:</span> <span class="token number">5</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 连接etcd</span>
+	client<span class="token punctuation">,</span> err <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> client<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建一个租约</span>
+	lease<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Grant</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 使用租约设置键值</span>
+	<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">Put</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;lease-key&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;lease-value&quot;</span><span class="token punctuation">,</span> clientv3<span class="token punctuation">.</span><span class="token function">WithLease</span><span class="token punctuation">(</span>lease<span class="token punctuation">.</span>ID<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 获取并输出键值</span>
+	resp<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;lease-key&quot;</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> kv <span class="token operator">:=</span> <span class="token keyword">range</span> resp<span class="token punctuation">.</span>Kvs <span class="token punctuation">{</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;key: %s, value: %s\n&quot;</span><span class="token punctuation">,</span> kv<span class="token punctuation">.</span>Key<span class="token punctuation">,</span> kv<span class="token punctuation">.</span>Value<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 等待租约过期</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Waiting for lease to expire...&quot;</span><span class="token punctuation">)</span>
+	time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">6</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+
+	<span class="token comment">// 再次获取并输出键值</span>
+	resp<span class="token punctuation">,</span> err <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;lease-key&quot;</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> kv <span class="token operator">:=</span> <span class="token keyword">range</span> resp<span class="token punctuation">.</span>Kvs <span class="token punctuation">{</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;key: %s, value: %s\n&quot;</span><span class="token punctuation">,</span> kv<span class="token punctuation">.</span>Key<span class="token punctuation">,</span> kv<span class="token punctuation">.</span>Value<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>在此示例中，我们首先创建了一个etcd客户端配置，然后使用配置创建了一个etcd客户端。接着，我们创建了一个租约，并使用租约设置了一个键值对。然后，我们获取并输出该键对应的值，等待租约过期，再次获取并输出该键对应的值，而此时由于过期无法获取到。</p> <p>然后，在命令行中执行以下命令：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>go run main.go
+</code></pre></div><p>如果一切正常，您应该会看到类似以下的输出：</p> <div class="language- extra-class"><pre class="language-text"><code>key: lease-key, value: lease-value
+Waiting for lease to expire...
+</code></pre></div><p>因为key值被删除而无法获取到。</p> <h3 id="keepalive操作"><a href="#keepalive操作" class="header-anchor">#</a> keepAlive操作</h3> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	clientv3 <span class="token string">&quot;go.etcd.io/etcd/client/v3&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 创建etcd客户端配置</span>
+	config <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span>Config<span class="token punctuation">{</span>
+		Endpoints<span class="token punctuation">:</span>   <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span><span class="token string">&quot;localhost:2379&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+		DialTimeout<span class="token punctuation">:</span> <span class="token number">5</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 连接etcd</span>
+	client<span class="token punctuation">,</span> err <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> client<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建一个租约</span>
+	lease<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Grant</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 使用租约设置键值</span>
+	<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">Put</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;keepalive-key&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;keepalive-value&quot;</span><span class="token punctuation">,</span> clientv3<span class="token punctuation">.</span><span class="token function">WithLease</span><span class="token punctuation">(</span>lease<span class="token punctuation">.</span>ID<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 创建一个KeepAlive</span>
+	keepAlive<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">KeepAlive</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> lease<span class="token punctuation">.</span>ID<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 启动一个goroutine，处理KeepAlive响应</span>
+	<span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">for</span> <span class="token punctuation">{</span>
+			<span class="token keyword">select</span> <span class="token punctuation">{</span>
+			<span class="token keyword">case</span> ka <span class="token operator">:=</span> <span class="token operator">&lt;-</span>keepAlive<span class="token punctuation">:</span>
+				<span class="token keyword">if</span> ka <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+					<span class="token keyword">return</span>
+				<span class="token punctuation">}</span>
+				<span class="token comment">// 获取键值</span>
+				ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+				resp<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;keepalive-key&quot;</span><span class="token punctuation">)</span>
+				<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+				<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+					log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+				<span class="token punctuation">}</span>
+
+				<span class="token comment">// 输出获取到的键值</span>
+				<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> kv <span class="token operator">:=</span> <span class="token keyword">range</span> resp<span class="token punctuation">.</span>Kvs <span class="token punctuation">{</span>
+					fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Received KeepAlive response=&gt; key: %s, value: %s\n&quot;</span><span class="token punctuation">,</span> kv<span class="token punctuation">.</span>Key<span class="token punctuation">,</span> kv<span class="token punctuation">.</span>Value<span class="token punctuation">)</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 等待一段时间</span>
+	time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">10</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>在此示例中，我们首先创建了一个etcd客户端配置，然后使用配置创建了一个etcd客户端。接着，我们创建了一个租约，并使用租约设置了一个键值对。然后，我们创建了一个KeepAlive，并启动一个goroutine处理KeepAlive响应。可以看到虽然keepalive-key设置了5秒的租约，但是因为使用了keepAlive机制，etcd会自动续约，所以我们可以一直读取到keepalive-key的值。</p> <p>然后，在命令行中执行以下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>go run main.go
+</code></pre></div><p>如果一切正常，您应该会看到类似以下的输出：</p> <div class="language- extra-class"><pre class="language-text"><code>Received KeepAlive response=&gt; key: keepalive-key, value: keepalive-value
+Received KeepAlive response=&gt; key: keepalive-key, value: keepalive-value
+Received KeepAlive response=&gt; key: keepalive-key, value: keepalive-value
+Received KeepAlive response=&gt; key: keepalive-key, value: keepalive-value
+Received KeepAlive response=&gt; key: keepalive-key, value: keepalive-value
+</code></pre></div><h3 id="主节点选举"><a href="#主节点选举" class="header-anchor">#</a> 主节点选举</h3> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;os&quot;</span>
+	<span class="token string">&quot;os/signal&quot;</span>
+	<span class="token string">&quot;sync&quot;</span>
+	<span class="token string">&quot;syscall&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+
+	<span class="token string">&quot;go.etcd.io/etcd/client/v3&quot;</span>
+	<span class="token string">&quot;go.etcd.io/etcd/client/v3/concurrency&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">startElection</span><span class="token punctuation">(</span>id <span class="token builtin">int</span><span class="token punctuation">,</span> wg <span class="token operator">*</span>sync<span class="token punctuation">.</span>WaitGroup<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">defer</span> wg<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建etcd客户端配置</span>
+	config <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span>Config<span class="token punctuation">{</span>
+		Endpoints<span class="token punctuation">:</span>   <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span><span class="token string">&quot;localhost:2379&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+		DialTimeout<span class="token punctuation">:</span> <span class="token number">5</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 连接etcd</span>
+	client<span class="token punctuation">,</span> err <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> client<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建一个etcd会话</span>
+	session<span class="token punctuation">,</span> err <span class="token operator">:=</span> concurrency<span class="token punctuation">.</span><span class="token function">NewSession</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> concurrency<span class="token punctuation">.</span><span class="token function">WithTTL</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">//defer session.Close()</span>
+
+	<span class="token comment">// 创建一个etcd选举器</span>
+	election <span class="token operator">:=</span> concurrency<span class="token punctuation">.</span><span class="token function">NewElection</span><span class="token punctuation">(</span>session<span class="token punctuation">,</span> <span class="token string">&quot;/my-election/&quot;</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建一个信号处理器</span>
+	signalChan <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> os<span class="token punctuation">.</span>Signal<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+	signal<span class="token punctuation">.</span><span class="token function">Notify</span><span class="token punctuation">(</span>signalChan<span class="token punctuation">,</span> syscall<span class="token punctuation">.</span>SIGINT<span class="token punctuation">,</span> syscall<span class="token punctuation">.</span>SIGTERM<span class="token punctuation">)</span>
+
+	<span class="token comment">// 开始选举</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		err <span class="token operator">:=</span> election<span class="token punctuation">.</span><span class="token function">Campaign</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;node-%d&quot;</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token comment">// 检查是否成为主节点</span>
+		leader<span class="token punctuation">,</span> err <span class="token operator">:=</span> election<span class="token punctuation">.</span><span class="token function">Leader</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token comment">// 设置一个定时器来取消会话，模拟主节点宕机的情况</span>
+		<span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">5</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+			session<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		<span class="token keyword">if</span> <span class="token function">string</span><span class="token punctuation">(</span>leader<span class="token punctuation">.</span>Kvs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span> <span class="token operator">==</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;node-%d&quot;</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Node %d is the leader now\n&quot;</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Node %d is a follower\n&quot;</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token comment">// todo 启动cron服务</span>
+		<span class="token function">runCronService</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>leader<span class="token punctuation">.</span>Kvs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+		<span class="token comment">// 等待信号或者会话过期</span>
+		<span class="token keyword">select</span> <span class="token punctuation">{</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>signalChan<span class="token punctuation">:</span>
+			<span class="token function">closeCronService</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>leader<span class="token punctuation">.</span>Kvs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>session<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Node %d session expired, restarting election\n&quot;</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span>
+      <span class="token function">closeCronService</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>leader<span class="token punctuation">.</span>Kvs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">runCronService</span><span class="token punctuation">(</span>node <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// todo</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>node <span class="token operator">+</span> <span class="token string">&quot; 启动定时任务服务...&quot;</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">closeCronService</span><span class="token punctuation">(</span>node <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// todo</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>node <span class="token operator">+</span> <span class="token string">&quot; 关闭定时任务服务...&quot;</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> wg sync<span class="token punctuation">.</span>WaitGroup
+
+	<span class="token comment">// 模拟多个节点并发选举</span>
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		wg<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+		<span class="token keyword">go</span> <span class="token function">startElection</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token operator">&amp;</span>wg<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	wg<span class="token punctuation">.</span><span class="token function">Wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>在这个示例中，我们创建了一个<code>startElection</code>函数，它接受一个节点ID和一个<code>sync.WaitGroup</code>作为参数。然后我们在<code>main</code>函数中启动多个goroutine来运行<code>startElection</code>函数，模拟多个节点并发选举，每次只有1个节点可以选举成为master。</p> <p>同时选举成为master的主节点，会启动cron服务。同时我们通过session.Close操作模拟主节点宕机的情况下，是否会正常进行选举。</p> <p>然后，在命令行中执行以下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>go run main.go
+</code></pre></div><p>如果一切正常，您应该会看到类似以下的输出：</p> <div class="language- extra-class"><pre class="language-text"><code>Node 3 is the leader now
+node-3 启动定时任务服务...
+Node 3 session expired, restarting election
+node-3 关闭定时任务服务...
+Node 5 is the leader now
+node-5 启动定时任务服务...
+Node 5 session expired, restarting election
+node-5 关闭定时任务服务...
+Node 2 is the leader now
+node-2 启动定时任务服务...
+Node 2 session expired, restarting election
+node-2 关闭定时任务服务...
+Node 4 is the leader now
+node-4 启动定时任务服务...
+Node 4 session expired, restarting election
+node-4 关闭定时任务服务...
+Node 1 is the leader now
+node-1 启动定时任务服务...
+Node 1 session expired, restarting election
+node-1 关闭定时任务服务...
+</code></pre></div><h2 id="master-worker主从架构"><a href="#master-worker主从架构" class="header-anchor">#</a> master-worker主从架构</h2> <p>前面我们介绍了分布式crontab任务调度中涉及到的几个关键功能的实现，下面，我们结合下图的master-worker主从架构来完整实现这一服务。整个架构分成如下三部分：</p> <ul><li><p>用户操作</p> <ul><li>启用工作流。这时需要更新ETCD中的键值对，并且主节点需要添加该cron服务。</li> <li>停止、删除工作流。删除ETCD中对应的键值对，这时主节点的watcher机制会被触发并移除该cron服务。</li></ul></li> <li><p>主节点</p> <ul><li>2.3 读取加载存量的cron服务</li> <li>2.4 通过etcd的watcher机制监控op_list键值变化。op_list会记录后续用户新增或移除的cron服务，如果新增一个cron服务工作流，用<code>add#工作流id</code>表示，如果移除一个cron服务工作流（删除或停止），用<code>del#工作流id</code>表示。</li> <li>2.5 如果op_list键值变化，则获取要新增或移除的cron服务，更新cron服务列表。</li> <li>2.6 cron服务如果达到时间要求，则会触发创建工作流实例运行，并推送到任务队列。</li></ul></li> <li><p>各个节点</p> <ul><li><p>上报心跳</p></li> <li><p>时刻进行选举</p></li></ul></li></ul> <img src="/assets/img/8 master-worker架构.e45bca99.png" alt="image-20240309120206122" style="zoom:67%;"> <h3 id="用户添加或移除cron操作"><a href="#用户添加或移除cron操作" class="header-anchor">#</a> 用户添加或移除cron操作</h3> <p><code>AddOrDelCronOp</code>函数主要实现在用户添加或移除cron服务工作流时，更新对应的ETCD键值对。</p> <p>除了设置工作流的详情信息键值，还需要将本次的操作更新到op_list键值，op_list键值的操作要基于分布式锁保证原子性，即每次操作只有一个线程可以处理。</p> <div class="language-go extra-class"><pre class="language-go"><code>
+<span class="token keyword">type</span> cronVal <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	Cron    <span class="token builtin">string</span> <span class="token string">`json:&quot;cron&quot;`</span>
+	Id      <span class="token builtin">string</span> <span class="token string">`json:&quot;id&quot;`</span> <span class="token comment">// workflow id</span>
+	Details <span class="token builtin">string</span> <span class="token string">`json:&quot;details&quot;`</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// AddOrDelCronOp 添加或移除cron服务操作</span>
+<span class="token keyword">func</span> <span class="token function">AddOrDelCronOp</span><span class="token punctuation">(</span>client <span class="token operator">*</span>clientv3<span class="token punctuation">.</span>Client<span class="token punctuation">,</span> op <span class="token builtin">string</span><span class="token punctuation">,</span> workflowId<span class="token punctuation">,</span> cron<span class="token punctuation">,</span> details <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>err <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// ================================</span>
+	<span class="token comment">// 添加新key值</span>
+	<span class="token comment">// ================================</span>
+	key <span class="token operator">:=</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;/flow/%s&quot;</span><span class="token punctuation">,</span> workflowId<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> op <span class="token operator">==</span> <span class="token string">&quot;add&quot;</span> <span class="token punctuation">{</span>
+		ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+
+		bs<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> json<span class="token punctuation">.</span><span class="token function">Marshal</span><span class="token punctuation">(</span>cronVal<span class="token punctuation">{</span>
+			Cron<span class="token punctuation">:</span>    cron<span class="token punctuation">,</span> <span class="token comment">//</span>
+			Id<span class="token punctuation">:</span>      workflowId<span class="token punctuation">,</span>
+			Details<span class="token punctuation">:</span> details<span class="token punctuation">,</span>
+		<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+		<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">Put</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token function">string</span><span class="token punctuation">(</span>bs<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> op <span class="token operator">==</span> <span class="token string">&quot;del&quot;</span> <span class="token punctuation">{</span>
+		ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+		<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">Delete</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> key<span class="token punctuation">)</span>
+		<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+		err <span class="token operator">=</span> errors<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token string">&quot;invalid operation&quot;</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// ================================</span>
+	<span class="token comment">// 更新op_list</span>
+	<span class="token comment">// ================================</span>
+	<span class="token comment">// 获取键值</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+	resp<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;op_list&quot;</span><span class="token punctuation">)</span>
+	<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	newVal <span class="token operator">:=</span> <span class="token string">&quot;&quot;</span>
+	<span class="token keyword">if</span> <span class="token function">len</span><span class="token punctuation">(</span>resp<span class="token punctuation">.</span>Kvs<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		newVal <span class="token operator">=</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;%s,%s#%s&quot;</span><span class="token punctuation">,</span> <span class="token function">string</span><span class="token punctuation">(</span>resp<span class="token punctuation">.</span>Kvs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">,</span> op<span class="token punctuation">,</span> workflowId<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+		newVal <span class="token operator">=</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;%s#%s&quot;</span><span class="token punctuation">,</span> op<span class="token punctuation">,</span> workflowId<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 创建一个etcd会话</span>
+	session<span class="token punctuation">,</span> err <span class="token operator">:=</span> concurrency<span class="token punctuation">.</span><span class="token function">NewSession</span><span class="token punctuation">(</span>client<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> session<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// op_list的操作要使用分布式锁保证原子性</span>
+	mutex <span class="token operator">:=</span> concurrency<span class="token punctuation">.</span><span class="token function">NewMutex</span><span class="token punctuation">(</span>session<span class="token punctuation">,</span> <span class="token string">&quot;/lock/op_list&quot;</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 获取锁</span>
+	err <span class="token operator">=</span> mutex<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// 释放锁</span>
+	<span class="token keyword">defer</span> mutex<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 更新op_list</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+	<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">Put</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;op_list&quot;</span><span class="token punctuation">,</span> newVal<span class="token punctuation">)</span>
+	<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="加载存量cron服务"><a href="#加载存量cron服务" class="header-anchor">#</a> 加载存量cron服务</h3> <p><code>LoadCronServiceByOne</code>函数通过beego的crontab模块添加一个cron后台任务，其中flowKey格式如前面的架构图：<code>/flow/10001</code>。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// LoadCronServiceByOne 后台添加cron服务</span>
+<span class="token keyword">func</span> <span class="token function">LoadCronServiceByOne</span><span class="token punctuation">(</span>client <span class="token operator">*</span>clientv3<span class="token punctuation">.</span>Client<span class="token punctuation">,</span> flowKey<span class="token punctuation">,</span> nodeId <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	task<span class="token punctuation">.</span><span class="token function">DeleteTask</span><span class="token punctuation">(</span>flowKey<span class="token punctuation">)</span>
+
+	<span class="token comment">// 获取工作流的cron信息</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+	resp<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> flowKey<span class="token punctuation">)</span>
+	<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> <span class="token function">len</span><span class="token punctuation">(</span>resp<span class="token punctuation">.</span>Kvs<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">var</span> cv cronVal
+	<span class="token keyword">if</span> err <span class="token operator">=</span> json<span class="token punctuation">.</span><span class="token function">Unmarshal</span><span class="token punctuation">(</span>resp<span class="token punctuation">.</span>Kvs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Value<span class="token punctuation">,</span> <span class="token operator">&amp;</span>cv<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">.</span><span class="token function">Error</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 添加到cron服务</span>
+	tk <span class="token operator">:=</span> task<span class="token punctuation">.</span><span class="token function">NewTask</span><span class="token punctuation">(</span>flowKey<span class="token punctuation">,</span> cv<span class="token punctuation">.</span>Cron<span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;[%s] running cron task %s...\n&quot;</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">,</span> flowKey<span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	task<span class="token punctuation">.</span><span class="token function">AddTask</span><span class="token punctuation">(</span>flowKey<span class="token punctuation">,</span> tk<span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;[%s] load cron success, key:%s, expr:%s \n&quot;</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">,</span> flowKey<span class="token punctuation">,</span> cv<span class="token punctuation">.</span>Cron<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p><code>LoadExistedCronServices</code>函数通过etcd的键值对<code>/flow/</code>读取其下所有启用的crontab服务，并加载到后台。</p> <p>注意由于该操作时初始化操作，同时也会把<code>op_list</code>键值重置清空。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// LoadExistedCronServices 获取并加载存量的cron服务</span>
+<span class="token keyword">func</span> <span class="token function">LoadExistedCronServices</span><span class="token punctuation">(</span>client <span class="token operator">*</span>clientv3<span class="token punctuation">.</span>Client<span class="token punctuation">,</span> nodeId <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithTimeout</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+	<span class="token comment">// 先清空初始化op_list</span>
+	client<span class="token punctuation">.</span><span class="token function">Delete</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;op_list&quot;</span><span class="token punctuation">)</span>
+
+	resp<span class="token punctuation">,</span> err <span class="token operator">:=</span> client<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;/flow/&quot;</span><span class="token punctuation">,</span> clientv3<span class="token punctuation">.</span><span class="token function">WithPrefix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 遍历cron服务</span>
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> kv <span class="token operator">:=</span> <span class="token keyword">range</span> resp<span class="token punctuation">.</span>Kvs <span class="token punctuation">{</span>
+		<span class="token function">LoadCronServiceByOne</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> <span class="token function">string</span><span class="token punctuation">(</span>kv<span class="token punctuation">.</span>Key<span class="token punctuation">)</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h3 id="监听增量cron变化"><a href="#监听增量cron变化" class="header-anchor">#</a> 监听增量cron变化</h3> <p><code>MonitorKey</code>函数会监听<code>op_list</code>的键值变化。每次用户在添加或移除cron工作流时，就会触发该监听器。收到事件后会添加新的cron服务或者移除cron服务。注意由于该操作处理完后需要重置<code>op_list</code>键值，所以在捕获到事件时就需要获取分布式锁，并在处理完事件以后重置<code>op_list</code>并释放锁。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// MonitorKey 监听op_list键值变化</span>
+<span class="token keyword">func</span> <span class="token function">MonitorKey</span><span class="token punctuation">(</span>client <span class="token operator">*</span>clientv3<span class="token punctuation">.</span>Client<span class="token punctuation">,</span> nodeId<span class="token punctuation">,</span> key <span class="token builtin">string</span><span class="token punctuation">,</span> ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 创建一个watcher</span>
+	watcher <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span><span class="token function">NewWatcher</span><span class="token punctuation">(</span>client<span class="token punctuation">)</span>
+	<span class="token keyword">defer</span> watcher<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 监听键值变更</span>
+	watchChan <span class="token operator">:=</span> watcher<span class="token punctuation">.</span><span class="token function">Watch</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> key<span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建一个etcd会话</span>
+	session<span class="token punctuation">,</span> err <span class="token operator">:=</span> concurrency<span class="token punctuation">.</span><span class="token function">NewSession</span><span class="token punctuation">(</span>client<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> session<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 处理watch事件</span>
+	<span class="token keyword">for</span> watchResp <span class="token operator">:=</span> <span class="token keyword">range</span> watchChan <span class="token punctuation">{</span>
+		<span class="token comment">// op_list的操作要使用分布式锁保证原子性</span>
+		mutex <span class="token operator">:=</span> concurrency<span class="token punctuation">.</span><span class="token function">NewMutex</span><span class="token punctuation">(</span>session<span class="token punctuation">,</span> <span class="token string">&quot;/lock/op_list&quot;</span><span class="token punctuation">)</span>
+
+		<span class="token comment">// 获取锁</span>
+		err <span class="token operator">=</span> mutex<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> event <span class="token operator">:=</span> <span class="token keyword">range</span> watchResp<span class="token punctuation">.</span>Events <span class="token punctuation">{</span>
+			<span class="token keyword">if</span> event<span class="token punctuation">.</span>Type <span class="token operator">!=</span> clientv3<span class="token punctuation">.</span>EventTypePut <span class="token punctuation">{</span>
+				<span class="token keyword">continue</span>
+			<span class="token punctuation">}</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;[%s] Event received! Key: %s, Value: %s\n&quot;</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">,</span> event<span class="token punctuation">.</span>Kv<span class="token punctuation">.</span>Key<span class="token punctuation">,</span> event<span class="token punctuation">.</span>Kv<span class="token punctuation">.</span>Value<span class="token punctuation">)</span>
+
+			<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> item <span class="token operator">:=</span> <span class="token keyword">range</span> strings<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>event<span class="token punctuation">.</span>Kv<span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;,&quot;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token keyword">if</span> item <span class="token operator">==</span> <span class="token string">&quot;&quot;</span> <span class="token punctuation">{</span>
+					<span class="token keyword">continue</span>
+				<span class="token punctuation">}</span>
+				arr <span class="token operator">:=</span> strings<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> <span class="token string">&quot;#&quot;</span><span class="token punctuation">)</span>
+				op <span class="token operator">:=</span> arr<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+				workflowId <span class="token operator">:=</span> arr<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+
+				flowKey <span class="token operator">:=</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;/flow/%s&quot;</span><span class="token punctuation">,</span> workflowId<span class="token punctuation">)</span>
+				<span class="token keyword">if</span> op <span class="token operator">==</span> <span class="token string">&quot;add&quot;</span> <span class="token punctuation">{</span>
+					<span class="token function">LoadCronServiceByOne</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> flowKey<span class="token punctuation">,</span> nodeId<span class="token punctuation">)</span>
+				<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> op <span class="token operator">==</span> <span class="token string">&quot;del&quot;</span> <span class="token punctuation">{</span>
+					task<span class="token punctuation">.</span><span class="token function">DeleteTask</span><span class="token punctuation">(</span>flowKey<span class="token punctuation">)</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">}</span>
+
+		<span class="token punctuation">}</span>
+
+		<span class="token comment">// 处理完所有操作后重置op_list</span>
+		client<span class="token punctuation">.</span><span class="token function">Delete</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;op_list&quot;</span><span class="token punctuation">)</span>
+
+		<span class="token comment">// 释放锁</span>
+		mutex<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre></div><h3 id="主节点选举-2"><a href="#主节点选举-2" class="header-anchor">#</a> 主节点选举</h3> <p>下面的函数是进行主节点选举的函数，选举成为主节点后，加载存量的cron服务，同时通过监听用户操作的<code>op_list</code>键值变化来加载或移除cron服务。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token function">campaignLoop</span><span class="token punctuation">(</span>client <span class="token operator">*</span>clientv3<span class="token punctuation">.</span>Client<span class="token punctuation">,</span> nodeId <span class="token builtin">string</span><span class="token punctuation">,</span> wg <span class="token operator">*</span>sync<span class="token punctuation">.</span>WaitGroup<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">defer</span> wg<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token comment">// 创建一个etcd会话</span>
+	session<span class="token punctuation">,</span> err <span class="token operator">:=</span> concurrency<span class="token punctuation">.</span><span class="token function">NewSession</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> concurrency<span class="token punctuation">.</span><span class="token function">WithTTL</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> session<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建一个etcd选举器</span>
+	election <span class="token operator">:=</span> concurrency<span class="token punctuation">.</span><span class="token function">NewElection</span><span class="token punctuation">(</span>session<span class="token punctuation">,</span> <span class="token string">&quot;/master/cron&quot;</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 创建一个信号处理器</span>
+	signalChan <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> os<span class="token punctuation">.</span>Signal<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+	signal<span class="token punctuation">.</span><span class="token function">Notify</span><span class="token punctuation">(</span>signalChan<span class="token punctuation">,</span> syscall<span class="token punctuation">.</span>SIGINT<span class="token punctuation">,</span> syscall<span class="token punctuation">.</span>SIGTERM<span class="token punctuation">)</span>
+
+	<span class="token comment">// 开始选举</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		err <span class="token operator">=</span> election<span class="token punctuation">.</span><span class="token function">Campaign</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;node-%s&quot;</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token comment">// 检查是否成为主节点</span>
+		leader<span class="token punctuation">,</span> err <span class="token operator">:=</span> election<span class="token punctuation">.</span><span class="token function">Leader</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token comment">// 设置一个定时器来取消会话，模拟主节点宕机的情况</span>
+		<span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">8</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+			session<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		<span class="token keyword">if</span> <span class="token function">string</span><span class="token punctuation">(</span>leader<span class="token punctuation">.</span>Kvs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span> <span class="token operator">==</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;node-%s&quot;</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;[%s] is the leader now\n&quot;</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;[%s] is a follower\n&quot;</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token comment">// 加载存量的cron服务</span>
+		<span class="token function">LoadExistedCronServices</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> nodeId<span class="token punctuation">)</span>
+
+		<span class="token comment">// 监控op_list键值变化</span>
+		ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithCancel</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">go</span> <span class="token function">MonitorKey</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> nodeId<span class="token punctuation">,</span> <span class="token string">&quot;op_list&quot;</span><span class="token punctuation">,</span> ctx<span class="token punctuation">)</span>
+
+		task<span class="token punctuation">.</span><span class="token function">StartTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		<span class="token comment">// 等待信号或者会话过期</span>
+		<span class="token keyword">select</span> <span class="token punctuation">{</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>signalChan<span class="token punctuation">:</span>
+			task<span class="token punctuation">.</span><span class="token function">StopTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>session<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;[%s] session expired, restarting election\n&quot;</span><span class="token punctuation">,</span> nodeId<span class="token punctuation">)</span>
+			task<span class="token punctuation">.</span><span class="token function">StopTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="main入口函数"><a href="#main入口函数" class="header-anchor">#</a> main入口函数</h3> <p>下面是整个框架的入口函数，我们会模拟分布式集群多节点的情况，同时模拟用户移除cron的操作。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;encoding/json&quot;</span>
+	<span class="token string">&quot;errors&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;github.com/beego/beego/v2/task&quot;</span>
+	clientv3 <span class="token string">&quot;go.etcd.io/etcd/client/v3&quot;</span>
+	<span class="token string">&quot;go.etcd.io/etcd/client/v3/concurrency&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;os&quot;</span>
+	<span class="token string">&quot;os/signal&quot;</span>
+	<span class="token string">&quot;strings&quot;</span>
+	<span class="token string">&quot;sync&quot;</span>
+	<span class="token string">&quot;syscall&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+
+<span class="token keyword">var</span> etcdClient <span class="token operator">*</span>clientv3<span class="token punctuation">.</span>Client
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 创建etcd客户端配置</span>
+	config <span class="token operator">:=</span> clientv3<span class="token punctuation">.</span>Config<span class="token punctuation">{</span>
+		Endpoints<span class="token punctuation">:</span>   <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span><span class="token string">&quot;localhost:2379&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+		DialTimeout<span class="token punctuation">:</span> <span class="token number">5</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 连接etcd</span>
+	<span class="token keyword">var</span> err <span class="token builtin">error</span>
+	etcdClient<span class="token punctuation">,</span> err <span class="token operator">=</span> clientv3<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token function">panic</span><span class="token punctuation">(</span>err<span class="token punctuation">.</span><span class="token function">Error</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> etcdClient<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 1.模拟添加cron工作流操作</span>
+	err <span class="token operator">=</span> <span class="token function">AddOrDelCronOp</span><span class="token punctuation">(</span>etcdClient<span class="token punctuation">,</span> <span class="token string">&quot;add&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;10001&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;*/5 * * * * *&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;cron job&quot;</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>err<span class="token punctuation">.</span><span class="token function">Error</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 模拟删除cron工作流操作，删除后，主节点后台就不会继续运行10001 cron任务</span>
+	<span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">15</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+		<span class="token function">AddOrDelCronOp</span><span class="token punctuation">(</span>etcdClient<span class="token punctuation">,</span> <span class="token string">&quot;del&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;10001&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">)</span>
+
+	<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">var</span> wg sync<span class="token punctuation">.</span>WaitGroup
+
+	<span class="token comment">// 模拟分布式集群多个节点</span>
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">3</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		wg<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+		ip <span class="token operator">:=</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;%d.%d.%d.%d&quot;</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> i<span class="token punctuation">,</span> i<span class="token punctuation">,</span> i<span class="token punctuation">)</span>
+		<span class="token keyword">go</span> <span class="token function">campaignLoop</span><span class="token punctuation">(</span>etcdClient<span class="token punctuation">,</span> ip<span class="token punctuation">,</span> <span class="token operator">&amp;</span>wg<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	wg<span class="token punctuation">.</span><span class="token function">Wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>然后，在命令行中执行以下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>go run main.go
+</code></pre></div><p>如果一切正常，您应该会看到类似以下的输出：</p> <div class="language- extra-class"><pre class="language-text"><code>key:/flow/10001, value:{&quot;cron&quot;:&quot;*/5 * * * * *&quot;,&quot;id&quot;:&quot;10001&quot;,&quot;details&quot;:&quot;cron job&quot;}
+key:op_list, value:add#10001
+[3.3.3.3] is the leader now
+[3.3.3.3] load cron success, key:/flow/10001, expr:*/5 * * * * * 
+[3.3.3.3] running cron task /flow/10001...
+[3.3.3.3] running cron task /flow/10001...
+[3.3.3.3] session expired, restarting election
+{&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2024-03-09T14:28:16.92806+0800&quot;,&quot;logger&quot;:&quot;etcd-client&quot;,&quot;caller&quot;:&quot;v3@v3.5.12/retry_interceptor.go:62&quot;,&quot;msg&quot;:&quot;retrying of unary invoker failed&quot;,&quot;target&quot;:&quot;etcd-endpoints://0x14000297500/localhost:2379&quot;,&quot;attempt&quot;:0,&quot;error&quot;:&quot;rpc error: code = NotFound desc = etcdserver: requested lease not found&quot;}
+[2.2.2.2] is the leader now
+[2.2.2.2] load cron success, key:/flow/10001, expr:*/5 * * * * * 
+[2.2.2.2] running cron task /flow/10001...
+key:op_list, value:del#10001
+[2.2.2.2] Event received! Key: op_list, Value: del#10001
+[2.2.2.2] session expired, restarting election
+{&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2024-03-09T14:28:24.972703+0800&quot;,&quot;logger&quot;:&quot;etcd-client&quot;,&quot;caller&quot;:&quot;v3@v3.5.12/retry_interceptor.go:62&quot;,&quot;msg&quot;:&quot;retrying of unary invoker failed&quot;,&quot;target&quot;:&quot;etcd-endpoints://0x14000297500/localhost:2379&quot;,&quot;attempt&quot;:0,&quot;error&quot;:&quot;rpc error: code = NotFound desc = etcdserver: requested lease not found&quot;}
+[1.1.1.1] is the leader now
+[1.1.1.1] session expired, restarting election
+{&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2024-03-09T14:28:33.009574+0800&quot;,&quot;logger&quot;:&quot;etcd-client&quot;,&quot;caller&quot;:&quot;v3@v3.5.12/retry_interceptor.go:62&quot;,&quot;msg&quot;:&quot;retrying of unary invoker failed&quot;,&quot;target&quot;:&quot;etcd-endpoints://0x14000297500/localhost:2379&quot;,&quot;attempt&quot;:0,&quot;error&quot;:&quot;rpc error: code = Canceled desc = context canceled&quot;}
+</code></pre></div><h2 id="任务设计的最佳实践"><a href="#任务设计的最佳实践" class="header-anchor">#</a> 任务设计的最佳实践</h2> <p>在设计脚本类任务时，有一些最佳实践可以帮助我们提高任务的可靠性和可维护性。其中有两个关键概念是幂等性（Idempotency）和原子性（Atomicity）。</p> <h3 id="幂等性"><a href="#幂等性" class="header-anchor">#</a> 幂等性</h3> <p>幂等性是指一个操作可以被执行多次，但结果仍然与执行一次相同。设计幂等任务意味着即使任务失败并被重试，也不会导致数据不一致或其他副作用。这对于提高任务的可靠性和容错性非常重要。</p> <p>以SQL为例，有些操作是天然具备幂等性的，它们无论执行多少次都不会改变状态。</p> <div class="language- extra-class"><pre class="language-text"><code>查询语句，如select * from table1 where col1 = 1
+
+常量更新语句，如update table1 set col1 = 1 where col2 = 2
+
+删除语句，如delete from user where id=2
+</code></pre></div><h3 id="原子性"><a href="#原子性" class="header-anchor">#</a> 原子性</h3> <p>原子性是指一个操作要么完全成功，要么完全失败。设计原子任务意味着任务在执行过程中不会产生不完整或不一致的结果。这有助于确保数据的完整性和准确性。</p> <p>所以，在设计脚本类任务时，应注意实现幂等性和原子性。这将有助于提高任务的可靠性、容错性和可维护性。</p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">4/6/2024, 8:27:42 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/7-权限系统设计.html" class="prev">
+        7 权限系统设计
+      </a></span> <span class="next"><a href="/9-流程分析.html">
+        9 流程分析
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/54.ac356f09.js" defer></script>
+  </body>
+</html>

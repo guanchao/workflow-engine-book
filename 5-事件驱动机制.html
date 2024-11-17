@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>事件驱动架构 | 流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/47.35c13096.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第二部份：流程引擎实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>4 流程引擎的核心组件</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/4.1-WFMC工作流参考模型.html" class="sidebar-link">4.1 WFMC工作流参考模型</a></li><li><section class="sidebar-group collapsable is-sub-group depth-2"><p class="sidebar-heading"><span>4.2 任务调度机制</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/4.3-工作流模式-控制流模式.html" class="sidebar-link">4.3 工作流模式-控制流模式</a></li><li><a href="/4.4-资源调度机制-资源模式.html" class="sidebar-link">4.4 资源调度机制-资源模式</a></li><li><a href="/4.5-数据管理机制-数据模式.html" class="sidebar-link">4.5 数据管理机制-数据模式</a></li><li><a href="/4.6-异常处理机制-异常处理模式.html" class="sidebar-link">4.6 异常处理机制-异常处理模式</a></li><li><a href="/4.7-引擎执行模式.html" class="sidebar-link">4.7 引擎执行模式</a></li></ul></section></li><li><a href="/5-事件驱动机制.html" class="active sidebar-link">5 事件驱动机制</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/5-事件驱动机制.html#事件驱动架构" class="sidebar-link">事件驱动架构</a></li><li class="sidebar-sub-header"><a href="/5-事件驱动机制.html#基于redis的轻量级综合实践" class="sidebar-link">基于Redis的轻量级综合实践</a></li><li class="sidebar-sub-header"><a href="/5-事件驱动机制.html#基于kafka的高性能综合实践" class="sidebar-link">基于Kafka的高性能综合实践</a></li></ul></li><li><a href="/6-核心表结构与接口设计.html" class="sidebar-link">6 核心表结构与接口设计</a></li><li><a href="/7-权限系统设计.html" class="sidebar-link">7 权限系统设计</a></li><li><a href="/8-分布式Crontab任务调度.html" class="sidebar-link">8 分布式Crontab任务调度</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="事件驱动架构"><a href="#事件驱动架构" class="header-anchor">#</a> 事件驱动架构</h2> <p>事件驱动机制的核心思想是，当某个特定的事件发生时，会触发相应的处理程序（事件处理器）来响应这个事件。这样的设计模式使得应用程序更加灵活、可扩展和易于维护。</p> <p>事件驱动机制的主要组成部分包括：</p> <ol><li>事件源（Event Source）：事件源是产生事件的对象或组件，例如按钮、定时器或者网络连接等。</li> <li>事件（Event）：事件可以由各种来源触发，如人工操作、API调用、定时器等。</li> <li>事件监听器（Event Listener）：事件监听器是一个接口或者守护进程服务，它定义了接收那些事件。当事件发生时，事件监听器负责将事件传递给相应的事件处理器。</li> <li>事件处理器（Event Handler）：事件处理器是用来处理特定事件的程序或方法。这里是调用流程引擎来执行任务。</li></ol> <p>事件驱动架构如下图所示：</p> <p>它是基于生产者和消费者的模式实现，在工程实现上，可以基于Redis消息队列或者Kafka实现。</p> <ul><li>生产者（Producers）：产生事件并将其传递给消息队列或主题。</li> <li>消费者（Consumers）：从消息队列或主题中获取事件并处理它们。</li> <li>消息队列/主题（消息队列/Topic）：用于存储和传递事件的中间件，可以基于Redis、Kafka等中间件。</li></ul> <img src="/assets/img/6 事件驱动机制.eab84e47.png" alt="image-20240305193947258" style="zoom:67%;"> <h2 id="基于redis的轻量级综合实践"><a href="#基于redis的轻量级综合实践" class="header-anchor">#</a> 基于Redis的轻量级综合实践</h2> <p>对于轻量级的系统，例如每日任务量在百万级别以内的，可以直接基于Redis的消息队列实现，如下是代码示例。</p> <blockquote><p>生产者</p></blockquote> <p>无限循环，每次循环将一个格式化的消息推送到名为 &quot;queue&quot; 的 Redis 列表中，模拟事件产生的过程。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token function">producer</span><span class="token punctuation">(</span>rdb <span class="token operator">*</span>redis<span class="token punctuation">.</span>Client<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		err <span class="token operator">:=</span> rdb<span class="token punctuation">.</span><span class="token function">LPush</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;queue&quot;</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;message-%d&quot;</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;producer error:&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;produced message:&quot;</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+		time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>消费者</p></blockquote> <p>无限循环，每次循环从名为 &quot;queue&quot; 的 Redis 列表中阻塞获取一条消息，模拟消费事件的过程。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token function">consumer</span><span class="token punctuation">(</span>rdb <span class="token operator">*</span>redis<span class="token punctuation">.</span>Client<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		result<span class="token punctuation">,</span> err <span class="token operator">:=</span> rdb<span class="token punctuation">.</span><span class="token function">BRPop</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token number">0</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">,</span> <span class="token string">&quot;queue&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Result</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;consumer error:&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;consumed message:&quot;</span><span class="token punctuation">,</span> result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><blockquote><p>主函数</p></blockquote> <p>main.go</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;github.com/go-redis/redis/v8&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> ctx <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	rdb <span class="token operator">:=</span> redis<span class="token punctuation">.</span><span class="token function">NewClient</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>redis<span class="token punctuation">.</span>Options<span class="token punctuation">{</span>
+		Addr<span class="token punctuation">:</span>     <span class="token string">&quot;localhost:6379&quot;</span><span class="token punctuation">,</span>
+		Password<span class="token punctuation">:</span> <span class="token string">&quot;test:test&quot;</span><span class="token punctuation">,</span>
+		DB<span class="token punctuation">:</span>       <span class="token number">0</span><span class="token punctuation">,</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+	err <span class="token operator">:=</span> rdb<span class="token punctuation">.</span><span class="token function">Ping</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token function">panic</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">go</span> <span class="token function">producer</span><span class="token punctuation">(</span>rdb<span class="token punctuation">)</span>
+	<span class="token keyword">go</span> <span class="token function">consumer</span><span class="token punctuation">(</span>rdb<span class="token punctuation">)</span>
+
+	<span class="token keyword">select</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+
+
+
+</code></pre></div><p>在代码中，我们首先创建了一个 Redis 客户端，启动两个 goroutine 分别执行 producer 和 consumer 函数。使用 select {} 保持主 goroutine 永远运行，以保持程序运行。</p> <p>要运行此代码，请确保你已经在本地安装了 Redis 并运行在默认端口 6379 上。然后，使用以下命令运行代码：</p> <div class="language-shell extra-class"><pre class="language-shell"><code>go run main.go
+</code></pre></div><p>你应该会看到类似如下的输出：</p> <div class="language- extra-class"><pre class="language-text"><code>produced message: 0
+consumed message: message-0
+produced message: 1
+consumed message: message-1
+produced message: 2
+consumed message: message-2
+produced message: 3
+consumed message: message-3
+
+</code></pre></div><p>这个例子仅用于演示如何使用 Go 和 Redis 实现一个简单的生产者和消费者消息队列。在实际应用中，你可能需要考虑更多的异常处理、并发控制和优雅地关闭程序等问题。</p> <h2 id="基于kafka的高性能综合实践"><a href="#基于kafka的高性能综合实践" class="header-anchor">#</a> 基于Kafka的高性能综合实践</h2> <p>如果业务系统的任务量非常大，每日在百万级别以上，这时候需要考虑使用Kafka消息引擎。</p> <p>Kafka主要用于构建实时数据流处理应用程序，以满足高吞吐量、低延迟和高可用性等需求。</p> <p>Kafka具有以下主要特点：</p> <ol><li>高吞吐量：Kafka可以处理大量的写入和读取操作，每秒可以处理数百万次操作。这使得它非常适合处理大量实时数据。</li> <li>分布式：Kafka可以在多个服务器上部署，以实现负载均衡和容错。这意味着，即使某个服务器出现故障，Kafka仍然可以继续运行，不会影响到整个系统的性能。</li> <li>持久性：Kafka将数据存储在磁盘上，这意味着即使系统崩溃，数据也不会丢失。此外，Kafka还支持数据备份，以进一步确保数据的安全性。</li> <li>实时处理：Kafka可以实时处理数据流，这使得它非常适用于实时分析和监控系统。</li> <li>可扩展性：Kafka可以轻松地扩展到更多的服务器和集群，以满足不断增长的数据处理需求。</li></ol> <p>Kafka的主要组件包括：</p> <ul><li><p>Producer</p> <p>生产者是负责将数据发送到Kafka的应用程序或服务。它们将数据发布到一个或多个Kafka主题。</p></li> <li><p>Broker</p> <p>代理是Kafka集群中的服务器，它们负责接收来自生产者的消息并将其存储在磁盘上。代理还向消费者提供消息。</p></li> <li><p>Topic</p> <p>主题是Kafka中的消息分类，用于将消息分组。生产者将消息发送到特定主题，而消费者从特定主题订阅消息。</p></li> <li><p>Partition</p> <p>分区是Kafka主题的子集，用于将数据分布在多个服务器上，以实现负载均衡和容错。</p></li> <li><p>Consumer</p> <p>消费者是订阅Kafka主题并处理消息的应用程序或服务。消费者可以是分布式的，以便并行处理大量消息。</p></li> <li><p>Consumer Group：</p> <p>Consumer Group（消费者组）是允许一个或多个Kafka消费者共享一个公共ID，以协同处理数据。</p> <p>当多个消费者共享同一个消费者组ID时，Kafka会将主题的每个分区的数据分发给消费者组中的一个消费者。这样，每条消息只会被消费者组中的一个消费者处理，从而实现负载均衡和并行处理。</p> <p>如果消费者组中的一个消费者发生故障，Kafka会自动将其处理的分区重新分配给组中的其他消费者，这样可以保证数据的持续处理，提高系统的可用性。</p> <p>同时，消费者组也支持消费者的动态扩展和缩减。当需要处理更多数据时，可以增加消费者组中的消费者数量，Kafka会自动重新分配分区；当消费者过多时，可以减少消费者数量，Kafka同样会自动进行分区的重新分配。</p></li></ul> <img src="/assets/img/6 kafka架构.016a7ab7.png" alt="image-20240305200413935" style="zoom:67%;"> <p>在实现上，我们可以根据事件的类型，例如是start、同步api或异步api或定时器等进行区分不同的主题。可以将任务数据流分散，避免集中堆积在一起。</p> <img src="/assets/img/6 基于kafka实现的架构.c22bd885.png" alt="image-20240305201031046" style="zoom:67%;"> <blockquote><p>创建Topic</p></blockquote> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">const</span> Host <span class="token operator">=</span> <span class="token string">&quot;10.64.119.59&quot;</span>
+
+
+<span class="token keyword">func</span> <span class="token function">CreateTopic</span><span class="token punctuation">(</span>topics <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	config <span class="token operator">:=</span> sarama<span class="token punctuation">.</span><span class="token function">NewConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	config<span class="token punctuation">.</span>Producer<span class="token punctuation">.</span>Return<span class="token punctuation">.</span>Successes <span class="token operator">=</span> <span class="token boolean">true</span>
+	config<span class="token punctuation">.</span>Consumer<span class="token punctuation">.</span>Return<span class="token punctuation">.</span>Errors <span class="token operator">=</span> <span class="token boolean">true</span>
+	brokers <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span>Host <span class="token operator">+</span> <span class="token string">&quot;:9092&quot;</span><span class="token punctuation">}</span>
+
+	admin<span class="token punctuation">,</span> err <span class="token operator">:=</span> sarama<span class="token punctuation">.</span><span class="token function">NewClusterAdmin</span><span class="token punctuation">(</span>brokers<span class="token punctuation">,</span> config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatalf</span><span class="token punctuation">(</span><span class="token string">&quot;Failed to create cluster admin: %v&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> err <span class="token operator">:=</span> admin<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatalf</span><span class="token punctuation">(</span><span class="token string">&quot;Failed to close cluster admin: %v&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> topic <span class="token operator">:=</span> <span class="token keyword">range</span> topics <span class="token punctuation">{</span>
+
+		detail <span class="token operator">:=</span> <span class="token operator">&amp;</span>sarama<span class="token punctuation">.</span>TopicDetail<span class="token punctuation">{</span>
+			NumPartitions<span class="token punctuation">:</span>     <span class="token number">1</span><span class="token punctuation">,</span> <span class="token comment">// 设置分区数量</span>
+			ReplicationFactor<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token comment">// 设置副本因子</span>
+			ConfigEntries<span class="token punctuation">:</span>     <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token operator">*</span><span class="token builtin">string</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token punctuation">}</span>
+		err <span class="token operator">=</span> admin<span class="token punctuation">.</span><span class="token function">CreateTopic</span><span class="token punctuation">(</span>topic<span class="token punctuation">,</span> detail<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Fatalf</span><span class="token punctuation">(</span><span class="token string">&quot;Failed to create topic: %v&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Topic %s created successfully\n&quot;</span><span class="token punctuation">,</span> topic<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>消费者</p></blockquote> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// MyConsumerGroupHandler 实现 sarama.ConsumerGroup 接口，作为自定义ConsumerGroup</span>
+<span class="token keyword">type</span> MyConsumerGroupHandler <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	name  <span class="token builtin">string</span>
+	count <span class="token builtin">int64</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// Setup 执行在 获得新 session 后 的第一步, 在 ConsumeClaim() 之前</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>MyConsumerGroupHandler<span class="token punctuation">)</span> <span class="token function">Setup</span><span class="token punctuation">(</span><span class="token boolean">_</span> sarama<span class="token punctuation">.</span>ConsumerGroupSession<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token boolean">nil</span> <span class="token punctuation">}</span>
+
+<span class="token comment">// Cleanup 执行在 session 结束前, 当所有 ConsumeClaim goroutines 都退出时</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>MyConsumerGroupHandler<span class="token punctuation">)</span> <span class="token function">Cleanup</span><span class="token punctuation">(</span><span class="token boolean">_</span> sarama<span class="token punctuation">.</span>ConsumerGroupSession<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token boolean">nil</span> <span class="token punctuation">}</span>
+
+<span class="token comment">// ConsumeClaim 具体的消费逻辑</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>h MyConsumerGroupHandler<span class="token punctuation">)</span> <span class="token function">ConsumeClaim</span><span class="token punctuation">(</span>sess sarama<span class="token punctuation">.</span>ConsumerGroupSession<span class="token punctuation">,</span> claim sarama<span class="token punctuation">.</span>ConsumerGroupClaim<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		<span class="token keyword">select</span> <span class="token punctuation">{</span>
+		<span class="token keyword">case</span> msg<span class="token punctuation">,</span> ok <span class="token operator">:=</span> <span class="token operator">&lt;-</span>claim<span class="token punctuation">.</span><span class="token function">Messages</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			<span class="token keyword">if</span> <span class="token operator">!</span>ok <span class="token punctuation">{</span>
+				<span class="token keyword">return</span> <span class="token boolean">nil</span>
+			<span class="token punctuation">}</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;[consumer] name:%s topic:%q partition:%d offset:%d, value：%s\n&quot;</span><span class="token punctuation">,</span> h<span class="token punctuation">.</span>name<span class="token punctuation">,</span> msg<span class="token punctuation">.</span>Topic<span class="token punctuation">,</span> msg<span class="token punctuation">.</span>Partition<span class="token punctuation">,</span> msg<span class="token punctuation">.</span>Offset<span class="token punctuation">,</span> msg<span class="token punctuation">.</span>Value<span class="token punctuation">)</span>
+			<span class="token comment">// 标记消息已被消费 内部会更新 consumer offset</span>
+			sess<span class="token punctuation">.</span><span class="token function">MarkMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">,</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">)</span>
+			h<span class="token punctuation">.</span>count<span class="token operator">++</span>
+			<span class="token keyword">if</span> h<span class="token punctuation">.</span>count<span class="token operator">%</span><span class="token number">10000</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+				fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;name:%s 消费数:%v\n&quot;</span><span class="token punctuation">,</span> h<span class="token punctuation">.</span>name<span class="token punctuation">,</span> h<span class="token punctuation">.</span>count<span class="token punctuation">)</span>
+			<span class="token punctuation">}</span>
+
+			<span class="token comment">// todo</span>
+			<span class="token comment">// 执行具体的业务</span>
+
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>sess<span class="token punctuation">.</span><span class="token function">Context</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">ConsumerGroup</span><span class="token punctuation">(</span>topic<span class="token punctuation">,</span> group<span class="token punctuation">,</span> name <span class="token builtin">string</span><span class="token punctuation">,</span> wg <span class="token operator">*</span>sync<span class="token punctuation">.</span>WaitGroup<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">defer</span> wg<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	config <span class="token operator">:=</span> sarama<span class="token punctuation">.</span><span class="token function">NewConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	config<span class="token punctuation">.</span>Consumer<span class="token punctuation">.</span>Return<span class="token punctuation">.</span>Errors <span class="token operator">=</span> <span class="token boolean">true</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithCancel</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token keyword">defer</span> <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	cg<span class="token punctuation">,</span> err <span class="token operator">:=</span> sarama<span class="token punctuation">.</span><span class="token function">NewConsumerGroup</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span>Host <span class="token operator">+</span> <span class="token string">&quot;:9092&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span> group<span class="token punctuation">,</span> config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span><span class="token string">&quot;NewConsumerGroup err: &quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> cg<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	handler <span class="token operator">:=</span> MyConsumerGroupHandler<span class="token punctuation">{</span>name<span class="token punctuation">:</span> name<span class="token punctuation">}</span>
+
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;running: &quot;</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span>
+
+		err <span class="token operator">=</span> cg<span class="token punctuation">.</span><span class="token function">Consume</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span>topic<span class="token punctuation">}</span><span class="token punctuation">,</span> handler<span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			log<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Consume err: &quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token keyword">if</span> ctx<span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>生产者</p></blockquote> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">type</span> NodeVal <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	TriggerTemplate <span class="token builtin">string</span>
+	Engine          <span class="token builtin">string</span>
+	ExecutionId     <span class="token builtin">string</span>
+	AppInstId       <span class="token builtin">string</span>
+	Value           <span class="token builtin">string</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">produceEvent</span><span class="token punctuation">(</span>producer sarama<span class="token punctuation">.</span>SyncProducer<span class="token punctuation">,</span> nodeVal <span class="token operator">*</span>NodeVal<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	topic <span class="token operator">:=</span> nodeVal<span class="token punctuation">.</span>TriggerTemplate
+	value <span class="token operator">:=</span> nodeVal<span class="token punctuation">.</span>Value
+
+	msg <span class="token operator">:=</span> <span class="token operator">&amp;</span>sarama<span class="token punctuation">.</span>ProducerMessage<span class="token punctuation">{</span>
+		Topic<span class="token punctuation">:</span> topic<span class="token punctuation">,</span>
+		Value<span class="token punctuation">:</span> sarama<span class="token punctuation">.</span><span class="token function">StringEncoder</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token boolean">_</span><span class="token punctuation">,</span> <span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">:=</span> producer<span class="token punctuation">.</span><span class="token function">SendMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		log<span class="token punctuation">.</span><span class="token function">Fatalln</span><span class="token punctuation">(</span><span class="token string">&quot;Error send message&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;[producer] topic:%s produce msg:%s\n&quot;</span><span class="token punctuation">,</span> topic<span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>主函数</p></blockquote> <p>main.go</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;context&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;github.com/IBM/sarama&quot;</span>
+	<span class="token string">&quot;log&quot;</span>
+	<span class="token string">&quot;sync&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> Host <span class="token operator">=</span> <span class="token string">&quot;10.64.119.59&quot;</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	config <span class="token operator">:=</span> sarama<span class="token punctuation">.</span><span class="token function">NewConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	config<span class="token punctuation">.</span>Producer<span class="token punctuation">.</span>Return<span class="token punctuation">.</span>Successes <span class="token operator">=</span> <span class="token boolean">true</span>
+	config<span class="token punctuation">.</span>Consumer<span class="token punctuation">.</span>Return<span class="token punctuation">.</span>Errors <span class="token operator">=</span> <span class="token boolean">true</span>
+	brokers <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span>Host <span class="token operator">+</span> <span class="token string">&quot;:9092&quot;</span><span class="token punctuation">}</span>
+	topics <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span><span class="token string">&quot;start&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;sync-api&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;async-api&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;form-trigger&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;crontab&quot;</span><span class="token punctuation">}</span>
+
+	<span class="token comment">// 创建topic</span>
+	<span class="token comment">//CreateTopic(topics)</span>
+
+	<span class="token keyword">var</span> client sarama<span class="token punctuation">.</span>Client
+	<span class="token keyword">var</span> err <span class="token builtin">error</span>
+	client<span class="token punctuation">,</span> err <span class="token operator">=</span> sarama<span class="token punctuation">.</span><span class="token function">NewClient</span><span class="token punctuation">(</span>brokers<span class="token punctuation">,</span> config<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> client<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">var</span> producer sarama<span class="token punctuation">.</span>SyncProducer
+	producer<span class="token punctuation">,</span> err <span class="token operator">=</span> sarama<span class="token punctuation">.</span><span class="token function">NewSyncProducerFromClient</span><span class="token punctuation">(</span>client<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">defer</span> producer<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 模拟一个节点实例</span>
+	nodeVal <span class="token operator">:=</span> NodeVal<span class="token punctuation">{</span>
+		TriggerTemplate<span class="token punctuation">:</span> <span class="token string">&quot;start&quot;</span><span class="token punctuation">,</span>
+		Engine<span class="token punctuation">:</span>          <span class="token string">&quot;standard&quot;</span><span class="token punctuation">,</span>
+		ExecutionId<span class="token punctuation">:</span>     <span class="token string">&quot;1541815603606036480&quot;</span><span class="token punctuation">,</span>
+		AppInstId<span class="token punctuation">:</span>       <span class="token string">&quot;inst-0001&quot;</span><span class="token punctuation">,</span>
+		Value<span class="token punctuation">:</span> <span class="token string">`{
+    &quot;instId&quot;: &quot;xxx&quot;,
+    &quot;name&quot;: &quot;start节点&quot;,
+    &quot;description&quot;: &quot;start周期任务&quot;,
+    &quot;template&quot;: &quot;start&quot;,
+    &quot;positions&quot;: [],
+    &quot;connections&quot;: [],
+    &quot;parameters&quot;: {},
+    &quot;errorHandler&quot;: {},
+    &quot;loopHandler&quot;: {},
+    &quot;timeout&quot;: 0,
+    &quot;isIgnore&quot;: false,
+    &quot;runtimes&quot;: []
+}`</span><span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">go</span> <span class="token function">produceEvent</span><span class="token punctuation">(</span>producer<span class="token punctuation">,</span> <span class="token operator">&amp;</span>nodeVal<span class="token punctuation">)</span>
+
+	<span class="token keyword">var</span> wg sync<span class="token punctuation">.</span>WaitGroup
+	wg<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>topics<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> topic <span class="token operator">:=</span> <span class="token keyword">range</span> topics <span class="token punctuation">{</span>
+		group <span class="token operator">:=</span> topic
+		<span class="token keyword">go</span> <span class="token function">ConsumerGroup</span><span class="token punctuation">(</span>topic<span class="token punctuation">,</span> group<span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;%s#%s&quot;</span><span class="token punctuation">,</span> group<span class="token punctuation">,</span> Host<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>wg<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	wg<span class="token punctuation">.</span><span class="token function">Wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>运行测试代码：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">go</span> run main<span class="token punctuation">.</span><span class="token keyword">go</span>
+</code></pre></div><p>生产者运行后，你会看到类似如下输出：</p> <div class="language- extra-class"><pre class="language-text"><code>running:  sync-api#10.64.119.59
+running:  async-api#10.64.119.59
+running:  start#10.64.119.59
+running:  form-trigger#10.64.119.59
+running:  crontab#10.64.119.59
+[producer] topic:start produce msg:{
+    &quot;instId&quot;: &quot;xxx&quot;,
+    &quot;name&quot;: &quot;start节点&quot;,
+    &quot;description&quot;: &quot;start周期任务&quot;,
+    &quot;template&quot;: &quot;start&quot;,
+    &quot;positions&quot;: [],
+    &quot;connections&quot;: [],
+    &quot;parameters&quot;: {},
+    &quot;errorHandler&quot;: {},
+    &quot;loopHandler&quot;: {},
+    &quot;timeout&quot;: 0,
+    &quot;isIgnore&quot;: false,
+    &quot;runtimes&quot;: []
+}
+
+</code></pre></div><p>消费者运行后，你会看到类似如下输出：</p> <div class="language- extra-class"><pre class="language-text"><code>[consumer] name:start#10.64.119.59 topic:&quot;start&quot; partition:0 offset:18, value：{
+    &quot;instId&quot;: &quot;xxx&quot;,
+    &quot;name&quot;: &quot;start节点&quot;,
+    &quot;description&quot;: &quot;start周期任务&quot;,
+    &quot;template&quot;: &quot;start&quot;,
+    &quot;positions&quot;: [],
+    &quot;connections&quot;: [],
+    &quot;parameters&quot;: {},
+    &quot;errorHandler&quot;: {},
+    &quot;loopHandler&quot;: {},
+    &quot;timeout&quot;: 0,
+    &quot;isIgnore&quot;: false,
+    &quot;runtimes&quot;: []
+}
+
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">9/22/2024, 10:43:02 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/4.7-引擎执行模式.html" class="prev">
+        4.7 引擎执行模式
+      </a></span> <span class="next"><a href="/6-核心表结构与接口设计.html">
+        6 核心表结构与接口设计
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/47.35c13096.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>核心表结构 | 流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/69.db66370e.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第二部份：流程引擎实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>4 流程引擎的核心组件</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/4.1-WFMC工作流参考模型.html" class="sidebar-link">4.1 WFMC工作流参考模型</a></li><li><section class="sidebar-group collapsable is-sub-group depth-2"><p class="sidebar-heading"><span>4.2 任务调度机制</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/4.3-工作流模式-控制流模式.html" class="sidebar-link">4.3 工作流模式-控制流模式</a></li><li><a href="/4.4-资源调度机制-资源模式.html" class="sidebar-link">4.4 资源调度机制-资源模式</a></li><li><a href="/4.5-数据管理机制-数据模式.html" class="sidebar-link">4.5 数据管理机制-数据模式</a></li><li><a href="/4.6-异常处理机制-异常处理模式.html" class="sidebar-link">4.6 异常处理机制-异常处理模式</a></li><li><a href="/4.7-引擎执行模式.html" class="sidebar-link">4.7 引擎执行模式</a></li></ul></section></li><li><a href="/5-事件驱动机制.html" class="sidebar-link">5 事件驱动机制</a></li><li><a href="/6-核心表结构与接口设计.html" class="active sidebar-link">6 核心表结构与接口设计</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#核心表结构" class="sidebar-link">核心表结构</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#流程表" class="sidebar-link">流程表</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#流程实例表" class="sidebar-link">流程实例表</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#节点实例表" class="sidebar-link">节点实例表</a></li></ul></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#核心接口" class="sidebar-link">核心接口</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#创建流程" class="sidebar-link">创建流程</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#获取流程详情" class="sidebar-link">获取流程详情</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#获取任务详情" class="sidebar-link">获取任务详情</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#启动流程实例" class="sidebar-link">启动流程实例</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#获取流程实例详情" class="sidebar-link">获取流程实例详情</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#获取任务实例详情" class="sidebar-link">获取任务实例详情</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#查询代办任务" class="sidebar-link">查询代办任务</a></li><li class="sidebar-sub-header"><a href="/6-核心表结构与接口设计.html#提交任务" class="sidebar-link">提交任务</a></li></ul></li></ul></li><li><a href="/7-权限系统设计.html" class="sidebar-link">7 权限系统设计</a></li><li><a href="/8-分布式Crontab任务调度.html" class="sidebar-link">8 分布式Crontab任务调度</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="核心表结构"><a href="#核心表结构" class="header-anchor">#</a> 核心表结构</h2> <h3 id="流程表"><a href="#流程表" class="header-anchor">#</a> 流程表</h3> <blockquote><p>workflow表</p></blockquote> <table><thead><tr><th>列名</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>id</td> <td>int unsigned</td> <td>id</td></tr> <tr><td>name</td> <td>varchar(200)</td> <td>工作流名称</td></tr> <tr><td>user</td> <td>varchar(100)</td> <td>工作流创建人</td></tr> <tr><td>enabled</td> <td>tinyint(1)</td> <td>是否启用</td></tr> <tr><td>desc</td> <td>varchar(500)</td> <td>工作流描述</td></tr> <tr><td>trigger_app</td> <td>varchar(30)</td> <td>工作流中起始触发app类型,如：cron, webhook...</td></tr> <tr><td>trigger_token</td> <td>varchar(50)</td> <td>trigger token</td></tr> <tr><td>start_app_inst_id</td> <td>varchar(100)</td> <td>起始app</td></tr> <tr><td>end_app_inst_id</td> <td>varchar(100)</td> <td>起始app</td></tr> <tr><td>engine</td> <td>varchar(100)</td> <td>使用的工作流类型，不同的类型执行会有区别，包括：标准工作流和快速工作流，默认使用标准工作流</td></tr> <tr><td>tasks</td> <td>mediumtext</td> <td>工作流中各个节点的配置参数及关系</td></tr> <tr><td>create_at</td> <td>timestamp</td> <td>创建时间</td></tr> <tr><td>update_at</td> <td>timestamp</td> <td>更新时间</td></tr></tbody></table> <h3 id="流程实例表"><a href="#流程实例表" class="header-anchor">#</a> 流程实例表</h3> <blockquote><p>workflow_inst表</p></blockquote> <table><thead><tr><th>列名</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>id</td> <td>int unsigned</td> <td>自增长id</td></tr> <tr><td>uid</td> <td>varchar(32)</td> <td>snowflake算法生成的全局唯一id</td></tr> <tr><td>p_uid</td> <td>varchar(32)</td> <td>父uid</td></tr> <tr><td>workflow_id</td> <td>int unsigned</td> <td>工作流id</td></tr> <tr><td>name</td> <td>varchar(200)</td> <td>工作流名称</td></tr> <tr><td>user</td> <td>varchar(100)</td> <td>工作流创建人</td></tr> <tr><td>executor</td> <td>varchar(100)</td> <td>工作流触发人，默认是工作流创建人</td></tr> <tr><td>status</td> <td>varchar(10)</td> <td>执行状态，请参考流程的生命周期章节</td></tr> <tr><td>trigger_data</td> <td>mediumtext</td> <td>开始事件触发时所传递的数据，例如api的post请求体</td></tr> <tr><td>trigger_app</td> <td>varchar(30)</td> <td>工作流中起始触发app类型,如：cron, webhook...</td></tr> <tr><td>start_at</td> <td>char(19)</td> <td>实例开始时间</td></tr> <tr><td>end_at</td> <td>char(19)</td> <td>实例结束时间</td></tr> <tr><td>start_app_inst_id</td> <td>varchar(100)</td> <td>开始执行的app</td></tr> <tr><td>end_app_inst_id</td> <td>varchar(100)</td> <td>结束执行的app</td></tr> <tr><td>engine</td> <td>varchar(100)</td> <td>使用的引擎，不同的引擎对工作流的执行会有区别，包括：标准引擎和快速引擎，默认使用标准引擎</td></tr> <tr><td>tasks</td> <td>mediumtext</td> <td>工作流中各个节点的配置参数及关系</td></tr> <tr><td>workflow_output</td> <td>text</td> <td>工作流输出结果</td></tr> <tr><td>cost</td> <td>long int</td> <td>执行耗时，单位：毫秒</td></tr> <tr><td>create_at</td> <td>timestamp</td> <td>创建时间</td></tr> <tr><td>update_at</td> <td>timestamp</td> <td>更新时间</td></tr></tbody></table> <h3 id="节点实例表"><a href="#节点实例表" class="header-anchor">#</a> 节点实例表</h3> <blockquote><p>node_inst表</p></blockquote> <table><thead><tr><th>列名</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>id</td> <td>int unsigned</td> <td>自增长id</td></tr> <tr><td>uid</td> <td>varchar(32)</td> <td>snowflake算法生成的全局唯一id</td></tr> <tr><td>workflow_uid</td> <td>varchar(32)</td> <td>工作流实例id，引用workflow表的uid字段</td></tr> <tr><td>execution_uid</td> <td>varchar(32)</td> <td>执行uid</td></tr> <tr><td>index</td> <td>int(11)</td> <td>索引id，在循环时使用，表示第几次执行</td></tr> <tr><td>node_id</td> <td>varchar(100)</td> <td>前端画布生成的节点id，在每一个流程中是唯一的</td></tr> <tr><td>name</td> <td>varchar(200)</td> <td>原子任务名称</td></tr> <tr><td>desc</td> <td>varchar(500)</td> <td>原子任务说明</td></tr> <tr><td>template</td> <td>varchar(100)</td> <td>app模板id类型，如：cron-timer、database-handler</td></tr> <tr><td>trigger_token</td> <td>varchar(50)</td> <td>trigger token</td></tr> <tr><td>trigger_data</td> <td>mediumtext</td> <td>trigger data</td></tr> <tr><td>task</td> <td>mediumtext</td> <td>Task参数数据，不同task参数不一样</td></tr> <tr><td>status</td> <td>varchar(32)</td> <td>状态，请参考节点的生命周期章节</td></tr> <tr><td>execute_ip</td> <td>varchar(32)</td> <td>执行该app的容器ip地址</td></tr> <tr><td>start_at</td> <td>char(19)</td> <td>实例开始时间</td></tr> <tr><td>end_at</td> <td>char(19)</td> <td>实例结束时间</td></tr> <tr><td>cost</td> <td>long int</td> <td>执行耗时，单位：毫秒</td></tr> <tr><td>create_at</td> <td>timestamp</td> <td>创建时间</td></tr> <tr><td>update_at</td> <td>timestamp</td> <td>更新时间</td></tr></tbody></table> <h2 id="核心接口"><a href="#核心接口" class="header-anchor">#</a> 核心接口</h2> <p>WFMC定义的所有接口如下：</p> <p>● 过程定义数据，以及过程定义数据的转换规范</p> <p>● 支持不同工作流系统间协同工作的接口</p> <p>● 支持与各种不同IT应用程序交互的接口</p> <p>● 支持与用户交互的接口</p> <p>● 提供系统监视，以及标准功能来简化复合工作流应用环境管理的接口</p> <h3 id="创建流程"><a href="#创建流程" class="header-anchor">#</a> 创建流程</h3> <table><thead><tr><th>请求URL</th> <th>/api/process</th></tr></thead> <tbody><tr><td>请求方法</td> <td>POST</td></tr> <tr><td>说明</td> <td>创建流程</td></tr></tbody></table> <blockquote><p>请求</p></blockquote> <p>各个字段的说明请参考第三章的《流程定义》。</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Unknown&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;startTaskInstId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;endTaskInstId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;engine&quot;</span><span class="token operator">:</span> <span class="token string">&quot;fast&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;creator&quot;</span><span class="token operator">:</span> <span class="token string">&quot;admin&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;executor&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;inputDataSchema&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;outputDataSchema&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;error&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;extension&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;metadata&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;tasks&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        ...
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>响应</p></blockquote> <div class="language- extra-class"><pre class="language-text"><code>{
+    &quot;response&quot;: {
+        &quot;id&quot;: &quot;proc-avxhke9u&quot;
+    }
+}
+</code></pre></div><h3 id="获取流程详情"><a href="#获取流程详情" class="header-anchor">#</a> 获取流程详情</h3> <table><thead><tr><th>请求URL</th> <th>/api/process/{process_id}</th></tr></thead> <tbody><tr><td>请求方法</td> <td>GET</td></tr> <tr><td>说明</td> <td>获取特定流程详情</td></tr> <tr><td>请求参数</td> <td>- <code>process_id</code> (流程ID，字符串)</td></tr> <tr><td>响应</td> <td></td></tr></tbody></table> <blockquote><p>请求</p></blockquote> <ul><li><code>process_id</code> (流程ID，字符串)</li></ul> <div class="language- extra-class"><pre class="language-text"><code>/v1/process/proc-avxhke9u
+</code></pre></div><blockquote><p>响应</p></blockquote> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;id&quot;</span><span class="token operator">:</span><span class="token string">&quot;proc-avxhke9u&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Unknown&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;startTaskInstId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;endTaskInstId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;engine&quot;</span><span class="token operator">:</span> <span class="token string">&quot;fast&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;creator&quot;</span><span class="token operator">:</span> <span class="token string">&quot;admin&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;executor&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;inputDataSchema&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;outputDataSchema&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;error&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;extension&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;metadata&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;tasks&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        ...
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="获取任务详情"><a href="#获取任务详情" class="header-anchor">#</a> 获取任务详情</h3> <table><thead><tr><th>请求URL</th> <th>/api/process/{process_id}/{task_id}</th></tr></thead> <tbody><tr><td>请求方法</td> <td>GET</td></tr> <tr><td>说明</td> <td>获取特定流程下的任务详情</td></tr></tbody></table> <blockquote><p>请求</p></blockquote> <ul><li><p><code>process_id</code> (流程ID，字符串)</p></li> <li><p><code>task_id</code>（任务ID，字符串）</p></li></ul> <div class="language- extra-class"><pre class="language-text"><code>/api/process/proc-10001/task-3udfizra
+</code></pre></div><blockquote><p>响应</p></blockquote> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;task-3udfizra&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;脚本任务执行&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;执行脚本任务&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;script&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;代码&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="启动流程实例"><a href="#启动流程实例" class="header-anchor">#</a> 启动流程实例</h3> <table><thead><tr><th>请求URL</th> <th>/api/process/{process_id}</th></tr></thead> <tbody><tr><td>请求方法</td> <td>POST</td></tr> <tr><td>说明</td> <td>启动流程实例</td></tr></tbody></table> <blockquote><p>请求</p></blockquote> <ul><li><p><code>process_id</code> (流程ID，字符串)</p></li> <li><p><code>payload</code> (初始化数据，可以为空，也可以传递启动的JSON数据)</p></li></ul> <div class="language-json extra-class"><pre class="language-json"><code>/api/process/proc-avxhke9u
+
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;param1&quot;</span><span class="token operator">:</span> <span class="token string">&quot;hello world&quot;</span><span class="token punctuation">,</span>
+		<span class="token property">&quot;param2&quot;</span><span class="token operator">:</span> <span class="token string">&quot;tester&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>响应</p></blockquote> <p>启动成功后，异步返回流程实例ID</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;response&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;1541815603606036480&quot;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="获取流程实例详情"><a href="#获取流程实例详情" class="header-anchor">#</a> 获取流程实例详情</h3> <table><thead><tr><th>请求URL</th> <th>/api/processInst/{inst_id}</th></tr></thead> <tbody><tr><td>请求方法</td> <td>GET</td></tr> <tr><td>说明</td> <td>获取流程实例详情</td></tr> <tr><td>请求参数</td> <td>- <code>inst_id</code> (流程实例ID，字符串)</td></tr> <tr><td>响应</td> <td></td></tr></tbody></table> <blockquote><p>请求</p></blockquote> <ul><li><code>inst_id</code> (流程实例ID，字符串。注意：每个inst_id是唯一的不重复)</li></ul> <div class="language- extra-class"><pre class="language-text"><code>/api/processInst/1541815603606036480
+</code></pre></div><blockquote><p>响应</p></blockquote> <p>这里主要是获取流程实例中各个任务实例在运行时的数据，即runtimes数据。</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;id&quot;</span><span class="token operator">:</span><span class="token string">&quot;1541815603606036480&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;proc_id&quot;</span><span class="token operator">:</span><span class="token string">&quot;proc-avxhke9u&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Unknown&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;startTaskInstId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;endTaskInstId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;engine&quot;</span><span class="token operator">:</span> <span class="token string">&quot;fast&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;creator&quot;</span><span class="token operator">:</span> <span class="token string">&quot;admin&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;executor&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;inputDataSchema&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;outputDataSchema&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;error&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;extension&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;metadata&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        ...
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;tasks&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span>
+              <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;task-3udfizra&quot;</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;脚本任务执行&quot;</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;执行脚本任务&quot;</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;script&quot;</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                  <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                      <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;代码&quot;</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+                  <span class="token punctuation">}</span>
+              <span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+              <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                  <span class="token punctuation">{</span>
+                      <span class="token property">&quot;index&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;startAt&quot;</span><span class="token operator">:</span> <span class="token number">1700063265000</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;endAt&quot;</span><span class="token operator">:</span> <span class="token number">1700063307000</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;done&quot;</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;error&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;input&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                          <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span>
+                      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+                      <span class="token property">&quot;output&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ok&quot;</span>
+                  <span class="token punctuation">}</span>
+              <span class="token punctuation">]</span>
+          <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="获取任务实例详情"><a href="#获取任务实例详情" class="header-anchor">#</a> 获取任务实例详情</h3> <table><thead><tr><th>请求URL</th> <th>/api/processInst/{inst_id}/{task_id}</th></tr></thead> <tbody><tr><td>请求方法</td> <td>GET</td></tr> <tr><td>说明</td> <td>获取某个流程实例下的某个任务执行详情</td></tr></tbody></table> <blockquote><p>请求</p></blockquote> <ul><li><code>inst_id</code>（流程实例ID，字符串。注意：每个流程实例ID都是唯一不重复的）</li> <li><code>task_id</code> (任务ID，字符串。注意：流程实例中每个任务ID都是唯一不重复的)</li></ul> <div class="language- extra-class"><pre class="language-text"><code>/api/processInst/inst-avxhke9u/task-3udfizra
+</code></pre></div><blockquote><p>响应</p></blockquote> <p>这里只返回对应流程实例中所关注的任务的运行时数据，即runtimes数据。</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;task-3udfizra&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;脚本任务执行&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;执行脚本任务&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;script&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;代码&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">&quot;index&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;startAt&quot;</span><span class="token operator">:</span> <span class="token number">1700063265000</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;endAt&quot;</span><span class="token operator">:</span> <span class="token number">1700063307000</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;done&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;error&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;input&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;output&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ok&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="查询代办任务"><a href="#查询代办任务" class="header-anchor">#</a> 查询代办任务</h3> <table><thead><tr><th>请求URL</th> <th>/api/taskInsts?user={string}&amp;limit={integer}&amp;offset={integer}</th></tr></thead> <tbody><tr><td>请求方法</td> <td>GET</td></tr> <tr><td>说明</td> <td>查询某个用户待处理的任务列表</td></tr></tbody></table> <blockquote><p>请求</p></blockquote> <ul><li><code>user</code> (用户，字符串)</li> <li><code>limit</code>(分页大小，整形)</li> <li><code>offset</code>(分页偏移，整形)</li></ul> <div class="language- extra-class"><pre class="language-text"><code>/api/taskInsts?user=zhangsan&amp;limit=20&amp;offset=0
+</code></pre></div><blockquote><p>响应</p></blockquote> <p>返回的list数组中的任务实例ID：inst-xf2gh3xs9是唯一不重复的。</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;response&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;list&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+                <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;inst-xf2gh3xs9&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;name&quot;</span><span class="token operator">:</span><span class="token string">&quot;请假条审批&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;content&quot;</span><span class="token operator">:</span><span class="token string">&quot;由于.....&quot;</span><span class="token punctuation">,</span>
+                <span class="token property">&quot;createAt&quot;</span><span class="token operator">:</span><span class="token string">&quot;2023-12-01 10:00:00&quot;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;total&quot;</span><span class="token operator">:</span> <span class="token number">1</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="提交任务"><a href="#提交任务" class="header-anchor">#</a> 提交任务</h3> <table><thead><tr><th>请求URL</th> <th>/api/taskInst/{task_inst_id}</th></tr></thead> <tbody><tr><td>请求方法</td> <td>POST</td></tr> <tr><td>说明</td> <td>任务实例提交</td></tr></tbody></table> <blockquote><p>请求</p></blockquote> <ul><li><code>task_inst_id</code> (任务实例ID，字符串)</li> <li><code>payload</code>提交的post参数，根据任务实例的入参来传递key、value数据。可以通过前面的获取任务实例详情接口得到入参列表。</li></ul> <div class="language-json extra-class"><pre class="language-json"><code>/api/taskInst/inst-xf2gh3xs9
+
+<span class="token punctuation">{</span>
+    <span class="token property">&quot;key1&quot;</span><span class="token operator">:</span> <span class="token string">&quot;value1&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;key2&quot;</span><span class="token operator">:</span> <span class="token string">&quot;value2&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">4/6/2024, 8:27:42 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/5-事件驱动机制.html" class="prev">
+        5 事件驱动机制
+      </a></span> <span class="next"><a href="/7-权限系统设计.html">
+        7 权限系统设计
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/69.db66370e.js" defer></script>
+  </body>
+</html>

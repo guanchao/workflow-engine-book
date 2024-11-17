@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>事件定义 | 流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/16.223f06e4.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第一部份：流程引擎基础</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/1-引言.html" class="sidebar-link">1 引言</a></li><li><a href="/2-概念.html" class="sidebar-link">2 概念</a></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>3 流程建模和解析</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/3.1-流程建模语言发展概述.html" class="sidebar-link">3.1 流程建模语言发展概述</a></li><li><section class="sidebar-group collapsable is-sub-group depth-2"><p class="sidebar-heading open"><span>3.2 流程建模</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/3.2-流程建模-流程定义.html" class="sidebar-link">流程定义</a></li><li><a href="/3.2-流程建模-事件节点定义.html" class="active sidebar-link">事件节点定义</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/3.2-流程建模-事件节点定义.html#事件定义" class="sidebar-link">事件定义</a></li></ul></li><li><a href="/3.2-流程建模-任务节点定义.html" class="sidebar-link">任务节点定义</a></li><li><a href="/3.2-流程建模-网关节点定义.html" class="sidebar-link">网关节点定义</a></li></ul></section></li><li><a href="/3.3-生命周期.html" class="sidebar-link">3.3 生命周期</a></li><li><a href="/3.4-流程模型的解析.html" class="sidebar-link">3.4 流程模型的解析</a></li><li><a href="/3.5-与BPMN的比较.html" class="sidebar-link">3.5 与BPMN的比较</a></li></ul></section></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="事件定义"><a href="#事件定义" class="header-anchor">#</a> 事件定义</h2> <p>按在流程中的处理阶段分类，如下表所示：</p> <img src="/assets/img/6 事件分类-2.ac4099e9.png" alt="image-20240304203041933" style="zoom:50%;"> <ul><li><p>开始阶段：主要用于触发流程实例执行，主要用于系统与外部环境或者流程实例之间进行通信。包括开始事件、时间开始、消息开始三种（触发事件）。</p> <ul><li>开始事件：开始事件是工作流的启动点。所有的流程都从这个点开始。在工作流图中，通常用一个没有入口的圆圈来表示开始事件。当开始事件被触发后，工作流就开始执行。</li></ul> <img src="/assets/img/6 开始阶段-开始事件.ac912cf5.png" alt="image-20240304130229266" style="zoom:50%;"> <ul><li><p>时间开始：时间开始事件是一种特殊的开始事件，它在预定的时间开始。例如，每天早上9点开始处理邮件，或者每月第一天开始生成报告。当达到预定的时间点，时间开始事件就会被触发，从而启动工作流。</p> <img src="/assets/img/6 开始阶段-时间开始.8401cb41.png" alt="image-20240304130144652" style="zoom:50%;"></li> <li><p>消息开始：消息开始也是一种特殊类型的开始事件。这种事件在接收到特定的消息后开始。例如，当收到一个HTTP请求时，开始处理发起响应流程。</p> <img src="/assets/img/6 开始阶段-消息开始.2e090243.png" alt="image-20240304130352009" style="zoom:50%;"></li></ul></li> <li><p>中间阶段：在开始和结束事件之间发生的事件，会影响流程的流转。包括：捕获时间、捕获消息、捕获异常。</p> <ul><li><p>捕获时间：捕获时间事件是一种基于时间的中间事件，它在达到特定的时间点时发生。这种事件通常用于对流程中的任务设置截止日期或超时提醒或者设置一个时间延迟。例如，如果一个任务在预定的时间内未完成，可以触发一个捕获时间事件来发送提醒给相关人员。</p> <img src="/assets/img/6 中间阶段-捕获时间.382549c1.png" alt="image-20240304131155798" style="zoom:50%;"></li> <li><p>捕获消息：捕获消息事件是一种基于消息传递的中间事件，它在接收到特定的消息时发生。这种事件通常用于流程实例之间的同步或从外部系统接收数据。例如，前面任务节点中的【接收任务】类型，可以通过调用生成的回调接口触发流程实例继续运行。</p> <img src="/assets/img/6 中间阶段-捕获消息.14dbac7b.png" alt="image-20240304131129240" style="zoom:50%;"></li> <li><p>捕获异常：捕获异常事件是一种基于异常处理的中间事件，它在发生特定的异常时发生。这种事件通常用于处理流程中的错误或异常情况。例如，当系统出现故障时，可以触发一个捕获异常事件来通知相关人员进行处理。</p> <img src="/assets/img/6 中间阶段-捕获异常.4889f064.png" alt="image-20240304131217669" style="zoom:50%;"></li></ul></li> <li><p>结束阶段：即结束事件，表明流程执行结束。包括：结束事件和终止事件。</p> <ul><li><p>结束事件：结束事件是流程结束的地方。在流程图中，结束事件被表示为一个带有一个粗圆环的圆圈。每个流程可以有一个或多个结束事件，意味着流程可以有一个或多个可能的结束点。结束事件表示流程的正常结束，所有的流程路径都在此结束。</p> <img src="/assets/img/6 结束阶段-结束事件.86839433.png" alt="image-20240304131412978" style="zoom:50%;"></li> <li><p>终止事件：终止事件是一种特殊类型的结束事件，它表示流程的非正常结束。在流程图中，终止事件通常用一个带有一个粗圆环和一个&quot;X&quot;的圆圈来表示。当发生某些特殊情况（如错误或异常）需要立即停止整个流程时，可以使用终止事件。终止事件不仅结束当前流程实例，还会结束所有的子流程和调用活动。</p> <img src="/assets/img/6 结束阶段-终止事件.1e46ab17.png" alt="image-20240304131440021" style="zoom:50%;"></li></ul></li></ul> <h3 id="开始阶段"><a href="#开始阶段" class="header-anchor">#</a> 开始阶段</h3> <p>每个流程都必须有一个开始节点。这个节点的模板类型定义了如何触发当前工作流执行。</p> <p>常见的开始节点类型有如下几种：</p> <h4 id="手动节点"><a href="#手动节点" class="header-anchor">#</a> 手动节点</h4> <p>手动节点主要在测试或者人工操作的场景下使用，该节点没有任何实际的功能。</p> <h4 id="crontab节点"><a href="#crontab节点" class="header-anchor">#</a> Crontab节点</h4> <blockquote><p>原理</p></blockquote> <p>Crontab节点完整JSON结构如下：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;crontab节点&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Event&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;crontab周期任务&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;crontab&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;expr&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;expr&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;*/1 * * * *&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;allow_repeated&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;allow_repeated&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;boolean&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;start_at&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;start_at&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2023-01-01 00:00:00&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;end_at&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;end_at&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2023-12-01 00:00:00&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li>expr</li></ul> <p>​	也就是linux系统上常见的crontab任务。可以设定流程执行的周期，一般精确到分钟级别就够用了。其语法如下：</p> <p>前五个字段分别表示如下：</p> <div class="language-xml extra-class"><pre class="language-xml"><code>[分钟：0-59]  [小时：1-23]  [日期：1-31]  [月份：1-12]  [星期：0-6（0 表示周日）]     
+</code></pre></div><p>并且支持一些特殊符号：</p> <p>*：表示任何时刻，例如下面的表示每天的第0分钟</p> <div class="language- extra-class"><pre class="language-text"><code>0 * * * *
+</code></pre></div><p>,：表示分割，例如下面表示每天的第10、20分钟</p> <div class="language- extra-class"><pre class="language-text"><code>10,20 * * * *
+</code></pre></div><p>-：表示范围，例如下面表示每天的第10-20分钟</p> <div class="language- extra-class"><pre class="language-text"><code>10-20 * * * *
+</code></pre></div><p>/n：表示每个n个时间单位执行一次，例如下面表示每隔5分钟</p> <div class="language- extra-class"><pre class="language-text"><code>5/* * * * *
+</code></pre></div><p>常见的一些用法如下：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 每分钟执行一次</span>
+* * * * *
+
+<span class="token comment"># 每天的9点0分执行</span>
+<span class="token number">0</span> <span class="token number">9</span> * * *
+
+<span class="token comment"># 每周一9点0分执行</span>
+<span class="token number">0</span> <span class="token number">9</span> * * <span class="token number">1</span>
+
+<span class="token comment"># 每月1号的10:00到11:00每隔1分钟执行一次</span>
+<span class="token number">0</span> <span class="token number">10</span>-11 <span class="token number">1</span> * *
+
+<span class="token comment"># 每周的周一到周五9点钟执行</span>
+<span class="token number">0</span> <span class="token number">9</span> * * <span class="token number">1</span>-5
+</code></pre></div><ul><li>allow_repeated</li></ul> <p>allow_repeated是重复任务开关。crontab任务是周期性任务。可能存在一种情况，即上一周期的任务未跑完，但是下一周期任务又开始了。</p> <p>所以这里，一个优化的做法是加一个开关，支持是否重复任务同时执行。</p> <p>如果启用开关，表示即使上一周期任务未跑完，下一周期也可以继续创建运行；</p> <p>如果不启用开关，表示上一周期任务未跑完，下一周期就不执行；</p> <ul><li>start_at</li></ul> <p>默认情况下开始时间start_at默认为空。</p> <p>start_at为空表示满足条件就立即触发运行，否则只有时间大于等于开始时间，且满足设置的条件才触发运行。</p> <ul><li>end_at</li></ul> <p>默认情况下结束时间end_at默认为空。</p> <p>end_at为空表示没有crontab周期任务运行永不停止，如果设置了结束时间，则到了结束时间以后，该crontab工作流就会被关闭不再运行。</p> <blockquote><p>实现</p></blockquote> <ul><li>单机环境</li></ul> <p>单机环境下只有一台机器，不存在多个主节点的情况，直接在当前机器管理运行所有crontab任务即可</p> <ul><li>分布式环境</li></ul> <p>分布式环境下，由于有多台机器，这时候需要保证只有一个主节点机器来进行crontab任务的管理运行。所以这里涉及到分布式系统的主节点选举，常见成熟的算法有raft算法。相应的开源组件有etcd、zookeeper。当然也可以使用redis分布式锁或基于DB自己来实现主节点选举，但是在重要的生产环境，还是建议使用稳定成熟的etcd和zookeeper开源组件。</p> <p>两种环境下，最终都是在一个节点上管理所有的crontab任务，我在实际的环境中测试，单机上8核16G的机器可以管理百万级别数量的crontab任务，保证运行时间误差在1s以内。所以对于大部分的场景，没必要去实现把crontab任务平均分配到各个节点上，这样不仅开发难度高、维护成本也高。</p> <p>通过选举主节点来管理所有crontab任务的这种实现方式，足以满足绝大部分的系统需求。</p> <p>同时主节点选举的机制，也避免了单节点故障问题，增强系统稳定性。</p> <h4 id="同步api节点"><a href="#同步api节点" class="header-anchor">#</a> 同步API节点</h4> <blockquote><p>原理</p></blockquote> <p>同步API完整JSON结构如下：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;同步API&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Event&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;同步API&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;sync-api&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;login_verification&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;login_verification&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;none&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;none&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;header_token&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;header_token&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;header_user&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;header_user&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;header_password&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;header_password&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;allow_remote_ips&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;allow_remote_ips&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;module&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;module&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;function&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;function&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;method&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;method&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;get&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li>login_verification</li></ul> <p>该字段表示API的认证方式，默认是none，各种认证方式如下：</p> <p>（1）none：没有认证</p> <p>（2）token：通过在header请求头带token密钥进行认证，关联的字段是header_token。</p> <p>（3）password：通过在header请求头带user和password进行认证，关联的字段是header_user和header_password。</p> <ul><li>allow_remote_ips</li></ul> <p>设置允许调用接口的来源IP，可以设置多个ip或ip段。</p> <ul><li>method</li></ul> <p>该字段表示API支持的请求方法，常见的HTTP请求方法包括：POST、GET、PUT等</p> <ul><li>module、function</li></ul> <p>该字段和function字段用来标识接口的路径。一般情况下，module可以用来标识具体的产品或者业务，function可以用来表示模块下的功能。</p> <p>在调用同步API接口时，引擎就可以通过module+fun来唯一定位到具体的工作流，然后触发创建实例运行。</p> <p>但是，要注意的是，module和function的组合一定是唯一的，不能跟历史的路径有重复。</p> <blockquote><p>实现</p></blockquote> <p>如下图所示，是同步API节点的执行原理</p> <img src="/assets/img/3 同步API路径匹配工作流.bcb11e4a.png" alt="image-20231019095126466"> <ul><li><p>Step1：API服务的路径匹配可以使用开源成熟的API框架实现，通过URL路径匹配获取到module和function信息，这样就可以唯一定位到具体的工作流。</p></li> <li><p>Step2：然后获取该同步API的安全认证信息，校验是否通过安全认证。</p></li> <li><p>Step3：通过安全认证以后，创建流程实例，并调用引擎去执行，这个过程是阻塞的（默认会有个很短的超时时间），直到流程实例运行结束后，读取并返回结果。</p></li></ul> <p>可以看到，同步API可以当成API服务来用。</p> <h4 id="异步api节点"><a href="#异步api节点" class="header-anchor">#</a> 异步API节点</h4> <blockquote><p>原理</p></blockquote> <p>异步API跟同步API的区别是，在通过url定位到具体流程，并进行安全认证后。</p> <p>同步API是创建流程实例并运行，然后阻塞，直到流程实例运行结束，才返回结果。</p> <p>异步API是创建流程实例，推送到消息队列后，立刻返回执行实例id。</p> <p>由于异步API的执行机制是非阻塞的，所以他的接口效率非常高，并发量高且接口延时低。</p> <p>异步API完整JSON结构如下：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;异步API&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Event&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;异步API&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;async-api&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;login_verification&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;login_verification&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;none&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;none&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;header_token&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;header_token&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;header_user&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;header_user&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;header_password&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;header_password&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;allow_remote_ips&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;allow_remote_ips&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;module&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;module&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;function&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;function&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;method&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;method&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;get&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li>login_verification</li></ul> <p>该字段表示API的认证方式，默认是none，各种认证方式如下：</p> <p>（1）none：没有认证</p> <p>（2）token：通过在header请求头带token密钥进行认证，关联的字段是header_token。</p> <p>（3）password：通过在header请求头带user和password进行认证，关联的字段是header_user和header_password。</p> <ul><li>allow_remote_ips</li></ul> <p>设置允许调用接口的来源IP，可以设置多个ip或ip段。</p> <ul><li>method</li></ul> <p>该字段表示API支持的请求方法，常见的HTTP请求方法包括：POST、GET、PUT等</p> <ul><li>module、function</li></ul> <p>该字段和function字段用来标识接口的路径。一般情况下，module可以用来标识具体的产品或者业务，function可以用来表示模块下的功能。</p> <p>在调用同步API接口时，引擎就可以通过module+fun来唯一定位到具体的工作流，然后触发创建实例运行。</p> <p>但是，要注意的是，module和function的组合一定是唯一的，不能跟历史的路径有重复。</p> <blockquote><p>实现</p></blockquote> <p>如下图所示，是异步API节点的执行原理</p> <img src="/assets/img/3 异步API路径匹配工作流.0a02a1b0.png" alt="image-20231019095156925" style="zoom:50%;"> <ul><li><p>Step1：同上，API服务的路径匹配可以使用开源成熟的API框架实现，通过URL路径匹配获取到module和function信息，这样就可以唯一定位到具体的工作流。</p></li> <li><p>Step2：然后获取该异步API的安全认证信息，校验是否通过安全认证。</p></li> <li><p>Step3：通过安全认证以后，创建流程实例，并推送到消息队列，然后立即返回流程实例id，这个过程是非阻塞的，也是跟同步API的区别所在。</p></li> <li><p>Step4：如果客户端需要获取执行结果，则可以通过上一步返回的流程实例id来查询。</p></li></ul> <p>注意：这里在创建流程实例后，并没有落到DB，而是直接推送到消息队列，然后直接返回流程实例id。这样的好处是减少DB的操作，极大提高异步API的性能和并发量。</p> <h4 id="表单节点"><a href="#表单节点" class="header-anchor">#</a> 表单节点</h4> <blockquote><p>实现</p></blockquote> <p>表单节点完整JSON结构如下：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;表单&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Event&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;表单&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;form&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;members&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;members&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;array&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;require_login&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;require_login&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;boolean&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li>members</li></ul> <p>该字段限制了哪些平台成员可以提交表单，如果不填写，则认为所有人都可以填写表单</p> <ul><li>require_login</li></ul> <p>该字段为true，表示需要用户登录平台获取登录态才能访问表单链接；</p> <p>该字段为false，表示任意的游客（未注册用户）或平台用户都可以访问表单链接。</p> <p>表单节点需要先设计一个前端的表单并生成一个唯一的URL地址，这个地址跟后端的工作流进行关联。</p> <div class="language- extra-class"><pre class="language-text"><code>http://xxxx/form/[workflow_id]/[appinst_id]
+</code></pre></div><p>只要表单提交后就会把提交的参数一同带上，触发创建工作流实例执行，然后由后端的worker集群来运行。</p> <img src="/assets/img/3 表单绑定工作流.5875de84.png" alt="image-20231020204328699" style="zoom:50%;"> <blockquote><p>实现</p></blockquote> <p>表单的可视化设计又是另一个大的系统，这里不展开讲。主要的功能跟流程设计器类似，需要有一个表单设计语言，即设计DSL语言，业界常见的做法是用JSON来描述表单。在保存表单的时候生成一个唯一的URL地址，并关联后端具体的工作流。</p> <p>用户提交表单时，就得到表单的key value JSON数据，这个JSON数据会以POST方法的形式作为参数传递给后端的工作流实例。</p> <h3 id="中间阶段"><a href="#中间阶段" class="header-anchor">#</a> 中间阶段</h3> <h4 id="延时节点-捕获时间"><a href="#延时节点-捕获时间" class="header-anchor">#</a> 延时节点（捕获时间）</h4> <blockquote><p>原理</p></blockquote> <p>延时节点完整JSON结构如下：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;延时任务&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Event&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;延时任务&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;interval&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;interval&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;interval&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;integer&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token number">60</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token number">60</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>延时任务即指定在未来某个时刻触发执行，跟前面crontab的周期性任务不同的是，它是一次性的任务。系统在到达指定时间后就会触发创建工作流实例运行。</p> <ul><li>interval</li></ul> <p>等待interval秒以后唤醒延时节点继续运行。</p> <blockquote><p>实现</p></blockquote> <p>延时任务的特点是时间戳由小到大排序，只要有任务的时间戳小于等于当前时间戳，就立即创建工作流实例运行。</p> <p>所以这里需要非常频繁地访问这个延时任务队列，并且这个延时任务队列要一直保持有序。这里可以基于Redis的zset有序集合这个数据结构来实现。</p> <ul><li>ZSET有序集合命令</li></ul> <p>zset有序集合不允许重复的成员出现，且每个成员都会关联一个double类型的分数，这个分数可以重复。redis通过这个分数为集合中的成员从小到大进行排序。</p> <p>zset集合是通过哈希表实现，所以添加、删除、查找的复杂度都是O(1)。</p> <p>zset集合支持最大的成员数是2^32-1（即每个集合可存储40多亿的成员数据），所以对于大部分业务是够用的。</p> <p>下表是在实现延时任务涉及到的zset命令：</p> <table><thead><tr><th>命令</th> <th>描述</th></tr></thead> <tbody><tr><td>ZADD key score member</td> <td>向有序集合添加成员</td></tr> <tr><td>ZREM key member</td> <td>移除有序集合中的成员</td></tr> <tr><td>ZCOUNT key min max</td> <td>计算在有序集合中指定区间分数的成员数</td></tr> <tr><td>ZREVRANGEBYSCORE key max min [WITHSCORES]</td> <td>返回有序集中指定分数区间内的成员，分数从高到低排序</td></tr></tbody></table> <p>key命名为：delay_execution_queue</p> <p>member命名格式为：节点实例uid</p> <p>score表示目标时间戳（单位：秒）</p> <p>第一步：创建并初始化节点实例，获得uid，存储到数据库</p> <div class="language- extra-class"><pre class="language-text"><code>uid
+</code></pre></div><p>第二步：通过ZADD命令添加到zset有序集合：</p> <div class="language- extra-class"><pre class="language-text"><code>ZADD delay_execution_queue 时间戳 uid
+</code></pre></div><p>第三步：通过ZCOUNT命令每秒轮询获取已达到当前时间戳的任务数量，直到返回个数大于0，执行下一步</p> <div class="language- extra-class"><pre class="language-text"><code>ZCOUNT delay_execution_queue 当前时间戳 -inf
+</code></pre></div><p>第四步：获取成员列表并删除zset中的成员</p> <p>这里获取成员和删除成员是两个动作，不是原子性的，需要使用lua脚本在redis操作来保证两个动作的原子性。即要么都成功，要么都失败，避免出现一个动作成功，另一个动作失败的情况。</p> <p>lua脚本如下，其中key是delay_execution_queue，max是当前时间戳。</p> <div class="language-lua extra-class"><pre class="language-lua"><code><span class="token keyword">local</span> key <span class="token operator">=</span> <span class="token function">tostring</span><span class="token punctuation">(</span>KEYS<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">local</span> max <span class="token operator">=</span> ARGV<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+
+<span class="token comment">-- 先获取当前时间戳以前的uid成员</span>
+<span class="token keyword">local</span> arr <span class="token operator">=</span> redis<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">'ZREVRANGEBYSCORE'</span><span class="token punctuation">,</span> key<span class="token punctuation">,</span> max<span class="token punctuation">,</span> <span class="token string">'-inf'</span><span class="token punctuation">,</span> <span class="token string">'LIMIT'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+
+<span class="token keyword">local</span> member <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>
+<span class="token keyword">for</span> i<span class="token punctuation">,</span> v <span class="token keyword">in</span> <span class="token function">pairs</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span> <span class="token keyword">do</span>
+    redis<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">'ZREM'</span><span class="token punctuation">,</span> key<span class="token punctuation">,</span> v<span class="token punctuation">)</span>
+    member <span class="token operator">=</span> v
+<span class="token keyword">end</span>
+<span class="token keyword">return</span> member
+</code></pre></div><h4 id="接收节点-捕获消息"><a href="#接收节点-捕获消息" class="header-anchor">#</a> 接收节点（捕获消息）</h4> <blockquote><p>原理</p></blockquote> <p>接收节点完整JSON结构如下：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;接收任务&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Event&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;接收任务&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;callback&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;timeout_branch&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;timeout_branch&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span><span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;timeout&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;integer&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li>timeout</li></ul> <p>等待接收信号的超时时间，默认为0表示没有限制，如果设置了超时时间，事件信号在指定的时间内没有到达，则会立刻停止响应或者执行指定的timeout_branch分支的节点任务。</p> <p>注意，超时以后，后续的事件信号即使到达了也不会再响应。</p> <ul><li>timeout_branch</li></ul> <p>如果前面设置了timeout属性，则在超过指定时间后，会执行该分支的节点任务。如果没有设置，则不做任何响应。</p> <p>接收节点会生成一个唯一的回调地址，用于给外部第三方系统进行调用和数据推送。</p> <p>通过工作流实例ID和节点ID就可以定位到流程中具体的节点位置。</p> <blockquote><p>实现</p></blockquote> <p>工作流实例在运行到接收节点时，会生成如下格式的回调地址：</p> <div class="language- extra-class"><pre class="language-text"><code>http://xxxx/callback/[execution_id]/[appinst_id]
+</code></pre></div><p>其中execution_id表示当前的工作流实例ID，appinst_id表示当前节点的实例ID。</p> <p>调用回调接口传递的参数，会作为接收节点的输出结果。</p> <p>其完整执行过程如下图所示：</p> <p>Step1：接受任务被上一个节点推送到消息队列，等待执行</p> <p>Step2：接收节点被worker节点消费执行，此时是接收任务第一次执行</p> <p>Step3：这时候生成一个回调地址工第三方系统调用。</p> <p>Step4：第三方系统拿到这个回调接口后，通过POST请求带上参数推送数据给引擎。</p> <p>通过回到URL，引擎获得execution_id和appinst_id，可以定位判断是否存在接收任务</p> <p>Step5：当上一步判定回调接口有效后，就会唤醒接收节点，即把接收节点再次推送到消息队列执行</p> <p>Step6：此时，接受节点被消费执行，这次是第二次执行，直接返回第三方系统POST的数据作为输出结果。</p> <img src="/assets/img/3 接收任务.cf41869a.png" alt="image-20231024194900450" style="zoom:50%;"> <h4 id="全局异常节点-捕获异常"><a href="#全局异常节点-捕获异常" class="header-anchor">#</a> 全局异常节点（捕获异常）</h4> <p>一个流程里面拖入一个全局异常节点，只要流程中有任意一个节点抛出异常并且自己没有处理，则最终就会被这个全局异常节点捕获。</p> <img src="/assets/img/3.2 全局异常节点.2ccc45df.png" alt="image-20240717230618250" style="zoom:50%;"> <p>这里，我们介绍的是全局异常的捕获。如果想节点自己捕获和处理异常，则可以给每个节点增加多一个错误处理配置（errorHandler），这个配置可以配置具体处理的方法。</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+	<span class="token property">&quot;operation&quot;</span><span class="token operator">:</span> <span class="token string">&quot;retry/ignore/catch/throw&quot;</span><span class="token punctuation">,</span>
+	<span class="token property">&quot;retry&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+		<span class="token property">&quot;count&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+		<span class="token property">&quot;period&quot;</span><span class="token operator">:</span> <span class="token number">1</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token property">&quot;catch&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+		<span class="token property">&quot;branch&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxxx&quot;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li><p>retry表示错误重试，可以设置重试的次数和间隔周期。</p></li> <li><p>ignore表示发生错误直接忽略不管，继续往下执行。</p></li> <li><p>catch表示捕获并处理这个异常，这是可以设置响应处理异常的分支节点。</p></li> <li><p>throw表示抛出这个异常，给全局异常节点捕获处理。</p></li></ul> <p>这个的原理类似python里面的try...catch异常捕获的思路一样。</p> <p>例如下面的<code>run_node</code>方法对应流程中的一个个节点任务，其中try是每个节点的具体业务功能，而except则是这个节点自己实现部分异常的捕获处理。如果except出现了一些节点自己没有捕获到的异常，则会向上一层抛出这个异常，最终被这个流程的全局except捕获到。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">run_node</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">try</span><span class="token punctuation">:</span>
+      <span class="token comment"># Some code that may raise an exception</span>
+      x <span class="token operator">=</span> <span class="token number">10</span> <span class="token operator">/</span> <span class="token number">0</span>
+  <span class="token keyword">except</span> ZeroDivisionError <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+      <span class="token comment"># Handling specific exception</span>
+      <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Division by zero error!&quot;</span><span class="token punctuation">)</span>
+      
+      
+<span class="token keyword">def</span> <span class="token function">__main__</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">try</span><span class="token punctuation">:</span>
+    run_node<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Global exception catch&quot;</span><span class="token punctuation">)</span>
+</code></pre></div><h3 id="结束阶段"><a href="#结束阶段" class="header-anchor">#</a> 结束阶段</h3> <h4 id="终止节点"><a href="#终止节点" class="header-anchor">#</a> 终止节点</h4> <p>执行结束节点会强制终止工作流实例停止，运行中的其他节点实例也会被强制终止。</p> <h4 id="结束节点"><a href="#结束节点" class="header-anchor">#</a> 结束节点</h4> <p>在一个流程中，结束节点分为两类。如下图所示，一种是显式声明结束节点，一种是隐式声明结束节点。</p> <p>这里我们说的是显示声明结束节点，主要是明显地在流程图上表示出来，并没有特别多的意义。</p> <img src="/assets/img/3.2 结束节点.71491a2f.png" alt="image-20240717225949205" style="zoom:50%;"> <img src="/assets/img/wechat.50adb4d4.png" style="zoom:25%;"></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">7/21/2024, 9:20:19 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/3.2-流程建模-流程定义.html" class="prev">
+        流程定义
+      </a></span> <span class="next"><a href="/3.2-流程建模-任务节点定义.html">
+        任务节点定义
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/16.223f06e4.js" defer></script>
+  </body>
+</html>

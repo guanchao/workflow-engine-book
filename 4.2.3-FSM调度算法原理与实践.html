@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/51.bdee7514.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第二部份：流程引擎实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>4 流程引擎的核心组件</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/4.1-WFMC工作流参考模型.html" class="sidebar-link">4.1 WFMC工作流参考模型</a></li><li><section class="sidebar-group collapsable is-sub-group depth-2"><p class="sidebar-heading open"><span>4.2 任务调度机制</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/4.2.1-DAG调度算法原理与实践.html" class="sidebar-link">4.2.1 DAG调度算法原理与实践</a></li><li><a href="/4.2.2-开源Airflow DAG调度算法剖析.html" class="sidebar-link">4.2.2 开源Airflow DAG调度算法剖析</a></li><li><a href="/4.2.3-FSM调度算法原理与实践.html" class="active sidebar-link">4.2.3 FSM调度算法原理与实践</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/4.2.3-FSM调度算法原理与实践.html#有限状态机原理" class="sidebar-link">有限状态机原理</a></li><li class="sidebar-sub-header"><a href="/4.2.3-FSM调度算法原理与实践.html#有限状态机实践" class="sidebar-link">有限状态机实践</a></li></ul></li><li><a href="/4.2.4-开源OSWorkflow FSM调度算法剖析.html" class="sidebar-link">4.2.4 开源OSWorkflow FSM调度算法剖析</a></li><li><a href="/4.2.5-Petri网调度算法原理与实践.html" class="sidebar-link">4.2.5 Petri网调度算法原理与实践</a></li><li><a href="/4.2.6-开源YAWL Petri网调度算法剖析.html" class="sidebar-link">4.2.6 开源YAWL Petri网调度算法剖析</a></li></ul></section></li><li><a href="/4.3-工作流模式-控制流模式.html" class="sidebar-link">4.3 工作流模式-控制流模式</a></li><li><a href="/4.4-资源调度机制-资源模式.html" class="sidebar-link">4.4 资源调度机制-资源模式</a></li><li><a href="/4.5-数据管理机制-数据模式.html" class="sidebar-link">4.5 数据管理机制-数据模式</a></li><li><a href="/4.6-异常处理机制-异常处理模式.html" class="sidebar-link">4.6 异常处理机制-异常处理模式</a></li><li><a href="/4.7-引擎执行模式.html" class="sidebar-link">4.7 引擎执行模式</a></li></ul></section></li><li><a href="/5-事件驱动机制.html" class="sidebar-link">5 事件驱动机制</a></li><li><a href="/6-核心表结构与接口设计.html" class="sidebar-link">6 核心表结构与接口设计</a></li><li><a href="/7-权限系统设计.html" class="sidebar-link">7 权限系统设计</a></li><li><a href="/8-分布式Crontab任务调度.html" class="sidebar-link">8 分布式Crontab任务调度</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>介绍FSM原理及其实现方法。</p> <h2 id="有限状态机原理"><a href="#有限状态机原理" class="header-anchor">#</a> 有限状态机原理</h2> <p>状态机（State Machine）是一种用来进行计算或者解决问题的数学模型。它由一系列的状态和转换函数组成，这些转换函数定义了在给定输入和当前状态下如何改变状态。状态机可以用来模拟许多实际世界的系统，例如电梯的工作过程，交通灯的变化等。</p> <p>而有限状态机（Finite State Machine，简称FSM）是状态机的一种特殊形式，它的状态数量是有限的。在任何给定的时间，有限状态机都处于其定义的某一状态中。当某个条件（通常是输入或时间事件）被满足时，它会从一个状态转移到另一个状态。</p> <p>FSM包含如下几个核心概念：</p> <ul><li>State：状态。可以对应工作流程中的一个阶段或步骤。</li> <li>Transition：流转，表示从一个状态流转到下一个状态，通常由事件触发。</li> <li>Action：动作，到达指定状态后执行的操作。</li></ul> <p>三者关系是：事件触发状态的转移，流转到指定状态后触发执行后续动作。</p> <img src="/assets/img/4 状态机.139501a7.png" alt="image-20231117093752924" style="zoom:50%;"> <p><strong>DAG侧重于描述任务之间的依赖关系，而FSM侧重于描述状态的流转关系。</strong></p> <p>相比于DAG不支持环的问题，FSM可以实现环，这个是FSM相比DAG方式实现工作流引擎的优势所在。</p> <p>下面是一个简单的状态流转实例，其流转关系是：State A -&gt; State B -&gt; State C</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">Start</span><span class="token punctuation">:</span> State A
+<span class="token key atrule">State A</span><span class="token punctuation">:</span>
+    <span class="token key atrule">Actions</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> 动作A
+    <span class="token key atrule">Next</span><span class="token punctuation">:</span>
+        State B
+<span class="token key atrule">State B</span><span class="token punctuation">:</span>
+    <span class="token key atrule">Actions</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> 动作B1
+    <span class="token punctuation">-</span> 动作B2
+    <span class="token key atrule">Next</span><span class="token punctuation">:</span>
+        State C
+<span class="token key atrule">State C</span><span class="token punctuation">:</span>
+    <span class="token key atrule">Actions</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> 动作C
+    <span class="token key atrule">Next</span><span class="token punctuation">:</span>
+        End
+</code></pre></div><h2 id="有限状态机实践"><a href="#有限状态机实践" class="header-anchor">#</a> 有限状态机实践</h2> <p>FSM的原理很简单，下面我们基于前面的原理来实现一个简单的FSM。</p> <ol><li>首先，我们定义了<code>State</code>类，它表示工作流中的一个状态。每个状态都有一个名字和一个动作列表。</li></ol> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">State</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">,</span> actions<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>name <span class="token operator">=</span> name
+        self<span class="token punctuation">.</span>actions <span class="token operator">=</span> actions <span class="token keyword">if</span> actions <span class="token keyword">else</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+</code></pre></div><ol start="2"><li>接下来，我们定义了<code>Transition</code>类，它表示工作流中的一个状态转换。每个转换都有一个源状态、一个目标状态、一个触发转换的事件、一个条件列表和一个动作列表。</li></ol> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">Transition</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> source_state<span class="token punctuation">,</span> target_state<span class="token punctuation">,</span> event<span class="token punctuation">,</span> conditions<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> actions<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>source_state <span class="token operator">=</span> source_state
+        self<span class="token punctuation">.</span>target_state <span class="token operator">=</span> target_state
+        self<span class="token punctuation">.</span>event <span class="token operator">=</span> event
+        self<span class="token punctuation">.</span>conditions <span class="token operator">=</span> conditions <span class="token keyword">if</span> conditions <span class="token keyword">else</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        self<span class="token punctuation">.</span>actions <span class="token operator">=</span> actions <span class="token keyword">if</span> actions <span class="token keyword">else</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+</code></pre></div><ol start="3"><li><p>然后，我们定义了<code>FiniteStateMachine</code>类，它表示一个工作流实例。<code>FiniteStateMachine</code>有一个状态列表、一个转换列表和一个当前状态。<code>on_event</code>方法用于处理事件。当事件发生时，它会检查所有与当前状态相关的转换，如果事件匹配并满足所有条件，则执行当前状态和转换的动作，并将当前状态更改为目标状态。</p> <p><code>transition.conditions</code>是一个包含条件函数的列表，这些函数在调用时返回一个布尔值。当所有条件函数的返回值都为<code>True</code>时，表示所有条件都满足。</p> <p><code>all()</code>函数接收一个可迭代对象（在本例中为生成器表达式），并返回<code>True</code>当且仅当可迭代对象中的所有元素都为真值（<code>True</code>）。生成器表达式<code>condition() for condition in transition.conditions</code>会依次调用列表<code>transition.conditions</code>中的每个条件函数，并返回一个包含所有条件函数返回值的生成器。</p> <p>如果转换的所有条件函数都返回<code>True</code>（即所有条件都满足），则执行该<code>if</code>语句块中的代码。在这种情况下，将执行当前状态和转换的动作，并将当前状态更改为目标状态。</p></li></ol> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">FiniteStateMachine</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> states<span class="token punctuation">,</span> transitions<span class="token punctuation">,</span> initial_state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>states <span class="token operator">=</span> states
+        self<span class="token punctuation">.</span>transitions <span class="token operator">=</span> transitions
+        self<span class="token punctuation">.</span>current_state <span class="token operator">=</span> initial_state
+
+    <span class="token keyword">def</span> <span class="token function">on_event</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> event<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;Current state: </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>current_state<span class="token punctuation">.</span>name<span class="token punctuation">}</span></span><span class="token string">, Event: </span><span class="token interpolation"><span class="token punctuation">{</span>event<span class="token punctuation">}</span></span><span class="token string">&quot;</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">for</span> transition <span class="token keyword">in</span> self<span class="token punctuation">.</span>transitions<span class="token punctuation">:</span>
+            <span class="token keyword">if</span> transition<span class="token punctuation">.</span>source_state <span class="token operator">==</span> self<span class="token punctuation">.</span>current_state <span class="token keyword">and</span> transition<span class="token punctuation">.</span>event <span class="token operator">==</span> event<span class="token punctuation">:</span>
+                <span class="token keyword">if</span> <span class="token builtin">all</span><span class="token punctuation">(</span>condition<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">for</span> condition <span class="token keyword">in</span> transition<span class="token punctuation">.</span>conditions<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    <span class="token keyword">for</span> action <span class="token keyword">in</span> self<span class="token punctuation">.</span>current_state<span class="token punctuation">.</span>actions<span class="token punctuation">:</span>
+                        action<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token keyword">for</span> action <span class="token keyword">in</span> transition<span class="token punctuation">.</span>actions<span class="token punctuation">:</span>
+                        action<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    self<span class="token punctuation">.</span>current_state <span class="token operator">=</span> transition<span class="token punctuation">.</span>target_state
+                    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;New state: </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>current_state<span class="token punctuation">.</span>name<span class="token punctuation">}</span></span><span class="token string">&quot;</span></span><span class="token punctuation">)</span>
+                    <span class="token keyword">break</span>
+
+</code></pre></div><ol start="4"><li>接下来，我们定义了<code>WorkflowEngine</code>类，它用于管理工作流定义和实例。<code>WorkflowEngine</code>有一个工作流定义字典和一个工作流实例字典。<code>create_workflow_instance</code>方法根据工作流名称创建一个新的<code>FiniteStateMachine</code>实例，并将其添加到实例字典中。<code>on_event</code>方法用于将事件传递给指定的工作流实例。</li></ol> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">WorkflowEngine</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> workflow_definitions<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>workflow_definitions <span class="token operator">=</span> workflow_definitions
+        self<span class="token punctuation">.</span>workflow_instances <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token keyword">def</span> <span class="token function">create_workflow_instance</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> workflow_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        state_machine <span class="token operator">=</span> self<span class="token punctuation">.</span>_create_state_machine<span class="token punctuation">(</span>workflow_name<span class="token punctuation">)</span>
+        workflow_instance_id <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>workflow_instances<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>workflow_instances<span class="token punctuation">[</span>workflow_instance_id<span class="token punctuation">]</span> <span class="token operator">=</span> state_machine
+        <span class="token keyword">return</span> workflow_instance_id
+
+    <span class="token keyword">def</span> <span class="token function">on_event</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> workflow_instance_id<span class="token punctuation">,</span> event<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        state_machine <span class="token operator">=</span> self<span class="token punctuation">.</span>workflow_instances<span class="token punctuation">[</span>workflow_instance_id<span class="token punctuation">]</span>
+        state_machine<span class="token punctuation">.</span>on_event<span class="token punctuation">(</span>event<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">_create_state_machine</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> workflow_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        definition <span class="token operator">=</span> self<span class="token punctuation">.</span>workflow_definitions<span class="token punctuation">[</span>workflow_name<span class="token punctuation">]</span>
+        states <span class="token operator">=</span> definition<span class="token punctuation">[</span><span class="token string">'states'</span><span class="token punctuation">]</span>
+        transitions <span class="token operator">=</span> definition<span class="token punctuation">[</span><span class="token string">'transitions'</span><span class="token punctuation">]</span>
+        initial_state <span class="token operator">=</span> states<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        <span class="token keyword">return</span> FiniteStateMachine<span class="token punctuation">(</span>states<span class="token punctuation">,</span> transitions<span class="token punctuation">,</span> initial_state<span class="token punctuation">)</span>
+</code></pre></div><ol start="5"><li><p>在这个示例中，我们定义了一个名为<code>order_process</code>的工作流，其中包含三个状态（<code>new_order</code>、<code>paid</code>和<code>shipped</code>）和两个转换（从<code>new_order</code>到<code>paid</code>和从<code>paid</code>到<code>shipped</code>）。如下图所示：</p> <p>![image-20240313234059811](./img/4 state-machine-demo.png)</p></li> <li><p>最后，我们创建了一个<code>WorkflowEngine</code>实例，使用<code>order_process</code>工作流定义创建了一个工作流实例，并触发了两个事件（<code>payment_successful</code>和<code>ship_order</code>），以使工作流实例从<code>new_order</code>状态转换到<code>paid</code>状态，然后转换到<code>shipped</code>状态。</p></li></ol> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">is_valid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 检查某些有效性条件，例如检查输入值、数据库记录等</span>
+    <span class="token keyword">return</span> <span class="token boolean">True</span>  <span class="token comment"># 或 False，根据实际条件</span>
+  
+<span class="token comment"># 定义工作流</span>
+new_order <span class="token operator">=</span> State<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">'new_order'</span><span class="token punctuation">,</span> actions<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+paid <span class="token operator">=</span> State<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">'paid'</span><span class="token punctuation">,</span> actions<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+shipped <span class="token operator">=</span> State<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">'shipped'</span><span class="token punctuation">,</span> actions<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+workflow_definitions <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'order_process'</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">'states'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>new_order<span class="token punctuation">,</span> paid<span class="token punctuation">,</span> shipped<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">'transitions'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+            Transition<span class="token punctuation">(</span>
+              source_state<span class="token operator">=</span>new_order<span class="token punctuation">,</span> 
+              target_state<span class="token operator">=</span>paid<span class="token punctuation">,</span> 
+              event<span class="token operator">=</span><span class="token string">'payment_successful'</span><span class="token punctuation">,</span> 
+              conditions<span class="token operator">=</span><span class="token punctuation">[</span>is_valid<span class="token punctuation">]</span><span class="token punctuation">,</span> actions<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            Transition<span class="token punctuation">(</span>
+              source_state<span class="token operator">=</span>paid<span class="token punctuation">,</span> 
+              target_state<span class="token operator">=</span>shipped<span class="token punctuation">,</span> 
+              event<span class="token operator">=</span><span class="token string">'ship_order'</span><span class="token punctuation">,</span> 
+              conditions<span class="token operator">=</span><span class="token punctuation">[</span>is_valid<span class="token punctuation">]</span><span class="token punctuation">,</span> actions<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># 创建工作流引擎</span>
+workflow_engine <span class="token operator">=</span> WorkflowEngine<span class="token punctuation">(</span>workflow_definitions<span class="token punctuation">)</span>
+
+<span class="token comment"># 创建工作流实例</span>
+workflow_instance_id <span class="token operator">=</span> workflow_engine<span class="token punctuation">.</span>create_workflow_instance<span class="token punctuation">(</span><span class="token string">'order_process'</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 触发事件</span>
+workflow_engine<span class="token punctuation">.</span>on_event<span class="token punctuation">(</span>workflow_instance_id<span class="token punctuation">,</span> <span class="token string">'payment_successful'</span><span class="token punctuation">)</span>
+workflow_engine<span class="token punctuation">.</span>on_event<span class="token punctuation">(</span>workflow_instance_id<span class="token punctuation">,</span> <span class="token string">'ship_order'</span><span class="token punctuation">)</span>
+</code></pre></div><p>现在，当您运行代码并触发事件时，您应该看到类似以下的输出：</p> <div class="language- extra-class"><pre class="language-text"><code>Current state: new_order, Event: payment_successful
+New state: paid
+Current state: paid, Event: ship_order
+New state: shipped
+</code></pre></div><p>这将显示工作流实例在事件触发时的状态变化。</p> <blockquote><p>总结</p></blockquote> <p>FSM很好解决了DAG中审批业务场景无法支持回环的问题，应用场景进一步得到扩展。流程引擎的实现方法介绍到FSM这里，基本上可以满足绝大多数的业务场景需求，其通用性也更加广泛。</p> <p>但是我们进一步研究，会发现，还有一小部分的场景，FSM和DAG实现的流程引擎都无法支持。例如，我们通过表单来触发流程，这里如果设置了表单提交分数例如100份，要提交至少80份以后才开始触发后续的流程，例如问卷统计之类的步骤。但是我们知道DAG和FSM都基于事件触发状态或任务的流转，那么每次用户提交一份表单就会触发一次流程实例的创建和运行，这样导致没法等待提交一定数量后的问卷才触发流程实例创建执行，因为这两种流程引擎的实现原理都是立即触发运行的。</p> <p>那么要解决这个问题，就需要用到后面我们介绍到的第三种算法：基于Petri网的令牌机制实现的流程引擎方法。</p> <ul><li>参考：https://web.mit.edu/6.111/www/f2017/handouts/L06.pdf</li></ul> <img src="/assets/img/wechat.50adb4d4.png" style="zoom:15%;"></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">9/12/2024, 11:20:51 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/4.2.2-开源Airflow DAG调度算法剖析.html" class="prev">
+        4.2.2 开源Airflow DAG调度算法剖析
+      </a></span> <span class="next"><a href="/4.2.4-开源OSWorkflow FSM调度算法剖析.html">
+        4.2.4 开源OSWorkflow FSM调度算法剖析
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/51.bdee7514.js" defer></script>
+  </body>
+</html>

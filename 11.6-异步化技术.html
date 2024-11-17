@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>同步编程和异步编程 | 流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/40.a8fcb556.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第三部份：流程引擎进阶</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/9-流程分析.html" class="sidebar-link">9 流程分析</a></li><li><a href="/10-云原生工作流.html" class="sidebar-link">10 云原生工作流</a></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>11 多引擎分布式系统实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/11.1-系统架构.html" class="sidebar-link">11.1 系统架构</a></li><li><a href="/11.2-分布式系统基础.html" class="sidebar-link">11.2 分布式系统基础</a></li><li><a href="/11.3-数据库架构与优化.html" class="sidebar-link">11.3 数据库架构与优化</a></li><li><a href="/11.4-全局唯一ID生成器.html" class="sidebar-link">11.4 全局唯一ID生成器</a></li><li><a href="/11.5-缓存技术.html" class="sidebar-link">11.5 缓存技术</a></li><li><a href="/11.6-异步化技术.html" class="active sidebar-link">11.6 异步化技术</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.6-异步化技术.html#同步编程和异步编程" class="sidebar-link">同步编程和异步编程</a></li><li class="sidebar-sub-header"><a href="/11.6-异步化技术.html#异步编程思想" class="sidebar-link">异步编程思想</a></li><li class="sidebar-sub-header"><a href="/11.6-异步化技术.html#基于消息队列实现异步化" class="sidebar-link">基于消息队列实现异步化</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.6-异步化技术.html#实现原理" class="sidebar-link">实现原理</a></li><li class="sidebar-sub-header"><a href="/11.6-异步化技术.html#实现流程" class="sidebar-link">实现流程</a></li><li class="sidebar-sub-header"><a href="/11.6-异步化技术.html#代码实现举例" class="sidebar-link">代码实现举例</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.6-异步化技术.html#工作流引擎中的异步化实现" class="sidebar-link">工作流引擎中的异步化实现</a></li></ul></li><li><a href="/11.7-池化技术.html" class="sidebar-link">11.7 池化技术</a></li><li><a href="/11.8-分布式锁.html" class="sidebar-link">11.8 分布式锁</a></li><li><a href="/11.9-限流.html" class="sidebar-link">11.9 限流</a></li></ul></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="同步编程和异步编程"><a href="#同步编程和异步编程" class="header-anchor">#</a> 同步编程和异步编程</h2> <p>异步化其实就是异步编程，相对的就是同步编程，这两种是不同的编程模型，它们的核心区别在于任务的执行方式和处理顺序。以下是它们的主要区别：</p> <ul><li>同步编程（Synchronous Programming）
+<ul><li>任务按顺序执行。一个任务必须完成后，才能执行下一个任务。</li> <li>如果某个任务耗时较长，比如从网络获取数据，整个程序会等待该任务完成，导致其他任务处于阻塞状态。</li></ul></li> <li>异步编程（Asynchronous Programming）
+<ul><li>任务可以并发执行，且不需要等待前一个任务完成。</li> <li>异步任务可以在等待（比如I/O操作）时，先让其他任务执行，提高程序的响应速度和效率。</li></ul></li></ul> <p>同步编程的优势在于简单易用，但在处理复杂并发任务时性能较差。异步编程虽然复杂度更高，但能更好地处理I/O密集型任务，提高系统的性能和响应速度。</p> <h2 id="异步编程思想"><a href="#异步编程思想" class="header-anchor">#</a> 异步编程思想</h2> <p>异步编程（Asynchronous Programming）广泛应用于Web服务器、数据处理、GUI应用程序等领域。例如，Node.js通过异步I/O机制处理大量并发请求，从而提高了服务器的吞吐量。</p> <p>这种技术旨在实现程序在执行耗时操作（如I/O操作、网络请求、数据库查询等）时不阻塞主线程或主流程。它通过将耗时任务的执行与主程序流程分离，使得程序能够继续处理其他任务，直到耗时操作完成后，再执行相应的回调或处理。</p> <p>而在同步编程中，程序需要等待某一任务完成后才能继续执行后续代码，这往往导致程序的阻塞，特别是遇到需要等待响应的操作时。而异步编程则避免了这种等待，通过调度机制在任务完成后回调处理。</p> <p>例如下图是同步编程和异步编程的请求顺序，两种不同的技术直接就导致下面两个请求响应耗时的差别，明显可以看到异步编程方式响应速度更快，因为没有阻塞等待结果。</p> <img src="/assets/img/11.3.4-async和sync请求顺序.2b9138d6.png" alt="Python Synchronous Asynchronous Web Model" style="zoom:67%;"> <img src="/assets/img/11.3.4-async和sync.a8bba563.png" alt="Synchronous vs. Asynchronous Programming: What's the Difference? - BuildFire" style="zoom:50%;"> <p>以下是异步化技术的几个关键点：</p> <p><strong>非阻塞操作</strong>：传统的同步操作需要程序等待某一任务完成后才能执行下一步操作，而异步操作则通过非阻塞的方式执行，程序不会被卡住，能够并行处理多个任务。</p> <p><strong>回调机制</strong>：回调机制是最早期且广泛使用的异步编程技术之一。在使用异步操作时，程序不直接返回结果，而是传递一个回调函数。异步操作完成后，系统会自动调用该回调函数并将结果传递给它。</p> <p><strong>消息队列</strong>：消息队列（Message Queue, MQ）是一种基于异步消息传递的机制，常用于实现异步化和解耦服务。它通过将消息放入队列中，发送者和接收者可以异步通信，从而实现任务的并发处理。在基于消息队列实现异步化时，生产者可以在不等待消费者处理消息的情况下继续执行其他任务，消费者可以独立于生产者的时间点从队列中读取消息并进行处理。</p> <ul><li><strong>消息发送者（生产者）</strong>：服务A将需要处理的任务封装为消息，放入队列中，立即返回并继续其他任务。</li> <li><strong>消息消费者（消费者）</strong>：服务B从队列中读取消息并处理。由于服务B和服务A是松耦合的，服务A不需要等待B的处理完成。</li></ul> <p><strong>事件驱动机制</strong>：事件驱动是一种基于回调的异步模式，通过事件循环来调度任务。Node.js中的事件驱动机制是异步I/O操作的典型代表，所有I/O操作都是异步的，事件循环负责调度任务。<strong>事件循环</strong>是一个无限循环，监听事件并分发处理。主线程可以继续处理其他任务，当事件发生时，相关的回调函数会被调度执行。</p> <p><strong>多线程与多进程</strong>：异步化技术在某些情况下通过多线程或多进程实现，使得不同的任务能够并行运行，最大化利用多核处理器的计算能力。与异步I/O不同的是，多线程和多进程允许多个任务真正同时运行。</p> <h2 id="基于消息队列实现异步化"><a href="#基于消息队列实现异步化" class="header-anchor">#</a> 基于消息队列实现异步化</h2> <h3 id="实现原理"><a href="#实现原理" class="header-anchor">#</a> 实现原理</h3> <p>消息队列通过以下两个角色进行异步通信：</p> <ul><li><strong>生产者（Producer）</strong>：负责将消息发布到消息队列中。生产者将需要处理的任务封装为消息，放入队列后即可继续执行其他操作。</li> <li><strong>消费者（Consumer）</strong>：从消息队列中获取消息并处理。消费者可以是多个，能够并发处理队列中的消息，处理完毕后继续监听队列。</li></ul> <h3 id="实现流程"><a href="#实现流程" class="header-anchor">#</a> 实现流程</h3> <p>（1）生产者发送消息</p> <p>在异步系统中，生产者执行任务时，将任务相关信息封装为消息并发送到消息队列。此时生产者的主要任务已经完成，可以继续其他工作，而不需要等待任务结果。</p> <p>（2）消息队列存储消息</p> <p>消息队列接收生产者发送的消息，并将其放入一个先进先出（FIFO）队列中。消息会按照发送的顺序存储，等待消费者处理。</p> <p>（3）消费者处理消息</p> <p>消费者是独立的进程或服务，它从消息队列中拉取消息进行处理。消费者可以是多个，允许并发处理多个任务。在完成消息处理后，消费者可以选择确认处理结果（如ACK机制），以告知消息队列该消息已经成功处理，也可以通过另一个消息队列或持久化存储返回。</p> <h3 id="代码实现举例"><a href="#代码实现举例" class="header-anchor">#</a> 代码实现举例</h3> <p>使用Golang和Redis来实现消息队列，通常会利用Redis的<code>LIST</code>数据结构。Redis提供了<code>LPUSH</code>和<code>BRPOP</code>命令，分别用于将消息放入队列和从队列中获取消息。通过这种方式，可以轻松实现基于消息队列的异步化处理。</p> <p>在下面的示例中，我们将使用Redis作为消息队列的基础，通过一个生产者将任务发送到队列中，多个消费者从队列中异步消费消息并处理任务。</p> <h4 id="环境准备"><a href="#环境准备" class="header-anchor">#</a> 环境准备</h4> <ol><li>安装Golang Redis客户端库：<a href="https://github.com/go-redis/redis" target="_blank" rel="noopener noreferrer">go-redis<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li> <li>确保已安装并运行了Redis服务。</li></ol> <p>使用以下命令安装<code>go-redis</code>库：</p> <div class="language-bash extra-class"><pre class="language-bash"><code>go get github.com/go-redis/redis/v8
+</code></pre></div><h4 id="代码示例"><a href="#代码示例" class="header-anchor">#</a> 代码示例</h4> <p>假设我们要模拟一个订单处理系统，订单服务将订单任务异步发送到Redis队列中，而多个消费者会从队列中获取订单并处理。</p> <h5 id="_1-生产者代码-将订单消息放入redis队列"><a href="#_1-生产者代码-将订单消息放入redis队列" class="header-anchor">#</a> 1. 生产者代码：将订单消息放入Redis队列</h5> <p>生产者的任务是将订单消息放入Redis的队列中。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">&quot;context&quot;</span>
+    <span class="token string">&quot;fmt&quot;</span>
+    <span class="token string">&quot;github.com/go-redis/redis/v8&quot;</span>
+    <span class="token string">&quot;log&quot;</span>
+    <span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment">// 初始化Redis客户端</span>
+<span class="token keyword">var</span> ctx <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> rdb <span class="token operator">=</span> redis<span class="token punctuation">.</span><span class="token function">NewClient</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>redis<span class="token punctuation">.</span>Options<span class="token punctuation">{</span>
+    Addr<span class="token punctuation">:</span> <span class="token string">&quot;localhost:6379&quot;</span><span class="token punctuation">,</span> <span class="token comment">// Redis地址</span>
+    DB<span class="token punctuation">:</span>   <span class="token number">0</span><span class="token punctuation">,</span>                <span class="token comment">// Redis数据库</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 模拟发送订单任务到Redis队列中</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        orderID <span class="token operator">:=</span> fmt<span class="token punctuation">.</span><span class="token function">Sprintf</span><span class="token punctuation">(</span><span class="token string">&quot;order_%d&quot;</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span>
+        err <span class="token operator">:=</span> <span class="token function">sendOrderToQueue</span><span class="token punctuation">(</span>orderID<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Failed to send order: %v\n&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;Order %s has been sent to the queue.\n&quot;</span><span class="token punctuation">,</span> orderID<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span> <span class="token comment">// 模拟每秒发送一笔订单</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 将订单消息推送到Redis的任务队列</span>
+<span class="token keyword">func</span> <span class="token function">sendOrderToQueue</span><span class="token punctuation">(</span>orderID <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> rdb<span class="token punctuation">.</span><span class="token function">LPush</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&quot;order_queue&quot;</span><span class="token punctuation">,</span> orderID<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="_2-消费者代码-从redis队列中异步获取并处理消息"><a href="#_2-消费者代码-从redis队列中异步获取并处理消息" class="header-anchor">#</a> 2. 消费者代码：从Redis队列中异步获取并处理消息</h5> <p>消费者从Redis队列中获取订单消息并进行处理。我们使用<code>BRPOP</code>命令来阻塞地等待消息，一旦有消息进入队列，就开始处理。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">&quot;context&quot;</span>
+    <span class="token string">&quot;fmt&quot;</span>
+    <span class="token string">&quot;github.com/go-redis/redis/v8&quot;</span>
+    <span class="token string">&quot;log&quot;</span>
+    <span class="token string">&quot;time&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment">// 初始化Redis客户端</span>
+<span class="token keyword">var</span> ctx <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> rdb <span class="token operator">=</span> redis<span class="token punctuation">.</span><span class="token function">NewClient</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>redis<span class="token punctuation">.</span>Options<span class="token punctuation">{</span>
+    Addr<span class="token punctuation">:</span> <span class="token string">&quot;localhost:6379&quot;</span><span class="token punctuation">,</span> <span class="token comment">// Redis地址</span>
+    DB<span class="token punctuation">:</span>   <span class="token number">0</span><span class="token punctuation">,</span>                <span class="token comment">// Redis数据库</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 启动两个消费者，模拟并发处理任务</span>
+    <span class="token keyword">go</span> <span class="token function">processOrders</span><span class="token punctuation">(</span><span class="token string">&quot;Consumer_1&quot;</span><span class="token punctuation">)</span>
+    <span class="token keyword">go</span> <span class="token function">processOrders</span><span class="token punctuation">(</span><span class="token string">&quot;Consumer_2&quot;</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// 防止主协程退出</span>
+    <span class="token keyword">select</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 消费者从队列中异步处理订单</span>
+<span class="token keyword">func</span> <span class="token function">processOrders</span><span class="token punctuation">(</span>consumerName <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 从Redis队列中阻塞式地获取订单消息</span>
+        order<span class="token punctuation">,</span> err <span class="token operator">:=</span> rdb<span class="token punctuation">.</span><span class="token function">BRPop</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token number">0</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">,</span> <span class="token string">&quot;order_queue&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Result</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;%s failed to get order: %v\n&quot;</span><span class="token punctuation">,</span> consumerName<span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+            <span class="token keyword">continue</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// 模拟订单处理</span>
+        orderID <span class="token operator">:=</span> order<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token comment">// BRPop返回的结果是一个包含队列名和消息的切片</span>
+        log<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;%s processing order: %s\n&quot;</span><span class="token punctuation">,</span> consumerName<span class="token punctuation">,</span> orderID<span class="token punctuation">)</span>
+        time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span> <span class="token comment">// 模拟订单处理时间</span>
+        log<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;%s finished processing order: %s\n&quot;</span><span class="token punctuation">,</span> consumerName<span class="token punctuation">,</span> orderID<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="_3-运行示例"><a href="#_3-运行示例" class="header-anchor">#</a> 3. 运行示例</h5> <ol><li><p>启动Redis服务器。</p></li> <li><p>运行生产者程序，将订单任务发送到Redis队列：</p> <div class="language-bash extra-class"><pre class="language-bash"><code>go run producer.go
+</code></pre></div></li> <li><p>运行消费者程序，消费者会异步从Redis队列中获取任务并处理：</p> <div class="language-bash extra-class"><pre class="language-bash"><code>go run consumer.go
+</code></pre></div></li></ol> <h4 id="代码解析"><a href="#代码解析" class="header-anchor">#</a> 代码解析</h4> <blockquote><p>生产者（Producer）</p></blockquote> <ul><li><strong><code>LPUSH</code></strong>：将订单消息推送到Redis的<code>order_queue</code>中。Redis的<code>LPUSH</code>命令将消息推送到列表的左侧，类似于在队列的头部插入消息。</li> <li>生产者通过每隔1秒发送一个订单的方式，模拟异步发送任务的场景。</li></ul> <blockquote><p>消费者（Consumer）</p></blockquote> <ul><li><strong><code>BRPOP</code></strong>：消费者使用Redis的<code>BRPOP</code>命令从队列的右侧阻塞式地弹出消息。<code>BRPOP</code>会阻塞等待，直到有新消息进入队列，保证消费者不会忙轮询等待消息。</li> <li>每个消费者处理完一个订单后，会继续等待下一个订单消息，模拟了异步任务处理的并发场景。</li> <li>消费者是通过<code>go</code>关键字并发运行的，这意味着可以启动多个消费者来从同一个队列中并发处理消息。</li></ul> <blockquote><p>并发处理</p></blockquote> <ul><li>消费者<code>Consumer_1</code>和<code>Consumer_2</code>分别是两个独立的Go协程（Goroutine），它们从同一个Redis队列<code>order_queue</code>中获取订单消息。由于Redis队列的特性，消息只会被一个消费者获取并处理，从而实现了任务的并发分发和处理。</li></ul> <blockquote><p>优势</p></blockquote> <ol><li><strong>异步任务处理</strong>：生产者将任务放入队列，消费者可以异步获取任务，双方不必同步等待。</li> <li><strong>松耦合</strong>：生产者和消费者通过队列解耦，彼此独立，生产者只负责将任务放入队列，消费者可以在不同的时间获取和处理任务。</li> <li><strong>高可扩展性</strong>：可以轻松通过增加更多消费者来提升任务处理的并发能力，保证系统在高并发场景下的性能。</li> <li><strong>可靠性</strong>：Redis的持久化选项可以确保即使在系统崩溃的情况下，队列中的任务不会丢失。当然这里也可以用Kafka等其他消息队列中间件。</li></ol> <h2 id="工作流引擎中的异步化实现"><a href="#工作流引擎中的异步化实现" class="header-anchor">#</a> 工作流引擎中的异步化实现</h2> <p>如下图，每个触发器会创建execution实例。如果在触发时创建实例就立即存储到DB，可能会出现高频的上报数据导致数据库高负载。从而极大影响接口的性能，导致接口响应超时、并发度下降。</p> <p>为了应付高频大量的调用场景，可以在触发器创建execution实例到落入数据库之间，通过增加消息队列进行存储，把任务异步化。后端通过worker集群进行消费，可以很好控制任务并发量，实现频率控制，降低DB的负载。</p> <p>同时，针对不同的触发器类型，其生产的任务推送到不同的队列，避免出现类似api触发器大量任务阻碍了其他类型触发器的任务。</p> <img src="/assets/img/13-4 分布式异步任务原理图.419c41a6.png" alt="image-20231009094943277" style="zoom:67%;"> <p>由于execution的主键uid是通过snowflake算法生成的，可以不使用数据库的自增长主键ID作为uid，减少了db的操作。接口的响应速度可以大大提升。</p> <img src="/assets/img/13-4 异步化.0b9c5d53.png" alt="image-20230927124803024" style="zoom:67%;"></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/11.5-缓存技术.html" class="prev">
+        11.5 缓存技术
+      </a></span> <span class="next"><a href="/11.7-池化技术.html">
+        11.7 池化技术
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/40.a8fcb556.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>解析节点 | 流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/57.90f7511a.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第一部份：流程引擎基础</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/1-引言.html" class="sidebar-link">1 引言</a></li><li><a href="/2-概念.html" class="sidebar-link">2 概念</a></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>3 流程建模和解析</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/3.1-流程建模语言发展概述.html" class="sidebar-link">3.1 流程建模语言发展概述</a></li><li><section class="sidebar-group collapsable is-sub-group depth-2"><p class="sidebar-heading"><span>3.2 流程建模</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/3.3-生命周期.html" class="sidebar-link">3.3 生命周期</a></li><li><a href="/3.4-流程模型的解析.html" class="active sidebar-link">3.4 流程模型的解析</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/3.4-流程模型的解析.html#解析节点" class="sidebar-link">解析节点</a></li><li class="sidebar-sub-header"><a href="/3.4-流程模型的解析.html#解析节点流转关系" class="sidebar-link">解析节点流转关系</a></li><li class="sidebar-sub-header"><a href="/3.4-流程模型的解析.html#解析异常处理器" class="sidebar-link">解析异常处理器</a></li><li class="sidebar-sub-header"><a href="/3.4-流程模型的解析.html#解析循环处理器" class="sidebar-link">解析循环处理器</a></li><li class="sidebar-sub-header"><a href="/3.4-流程模型的解析.html#解析变量表达式" class="sidebar-link">解析变量表达式</a></li></ul></li><li><a href="/3.5-与BPMN的比较.html" class="sidebar-link">3.5 与BPMN的比较</a></li></ul></section></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="解析节点"><a href="#解析节点" class="header-anchor">#</a> 解析节点</h2> <p>在前面章节，我们降到了流程定义，即工作流的JSON数据结构：</p> <blockquote><p>工作流json定义结构</p></blockquote> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Unknown&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;startNodeInstId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;endNodeInstId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;engine&quot;</span><span class="token operator">:</span> <span class="token string">&quot;fast&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;creator&quot;</span><span class="token operator">:</span> <span class="token string">&quot;admin&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;executor&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;mode&quot;</span><span class="token operator">:</span> <span class="token string">&quot;fast&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;inputDataSchema&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;outputDataSchema&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;nodes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;r0wrc5a395&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Start&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Event&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;start-trigger&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token number">1599</span><span class="token punctuation">,</span>
+                <span class="token number">248</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token punctuation">{</span>
+                    <span class="token property">&quot;index&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                    <span class="token property">&quot;input&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+                    <span class="token property">&quot;output&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+                    <span class="token property">&quot;startAt&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+                    <span class="token property">&quot;endAt&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+                    <span class="token property">&quot;error&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+                    <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;todo&quot;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>WorkflowInst（工作流实例）数据结构</p></blockquote> <p>工作流JSON在引擎运行解析后对应的内存数据结构如下：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">type</span> WorkflowInst <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	ExecutionId    <span class="token builtin">string</span>     <span class="token string">`json:&quot;executionUid&quot;`</span>
+	WorkflowId     <span class="token builtin">int64</span>      <span class="token string">`json:&quot;workflowId&quot;`</span>
+	Name           <span class="token builtin">string</span>     <span class="token string">`json:&quot;name&quot;`</span>
+	Descriptioin           <span class="token builtin">string</span>     <span class="token string">`json:&quot;descriptioin&quot;`</span>
+	StartNodeInstId <span class="token builtin">string</span>     <span class="token string">`json:&quot;startNodeInstId&quot;`</span>
+	EndNodeInstId   <span class="token builtin">string</span>     <span class="token string">`json:&quot;endNodeInstId&quot;`</span>
+	Engine         <span class="token builtin">string</span>     <span class="token string">`json:&quot;engine&quot;`</span>
+	Status         <span class="token builtin">string</span>     <span class="token string">`json:&quot;status&quot;`</span>
+	Creator           <span class="token builtin">string</span>     <span class="token string">`json:&quot;creator&quot;`</span>
+	Executor       <span class="token builtin">string</span>     <span class="token string">`json:&quot;executor&quot;`</span>
+  Mode           <span class="token builtin">string</span>     <span class="token string">`json:&quot;mode&quot;`</span>
+	InputDataSchema    <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>DataSchema     <span class="token string">`json:&quot;inputDataSchema&quot;`</span>
+  OutputDataSchema    <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>DataSchema     <span class="token string">`json:&quot;outputDataSchema&quot;`</span>
+	Tasks           <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>Task <span class="token string">`json:&quot;tasks&quot;`</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token keyword">type</span> DataSchema <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+  Type    <span class="token builtin">string</span>     <span class="token string">`json:&quot;type&quot;`</span>
+  Max    <span class="token builtin">int64</span>     <span class="token string">`json:&quot;max&quot;`</span>
+  Min    <span class="token builtin">int64</span>     <span class="token string">`json:&quot;min&quot;`</span>
+  Default    <span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span>     <span class="token string">`json:&quot;default&quot;`</span>
+  Required    <span class="token builtin">bool</span>     <span class="token string">`json:&quot;required&quot;`</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>Node的json定义结构</p></blockquote> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;r0wrc5a395&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Start&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Event&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;start-trigger&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token number">1599</span><span class="token punctuation">,</span>
+        <span class="token number">248</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">&quot;index&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;input&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;output&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;startAt&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;endAt&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;error&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;todo&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>引擎在运行工作流实例获取到流程定义结构时，会将流程实例中每个Node节点解析映射到如下Task数据结构中。</p> <blockquote><p>Node结构体</p></blockquote> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// go代码</span>
+<span class="token keyword">type</span> Node <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	InstId    <span class="token builtin">string</span> <span class="token string">`json:&quot;instId&quot;`</span>
+	Name      <span class="token builtin">string</span> <span class="token string">`json:&quot;name&quot;`</span>
+  Type      <span class="token builtin">string</span> <span class="token string">`json:&quot;type&quot;`</span>
+	Description      <span class="token builtin">string</span> <span class="token string">`json:&quot;description&quot;`</span>
+	Template              <span class="token builtin">string</span>  <span class="token string">`json:&quot;template&quot;`</span>
+	Positions             <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">float64</span>              <span class="token string">`json:&quot;positions&quot;`</span>
+	Connections           <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span>               <span class="token string">`json:&quot;connections&quot;`</span>
+	Parameters            <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Parameter <span class="token string">`json:&quot;parameters&quot;`</span> <span class="token comment">//运行前的参数</span>
+	ErrorHandler          ErrorHandler           <span class="token string">`json:&quot;errorHandler&quot;`</span>
+	LoopHandler           LoopHandler            <span class="token string">`json:&quot;loopHandler&quot;`</span>
+	IsIgnore              <span class="token builtin">bool</span>                   <span class="token string">`json:&quot;isIgnore&quot;`</span>
+  Timeout <span class="token builtin">int64</span> <span class="token string">`json:&quot;timeout&quot;`</span>
+	Runtimes       <span class="token punctuation">[</span><span class="token punctuation">]</span>NodeInst <span class="token string">`json:&quot;runtimes&quot;`</span>       <span class="token comment">// 运行时的参数</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> Parameter <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+  Type        <span class="token builtin">string</span>     <span class="token string">`json:&quot;type&quot;`</span>
+  Label       <span class="token builtin">string</span>     <span class="token string">`json:&quot;label&quot;`</span>
+  Value       <span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span>     <span class="token string">`json:&quot;value&quot;`</span>
+  Default     <span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span>     <span class="token string">`json:&quot;default&quot;`</span>
+  Required    <span class="token builtin">bool</span>     <span class="token string">`json:&quot;required&quot;`</span>
+<span class="token punctuation">}</span>
+</code></pre></div><blockquote><p>NodeInst结构体</p></blockquote> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// go代码</span>
+<span class="token keyword">type</span> NodeInst <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+  Index <span class="token builtin">int64</span> <span class="token string">`json:&quot;index&quot;`</span>
+	Input <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token string">`json:&quot;input&quot;`</span> <span class="token comment">//对应运行时的Task参数（运行后的，表达式会被替换成实际的数据）</span>
+	Output     <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span>          <span class="token string">`json:&quot;output&quot;`</span>
+	StartAt    <span class="token builtin">string</span>                 <span class="token string">`json:&quot;startAt&quot;`</span>
+	EndAt      <span class="token builtin">string</span>                 <span class="token string">`json:&quot;endAt&quot;`</span>
+	Error      <span class="token builtin">string</span>                 <span class="token string">`json:&quot;error&quot;`</span>
+	Status     <span class="token builtin">string</span>                 <span class="token string">`json:&quot;status&quot;`</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="解析节点流转关系"><a href="#解析节点流转关系" class="header-anchor">#</a> 解析节点流转关系</h2> <p>根据流程的定义，我们知道节点中connections字段是用于存储当前节点指向的下一批节点列表。</p> <p>引擎在执行完节点实例后，就会connections字段获取下一批要执行的节点任务实例，并推送到消息队列中。</p> <p>但是这里有两个个数据流控制节点比较特殊，它不是通过connections来获取下一个要执行的节点：</p> <ul><li><p>条件判断节点</p> <p>我们看【流程定义中的主要节点类型】，知道条件判断节点的json数据结构如下：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;condition_list&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;relation&quot;</span><span class="token operator">:</span> <span class="token string">&quot;or/and&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;false_branch&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx1&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;true_branch&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx2&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>引擎在执行条件判断节点时，会根据节点输出结果进行判断，如果是true，则读取true_branch分支指向的节点；如果是false，则读取false_branch分支指向的节点。然后推送到消息队列继续执行。</p></li> <li><p>人工任务中的审批节点</p> <p>审批节点的json结构如下，其中有三个属性是跟数据流转有关的，分别是：true_branch、false_branch和timeout_branch。</p> <p>审批节点在结束时，有两种情况。</p> <ul><li>超时：如果审批超时，这时引擎就会读取timeout_branch分支指向的节点继续执行。</li> <li>正常结束：如果审批结束，引擎会根据审批的结果，如果通过，则读取true_branch分支指向的节点；如果不通过，则读取false_branch分支指向的节点。然后推送到消息队列继续执行。</li></ul> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;members&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;title&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;content&quot;</span><span class="token operator">:</span> <span class="token string">&quot;hello world&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;attr&quot;</span><span class="token operator">:</span> <span class="token string">&quot;会签/或签&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;aggree_btn&quot;</span><span class="token operator">:</span> <span class="token string">&quot;同意&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;disaggree_btn&quot;</span><span class="token operator">:</span> <span class="token string">&quot;驳回&quot;</span><span class="token punctuation">,</span>
+    
+    <span class="token property">&quot;true_branch&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;false_branch&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout_branch&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <p>所以，节点流转关系这里除了上面的条件判断和人工审批节点比较特殊外。其逻辑都是一样的，引擎通过读取connections字段获取下一个节点。</p> <h2 id="解析异常处理器"><a href="#解析异常处理器" class="header-anchor">#</a> 解析异常处理器</h2> <p>异常处理器分两部分：</p> <ul><li>一个是节点自己的异常处理，也就是局部的异常处理器</li> <li>一个是整个工作流实例的异常处理，也就是全局的异常处理器</li></ul> <h3 id="局部异常处理"><a href="#局部异常处理" class="header-anchor">#</a> 局部异常处理</h3> <p>每个节点都会拥有一个异常处理器，其JSON结构如下。</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;operation&quot;</span><span class="token operator">:</span> <span class="token string">&quot;stop&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;retryCount&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;retryInterval&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;exception_branch&quot;</span><span class="token operator">:</span><span class="token string">&quot;xxx&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>其中operation字段支持的动作包括：</p> <ul><li>stop：发生错误，则直接停止往下执行</li> <li>ignore：发生错误，忽略，继续往下执行</li> <li>catch：发生错误，捕获并响应，执行异常分支的流程（exception_branch分支指向的节点）</li> <li>retry：发生错误，重试retryCount次，每次之间间隔是retryInterval秒</li></ul> <h3 id="全局异常处理"><a href="#全局异常处理" class="header-anchor">#</a> 全局异常处理</h3> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>Engine <span class="token operator">*</span>v<span class="token punctuation">)</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>err <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">defer</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">if</span> e <span class="token operator">:=</span> <span class="token function">recover</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> e <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 捕获全局异常</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+  
+  <span class="token comment">// 引擎执行节点任务实例</span>
+  isFinished<span class="token punctuation">,</span> output<span class="token punctuation">,</span> execErr <span class="token operator">=</span> execApp<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// 执行出现异常</span>
+  <span class="token keyword">if</span> execErr <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> todoNodeInst<span class="token punctuation">.</span>ErrorHandler<span class="token punctuation">.</span>Operation <span class="token operator">==</span> <span class="token string">&quot;ignore&quot;</span> <span class="token punctuation">{</span>
+      task<span class="token punctuation">.</span>NodeInstIdToData<span class="token punctuation">[</span>todoNodeInst<span class="token punctuation">.</span>InstId<span class="token punctuation">]</span><span class="token punctuation">.</span>Error <span class="token operator">=</span> execErr<span class="token punctuation">.</span><span class="token function">Error</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      task<span class="token punctuation">.</span>NodeInstIdToData<span class="token punctuation">[</span>todoNodeInst<span class="token punctuation">.</span>InstId<span class="token punctuation">]</span><span class="token punctuation">.</span>Status <span class="token operator">=</span> utils<span class="token punctuation">.</span>ExecutionStatus_Error
+
+
+      execErr <span class="token operator">=</span> <span class="token boolean">nil</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> todoNodeInst<span class="token punctuation">.</span>ErrorHandler<span class="token punctuation">.</span>Operation <span class="token operator">==</span> <span class="token string">&quot;retry&quot;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> todoNodeInst<span class="token punctuation">.</span>ErrorHandler<span class="token punctuation">.</span>RetryCount<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        isFinished<span class="token punctuation">,</span> output<span class="token punctuation">,</span> execErr <span class="token operator">=</span> execApp<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> execErr <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+          <span class="token keyword">break</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+          <span class="token comment">// sleep间隔</span>
+          time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span><span class="token function">Duration</span><span class="token punctuation">(</span>todoNodeInst<span class="token punctuation">.</span>ErrorHandler<span class="token punctuation">.</span>RetryInterval<span class="token punctuation">)</span> <span class="token operator">*</span> time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> todoNodeInst<span class="token punctuation">.</span>ErrorHandler<span class="token punctuation">.</span>Operation <span class="token operator">==</span> <span class="token string">&quot;throw&quot;</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 向上抛出异常</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="解析循环处理器"><a href="#解析循环处理器" class="header-anchor">#</a> 解析循环处理器</h2> <p>前面介绍流程定义中的主要节点，我们知道，这个循环的属性是对***子流程节点***而言的。在前面的内容，我们介绍了子流程节点的原理和实现。</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+   <span class="token comment">// 子流程设置</span>
+    <span class="token property">&quot;child_workflow_id&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;operation&quot;</span><span class="token operator">:</span> <span class="token string">&quot;sync/async&quot;</span><span class="token punctuation">,</span>
+    <span class="token comment">// 循环属性设置</span>
+    <span class="token property">&quot;loopType&quot;</span><span class="token operator">:</span> <span class="token string">&quot;for&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;maxIteration&quot;</span><span class="token operator">:</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;stopCond&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;index&quot;</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;String&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;value1&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;operation&quot;</span><span class="token operator">:</span> <span class="token string">&quot;equal&quot;</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;value2&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>这里我们，再展开讲下引擎具体的解析过程：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// 以下是golang代码部分实现</span>
+<span class="token comment">// todoNodeInst就是当前在执行的子流程节点实例</span>
+
+<span class="token operator">...</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token comment">// Step1: 执行当前节点实例</span>
+isFinished<span class="token punctuation">,</span> output<span class="token punctuation">,</span> execErr <span class="token operator">=</span> engine<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span>todoNodeInst<span class="token punctuation">)</span>
+<span class="token operator">...</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+<span class="token comment">// Step2: 执行完以后，取下一个要执行的节点，默认情况下，会直接取下一个节点实例ID</span>
+nextNodeInstIds <span class="token operator">=</span> todoNodeInst<span class="token punctuation">.</span>Connections
+<span class="token operator">...</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+<span class="token comment">// Step3.1 for循环方式处理</span>
+<span class="token keyword">if</span> todoNodeInst<span class="token punctuation">.</span>LoopHandler<span class="token punctuation">.</span>LoopType <span class="token operator">==</span> <span class="token string">&quot;for&quot;</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 获取当前循环了几次</span>
+		curLoop <span class="token operator">=</span> models<span class="token punctuation">.</span><span class="token function">GetLoopNodeInstCount</span><span class="token punctuation">(</span>executionId<span class="token punctuation">,</span> todoNodeInst<span class="token punctuation">.</span>InstId<span class="token punctuation">)</span>
+
+		<span class="token keyword">if</span> curLoop <span class="token operator">&lt;=</span> todoNodeInst<span class="token punctuation">.</span>LoopHandler<span class="token punctuation">.</span>MaxIteration <span class="token punctuation">{</span>
+			<span class="token comment">// 继续循环当前appinst</span>
+			nextNodeInstIds <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span>todoNodeInst<span class="token punctuation">.</span>InstId<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+			<span class="token comment">// 循环结束</span>
+      <span class="token comment">// 这时候nextNodeInstIds就是子流程节点指向的下一个节点实例</span>
+      <span class="token comment">// 即代码部分：nextNodeInstIds = todoNodeInst.Connections</span>
+		<span class="token punctuation">}</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> todoNodeInst<span class="token punctuation">.</span>LoopHandler<span class="token punctuation">.</span>LoopType <span class="token operator">==</span> <span class="token string">&quot;do_while&quot;</span> <span class="token punctuation">{</span>
+  <span class="token comment">// Step3.2 do..while循环方式处理</span>
+  
+  <span class="token comment">// 获取当前循环了几次</span>
+	curLoop <span class="token operator">=</span> models<span class="token punctuation">.</span><span class="token function">GetLoopAppInstCount</span><span class="token punctuation">(</span>executionId<span class="token punctuation">,</span> todoNodeInst<span class="token punctuation">.</span>InstId<span class="token punctuation">)</span>
+  
+  <span class="token keyword">if</span> <span class="token function">isDoWhileConditionMatched</span><span class="token punctuation">(</span>todoNodeInst<span class="token punctuation">)</span> <span class="token operator">||</span> curLoop <span class="token operator">&gt;</span> todoNodeInst<span class="token punctuation">.</span>LoopHandler<span class="token punctuation">.</span>MaxIteration <span class="token punctuation">{</span>
+    <span class="token comment">// 条件满足或超过最大循环次数，退出do...while循环</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 条件不满足，继续执行当前子流程节点实例</span>
+    nextNodeInstIds <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">{</span>todoNodeInst<span class="token punctuation">.</span>InstId<span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token operator">...</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+<span class="token comment">// 把下一批要执行的节点实例推送到消息队列</span>
+<span class="token function">pushAppInstToTaskQueue</span><span class="token punctuation">(</span>nextNodeInstIds<span class="token punctuation">)</span>
+<span class="token operator">...</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+</code></pre></div><h2 id="解析变量表达式"><a href="#解析变量表达式" class="header-anchor">#</a> 解析变量表达式</h2> <p>在流程定义部分，我们知道，流程中每一个节点都有一个唯一的ID来标识自己。通过这个节点ID就可以快速定位到流程中的位置。</p> <p>变量表达式如前面介绍，除了局部变量和全局变量，还有一种就是跟节点ID关联的变量表达式。通过这个变量表达式，可以快速定位获取节点ID在运行时的入参和出参数据。</p> <ul><li>入参、出参变量表达式</li></ul> <blockquote><p>入参变量表达式</p></blockquote> <div class="language- extra-class"><pre class="language-text"><code>{{appinst_id.0.input.field}}
+</code></pre></div><blockquote><p>出参变量表达式</p></blockquote> <div class="language- extra-class"><pre class="language-text"><code>{{appinst_id.0.output.field}}
+</code></pre></div><p>由前面内容，我们知道引擎每次在执行完工作流实例中的节点实例任务后，都会把这个节点实例的运行时数据（运行时的入参和出参）更新到对应的NodeInst结构体中。通过访问这个数据结构，就可以动态获取到节点实例的运行时数据。</p> <p>所以，引擎为每一个运行中的工作流实例，都维护了一个节点实例ID跟运行时数据的映射，其结构体如下：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// go代码</span>
+<span class="token keyword">var</span> InstIdToNodeInst   <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span>NodeInst
+</code></pre></div><p>将上面的InstIdToNodeInst变量数据Json话，得到的数据结构如下：</p> <div class="language- extra-class"><pre class="language-text"><code>{
+  &quot;task_inst_id_1&quot;:[{&quot;index&quot;:0,&quot;input&quot;:{},&quot;output&quot;:&quot;&quot;,&quot;startAt&quot;:&quot;&quot;,&quot;endAt&quot;:&quot;&quot;,&quot;error&quot;:&quot;&quot;,&quot;status&quot;:&quot;done&quot;},...],
+  &quot;task_inst_id_2&quot;:[{&quot;index&quot;:0,&quot;input&quot;:{},&quot;output&quot;:&quot;&quot;,&quot;startAt&quot;:&quot;&quot;,&quot;endAt&quot;:&quot;&quot;,&quot;error&quot;:&quot;&quot;,&quot;status&quot;:&quot;done&quot;},...],
+  &quot;task_inst_id_3&quot;:[{&quot;index&quot;:0,&quot;input&quot;:{},&quot;output&quot;:&quot;&quot;,&quot;startAt&quot;:&quot;&quot;,&quot;endAt&quot;:&quot;&quot;,&quot;error&quot;:&quot;&quot;,&quot;status&quot;:&quot;done&quot;},...],
+}
+</code></pre></div><p>我们可以发现入参变量表达式和出参变量表达式，跟InstIdToNodeInst数据结构是一一对应的层级关系。通过这样设计数据结构，引擎就可以快速动态解析入参和出参变量表达式</p> <ul><li>局部变量</li></ul> <p>局部变量表达式语法结构如下：</p> <div class="language- extra-class"><pre class="language-text"><code>{{variable.local.key}}
+</code></pre></div><p>在前面的【流程定义中的主要节点类型】，我们介绍了变量读写任务节点的原理和实现方式。</p> <p>那么就可以很容易知道，引擎在解析到局部变量表达式后，同时获取到了当前工作流实例ID（execution_id）和局部变量名称（key）。</p> <p>那么，通过Redis的GET命令，引擎就可以快速读取到当前局部变量此时此刻运行时的数据：</p> <div class="language- extra-class"><pre class="language-text"><code>GET execution_id#key
+</code></pre></div><ul><li>全局变量</li></ul> <p>全局变量表达式语法结构如下：</p> <div class="language- extra-class"><pre class="language-text"><code>{{variable.global.key}}
+</code></pre></div><p>同理，引擎在解析到全局变量表达式时，可以同时获取到当前工作流的创建人（user）和全局变量名称（key）。</p> <p>结合Redis的GET命令，引擎就可以获取到全局变量表达式运行时数据：</p> <div class="language- extra-class"><pre class="language-text"><code>GET user#key
+</code></pre></div><img src="/assets/img/wechat.50adb4d4.png" style="zoom:15%;"></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">9/12/2024, 11:20:51 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/3.3-生命周期.html" class="prev">
+        3.3 生命周期
+      </a></span> <span class="next"><a href="/3.5-与BPMN的比较.html">
+        3.5 与BPMN的比较
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/57.90f7511a.js" defer></script>
+  </body>
+</html>

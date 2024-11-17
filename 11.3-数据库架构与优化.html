@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>一、介绍 | 流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/12.49270403.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第三部份：流程引擎进阶</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/9-流程分析.html" class="sidebar-link">9 流程分析</a></li><li><a href="/10-云原生工作流.html" class="sidebar-link">10 云原生工作流</a></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>11 多引擎分布式系统实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/11.1-系统架构.html" class="sidebar-link">11.1 系统架构</a></li><li><a href="/11.2-分布式系统基础.html" class="sidebar-link">11.2 分布式系统基础</a></li><li><a href="/11.3-数据库架构与优化.html" class="active sidebar-link">11.3 数据库架构与优化</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#一、介绍" class="sidebar-link">一、介绍</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#二、系统配置优化" class="sidebar-link">二、系统配置优化</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_1、innodb-buffer-pool-size" class="sidebar-link">1、innodbbufferpool_size</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_2、innodb-log-file-size和innodb-log-files-in-group" class="sidebar-link">2、innodblogfilesize和innodblogfilesin_group</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_3、innodb-log-buffer-size" class="sidebar-link">3、innodblogbuffer_size</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_4、innodb-flush-log-at-trx-commit" class="sidebar-link">4、innodbflushlogattrx_commit</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_5、thread-cache-size" class="sidebar-link">5、threadcachesize</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_6、tmp-table-size和max-heap-table-size" class="sidebar-link">6、tmptablesize和maxheaptable_size</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_7、max-connections" class="sidebar-link">7、max_connections</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#三、数据库表结构设计优化" class="sidebar-link">三、数据库表结构设计优化</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_1、innodb逻辑存储结构" class="sidebar-link">1、InnoDB逻辑存储结构</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#四、索引设计优化" class="sidebar-link">四、索引设计优化</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_1、数据结构和算法" class="sidebar-link">1、数据结构和算法</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_2、聚集索引" class="sidebar-link">2、聚集索引</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_3、辅助索引" class="sidebar-link">3、辅助索引</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_4、例子说明" class="sidebar-link">4、例子说明</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_5、总结" class="sidebar-link">5、总结</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#五、sql查询优化" class="sidebar-link">五、SQL查询优化</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_1、分解关联查询" class="sidebar-link">1、分解关联查询</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_2、优化count-查询" class="sidebar-link">2、优化COUNT()查询</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_3、关联查询优化" class="sidebar-link">3、关联查询优化</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_4、优化子查询" class="sidebar-link">4、优化子查询</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_5、优化group-by和distinct" class="sidebar-link">5、优化GROUP BY和DISTINCT</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_6、优化limit分页" class="sidebar-link">6、优化LIMIT分页</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_7、优化union查询" class="sidebar-link">7、优化UNION查询</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#六、读写分离" class="sidebar-link">六、读写分离</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#物理层设计" class="sidebar-link">物理层设计</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#应用层设计" class="sidebar-link">应用层设计</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#七、分库、分表、分区" class="sidebar-link">七、分库、分表、分区</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#第一层-分库-按业务分db" class="sidebar-link">第一层：分库（按业务分db）</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#第二层-分表-按周分表" class="sidebar-link">第二层：分表（按周分表）</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#第三层-分区-按用户名做hash分区" class="sidebar-link">第三层：分区（按用户名做hash分区）</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#八、上线后监控优化" class="sidebar-link">八、上线后监控优化</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_1、慢查询" class="sidebar-link">1、慢查询</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_2、连接数" class="sidebar-link">2、连接数</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_3、缓存使用情况" class="sidebar-link">3、缓存使用情况</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_4、临时表" class="sidebar-link">4、临时表</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_5、线程使用情况" class="sidebar-link">5、线程使用情况</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_6、缓冲池利用情况" class="sidebar-link">6、缓冲池利用情况</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_7、磁盘排序" class="sidebar-link">7、磁盘排序</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_8、查看网络传输量" class="sidebar-link">8、查看网络传输量</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_9、吞吐量" class="sidebar-link">9、吞吐量</a></li><li class="sidebar-sub-header"><a href="/11.3-数据库架构与优化.html#_10、查看请求来源" class="sidebar-link">10、查看请求来源</a></li></ul></li></ul></li><li><a href="/11.4-全局唯一ID生成器.html" class="sidebar-link">11.4 全局唯一ID生成器</a></li><li><a href="/11.5-缓存技术.html" class="sidebar-link">11.5 缓存技术</a></li><li><a href="/11.6-异步化技术.html" class="sidebar-link">11.6 异步化技术</a></li><li><a href="/11.7-池化技术.html" class="sidebar-link">11.7 池化技术</a></li><li><a href="/11.8-分布式锁.html" class="sidebar-link">11.8 分布式锁</a></li><li><a href="/11.9-限流.html" class="sidebar-link">11.9 限流</a></li></ul></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="一、介绍"><a href="#一、介绍" class="header-anchor">#</a> 一、介绍</h2> <p>数据库的优化可以从以下四个方面做，其效果跟投入成相反关系，即：</p> <p>效果：</p> <div class="language- extra-class"><pre class="language-text"><code>SQL及索引 &gt; 数据库表结构 &gt; 系统配置 &gt; 硬件
+</code></pre></div><p>成本：</p> <div class="language- extra-class"><pre class="language-text"><code>硬件 &gt; 系统配置 &gt; 数据库表结构 &gt; SQL及索引
+</code></pre></div><img src="/assets/img/11-数据库优化成本.da9a3c13.png" alt="image-20240408132104452"> <p>硬件不用说，当然是配置越高越好，最好是专门用于数据库的服务器，并采用ssd的，不过这个成本是最高的，我们主要讲解剩下3种的优化思路。当然MySQL的优化工作是持续进行的，并不是一次性完成。</p> <p>我们可以在以下阶段持续进行优化，分别是</p> <ul><li>上线前产品的数据库设计（系统配置、数据库表结构、SQL及索引设计）</li> <li>上线后的持续监控优化（慢查询、mysql指标监控）。</li></ul> <p>当然，对于业务、产品的优化，并不单单只是针对MySQL进行优化，还可以通过其他方面来进行，例如缓存的应用。</p> <p>整体的优化思路可以按照如下的原则逐步进行：</p> <ul><li>优先考虑通过缓存降低对数据库的读操作（如：redis）</li> <li>再考虑读写分离，减轻数据库压力</li> <li>首先考虑按照业务垂直拆分</li> <li>再考虑水平拆分：先分库（设置数据路由规则，把数据分配到不同的库中）</li> <li>再考虑分表，单表拆分到数据1000万以内</li> <li>最后可以考虑分区，例如以用户名做hash分区</li></ul> <img src="/assets/img/11.3.1-数据库垂直水平拆分.affc23c0.jpg" style="zoom:80%;"> <h2 id="二、系统配置优化"><a href="#二、系统配置优化" class="header-anchor">#</a> 二、系统配置优化</h2> <p>以下针对的InnoDB引擎的配置文件my.cnf：</p> <div class="language-xml extra-class"><pre class="language-xml"><code>[mysqld]
+# GENERAL
+datadir = /var/lib/mysql
+socket = /var/lib/mysql/mysql.sock
+pid_file = /var/lib/mysql/mysql.pid
+user = mysql
+port = 3306
+
+# INNODB
+innodb_buffer_pool_size = <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span>
+innodb_log_file_size = <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span>
+innodb_file_per_table = 1
+
+# LOGGING
+slow_query_log = ON
+slow_query_log = /var/lib/mysql/mysql-slow.log
+log_error = /var/lib/mysql/mysql-error.log
+
+# OTHER
+tmp_table_size = 32M
+max_heap_table_size = 32M
+# 禁用缓存
+query_cache_type = 0
+query_cache_size = 0
+max_connections = <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span>
+thread_cache_size = <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">&gt;</span></span>
+open_files_limit = 65535
+
+[client]
+socket = /var/lib/mysql/mysql.sock
+port = 3306
+</code></pre></div><h3 id="_1、innodb-buffer-pool-size"><a href="#_1、innodb-buffer-pool-size" class="header-anchor">#</a> 1、innodb_buffer_pool_size</h3> <blockquote><p>介绍</p></blockquote> <p>InnoDB使用一个缓冲池来保存索引和原始数据，如下图所示：</p> <img src="/assets/img/11.3.1-InnoDB存储引擎内存结构.0128bfef.jpg" alt="InnoDB存储引擎内存结构" style="zoom:67%;"> <blockquote><p>优缺点</p></blockquote> <p>缓冲池的作用可以减少磁盘访问，我们知道内存读写速度比磁盘的读写速度快很多，所以这个参数对mysql性能有很大提升。当然，这里不是越大越好，也要考虑实际的服务器情况。总之，InnoDB严重依赖缓冲池，我们必须为它分配了足够的内存。</p> <p>更大的缓冲池会使得mysql服务在重启和关闭的时候花费很长时间。</p> <blockquote><p>如何配置</p></blockquote> <p>如果在一个独立使用的mysql服务器上，这个变量按照流行的经验法则，可以把缓冲池大小设置为服务器内存的约75%~80%。</p> <p>但是，如果服务器上除了跑mysql服务，还有其他服务也在运行，那么在分配缓冲池空间时，需要减去这部分程序占用的内存、mysql自身需要的内存以及减去足够让操作系统缓存InnoDB日志文件的内存，至少是足够缓存最近经常访问的部分。</p> <h3 id="_2、innodb-log-file-size和innodb-log-files-in-group"><a href="#_2、innodb-log-file-size和innodb-log-files-in-group" class="header-anchor">#</a> 2、innodb_log_file_size和innodb_log_files_in_group</h3> <blockquote><p>介绍</p></blockquote> <p>InnoDB使用日志来减少提交事务时的开销。</p> <p>InnoDB用日志把随机I/O变成顺序I/O。</p> <img src="/assets/img/11.3.1-InnoDB的缓存和文件.7117a2ee.jpg" style="zoom:67%;"> <p><strong>innodb_log_files_in_group</strong> 参数控制日志文件数，一般默认为2。mysql事务日志文件是循环覆写的，如下图：</p> <img src="/assets/img/11.3.1-日志文件循环写.2deaa63b.png" style="zoom:80%;"> <blockquote><p>优缺点</p></blockquote> <p>当一个日志文件写满后，innodb会自动切换到另一个日志文件，而且会触发数据库的checkpoint，这会导致innodb缓存脏页的小批量刷新，会明显降低innodb的性能。如果innodb_log_file_size设置太小，就会导致innodb频繁地checkpoint，导致性能降低。而如果设置太大，由于事务日志是顺序I/O，大大提高了I/O性能，但是在崩溃恢复InnoDB时，会导致恢复时间变长。</p> <p>如果InnoDB数据表有频繁的写操作，那么选择合适的innodb_log_file_size值对提升MySQL性能很重要。</p> <blockquote><p>如何配置</p></blockquote> <p>作为一个经验法则，日志文件的全部大小，应该足够容纳服务器一个小时的活动内容。方法如下：</p> <p>首先，在业务高峰期，计算出1分钟写入事务日志（redo log）的量，然后评估出一个小时的redo log量：</p> <div class="language-mysql extra-class"><pre class="language-text"><code># 使用pager之后，执行命令只显示Log开头的
+mysql&gt; pager grep Log
+PAGER set to 'grep Log'
+mysql&gt; show engine innodb status\G select sleep(60); show engine innodb status\G;
+Log sequence number 3257464291
+Log flushed up to   3257464278
+1 row in set (0.00 sec)
+
+1 row in set (1 min 0.00 sec)
+
+Log sequence number 3257550399
+Log flushed up to   3257550399
+1 row in set (0.00 sec)
+</code></pre></div><p>Log sequence number是写入事务日志的总字节数，通过1分钟内两个值的差值，我们可以看到每分钟有多少KB日志写入到MySQL中（备注：该返回值是我环境下的，具体数值请参考自己环境的返回值）</p> <div class="language- extra-class"><pre class="language-text"><code>mysql&gt; nopager
+PAGER set to stdout
+mysql&gt; select (3257550399-3257464291)/1024 as KB;
++---------+
+| KB      |
++---------+
+| 84.0898 |
++---------+
+1 row in set (0.00 sec)
+</code></pre></div><p>那么，1小时的事务日志写入量为：84KB * 60 = 5040KB，约为5MB。</p> <p>由于默认有两个日志文件，在日志组中，两个日志文件的大小是一致的。所以我们可以大约设置innodb_log_file_size=3M。</p> <h3 id="_3、innodb-log-buffer-size"><a href="#_3、innodb-log-buffer-size" class="header-anchor">#</a> 3、innodb_log_buffer_size</h3> <p>innodb_log_buffer_size可以控制日志缓冲区的大小。</p> <p>通常不需要把日志缓冲区设置得非常大。推荐的范围是1MB~8MB，一般来说是足够了，MySQL默认是8MB。</p> <h3 id="_4、innodb-flush-log-at-trx-commit"><a href="#_4、innodb-flush-log-at-trx-commit" class="header-anchor">#</a> 4、innodb_flush_log_at_trx_commit</h3> <blockquote><p>介绍</p></blockquote> <p>MySQL支持用户自定义在commit时如何将log buffer中的日志刷到log file中。这种控制通过变量：innodb_flush_log_at_trx_commit 来决定，该变量有：0、1、2三种值，默认为1。注意，这个变量只是控制commit动作是否刷新log buffer到磁盘中。</p> <ul><li>设置为0。把日志缓冲写到日志文件中，并且每秒钟刷新一次，但是事务提交时不做任何事，该设置是3者中性能最好的。也就是说设置为0时是(大约)每秒刷新写入到磁盘中的，当系统崩溃，会丢失1秒钟的数据。</li> <li>设置为1。将日志缓冲写入到日志文件，并且每次事务提交都刷新到持久化存储。这是默认的设置（并且是最安全的），该设置能保证不会丢失任何已经提交的事务。</li> <li>设置为2。每次提交时把日志缓冲写到日志文件，但并不刷新。InnoDB每秒钟做一次刷新。</li></ul> <img src="/assets/img/11.3.1-日志commit的三种方式.c0ff0982.png" style="zoom:80%;"> <blockquote><p>如何配置</p></blockquote> <p>日志缓冲必须被刷新到持久化存储（磁盘），以确保提交的事务完全被持久化了。如果和持久化相比更在乎性能，则可以修改该参数来控制日志缓冲刷新的频繁程度。</p> <h3 id="_5、thread-cache-size"><a href="#_5、thread-cache-size" class="header-anchor">#</a> 5、thread_cache_size</h3> <blockquote><p>介绍</p></blockquote> <p>线程缓存保存哪些当前没有与连接关联但是准备为后面新的连接服务的线程。当一个新的链接创建时，如果缓存中有线程存在，MySQL从缓存中删除一个线程，并且把它分配给这个新的连接。当连接关闭时，如果线程缓存还有空间的话，MySQL又会把线程放回缓存。如果没有空间的话，MySQL就会销毁这个线程。</p> <p>只要MySQL在缓存中还有空闲的线程，它就可以迅速地响应连接请求，因为这样就不用为每个连接创建新的线程。</p> <blockquote><p>如何配置</p></blockquote> <p>thread_cache_size指定了MySQL可以保存在缓存中的线程数。一般不需要配置这个值，除非服务器会有很多连接请求。</p> <p>一般，可以根据机器的内存进行设置：</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 1G  —&gt; 8  </span>
+<span class="token comment"># 2G  —&gt; 16  </span>
+<span class="token comment"># 3G  —&gt; 32  </span>
+<span class="token comment"># 大于3G  —&gt; 64或更大 </span>
+</code></pre></div><h3 id="_6、tmp-table-size和max-heap-table-size"><a href="#_6、tmp-table-size和max-heap-table-size" class="header-anchor">#</a> 6、tmp_table_size和max_heap_table_size</h3> <blockquote><p>介绍</p></blockquote> <p>tmp_table_size：临时表的内存缓存大小，临时表是指sql执行时生成的临时数据表。在优化sql时，应该尽量避免临时表。
+max_heap_table_size：该参数也会影响到临时表的内存缓存大小。在增加tmp_table_size的同时，也需要增加max_heap_table_size的大小。</p> <blockquote><p>如何配置</p></blockquote> <p>可以通过Created_tmp_disk_tables和Created_tmp_tables状态来分析是否需要增加tmp_table_size和max_heap_table_size。</p> <div class="language-mysql extra-class"><pre class="language-text"><code>#Created_tmp_disk_tables : 磁盘临时表的数量
+#Created_tmp_tables      : 内存临时表的数量
+
+mysql&gt; show global status like 'Created_tmp_disk_tables';
++-------------------------+-------+
+| Variable_name           | Value |
++-------------------------+-------+
+| Created_tmp_disk_tables | 15668 |
++-------------------------+-------+
+1 row in set (0.00 sec)
+
+mysql&gt; show global status like 'Created_tmp_tables';
++--------------------+--------+
+| Variable_name      | Value  |
++--------------------+--------+
+| Created_tmp_tables | 737670 |
++--------------------+--------+
+1 row in set (0.00 sec)
+</code></pre></div><h3 id="_7、max-connections"><a href="#_7、max-connections" class="header-anchor">#</a> 7、max_connections</h3> <blockquote><p>介绍</p></blockquote> <p>MySQL的max_connections参数用来设置最大连接数。如果该参数设置太小，会导致出现“Too many connections”的错误。</p> <p>如果服务器的并发连接请求量比较大，建议提高此值，以增加并行连接数量。但是这个是要建立在机器的性能能支撑的情况下，因为MySQL会为每一个连接提供连接缓冲区，如果并发连接数量太高，会导致消耗内存过多。</p> <blockquote><p>如何配置</p></blockquote> <p>如何判断max_connections设置的是否合理？</p> <p>首先，查看最大连接上限：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show variables like 'max_connections';
++-----------------+-------+
+| Variable_name   | Value |
++-----------------+-------+
+| max_connections | 1000  |
++-----------------+-------+
+</code></pre></div><p>然后，可以查看服务器响应的最大连接数：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'max_used_connections';
++----------------------+-------+
+| Variable_name        | Value |
++----------------------+-------+
+| Max_used_connections | 3     |
++----------------------+-------+
+</code></pre></div><p>可见，服务器历史最大连接数远远低于mysql服务器允许的最大连接上限。</p> <p>对于mysql服务器最大连接上限的设置范围，最理想的是：服务器响应的最大连接数值占服务器上限连接数值的比例值在10%以上，如果在10%以下，说明mysql服务器最大连接上限值设置过高。</p> <h2 id="三、数据库表结构设计优化"><a href="#三、数据库表结构设计优化" class="header-anchor">#</a> 三、数据库表结构设计优化</h2> <h3 id="_1、innodb逻辑存储结构"><a href="#_1、innodb逻辑存储结构" class="header-anchor">#</a> 1、InnoDB逻辑存储结构</h3> <p>InnoDB所有数据都存放在一个叫表空间（tablespace）的地方（ibdata1）。表空间由段（segment）、区（extent）、页（page）组成。InnoDB逻辑存储存储结构如下图：</p> <img src="/assets/img/11.3.1-innodb存储结构.e6b20d5e.png" alt="1560834709696" style="zoom:80%;"> <p>注意，如果用户启用了参数innodb_file_per_table，则每张表内的数据（包括数据、索引和插入缓冲Bitmap页）可以单独放到一个表空间内，但是其他数据，如回滚信息、插入缓冲索引页、系统事务信息等还是存放在原来的共享表空间内。</p> <h4 id="_1-段-segment"><a href="#_1-段-segment" class="header-anchor">#</a> （1）段（segment）</h4> <p>常见的段有数据段、索引段、回滚段等</p> <h4 id="_2-区-extent"><a href="#_2-区-extent" class="header-anchor">#</a> （2）区（extent）</h4> <p>区是由连续的页组成的空间，每个区大小都为1MB。为了保证区中页的连续性，InnoDB存储引擎一次从磁盘中申请4~5个区。在默认情况下，InnoDB存储引擎页大小为16KB，即一个区中一共有64个连续的页。</p> <h4 id="_3-页-page"><a href="#_3-页-page" class="header-anchor">#</a> （3）页（page）</h4> <p>页是InnoDB磁盘管理的最小单位，默认每个页大小为16KB。常见的页类型有：</p> <ul><li>数据页(B-tree Node)</li> <li>undo页(undo Log Page)</li> <li>系统页(System Page)</li> <li>事务数据页(Transaction system Page)</li> <li>插入缓冲位图页(Insert Buffer Bitmap)</li> <li>插入缓冲空闲列表页(Insert Buffer Free List)</li> <li>未压缩的二进制大对象页(Uncompressed BLOB Page)</li> <li>压缩的二进制大对象页(compressed BLOB Page)</li></ul> <p>这里重点将数据也的存储结构，该类型存放的是表中行的实际数据。</p> <p>InnoDB数据也由以下7个部分组成，如下：</p> <img src="/assets/img/11.3.1-InnoDB数据页的组成2.e40ce179.png" alt="1560657805690" style="zoom:80%;"> <ul><li><p>File Header用来记录页的一些头信息</p></li> <li><p>Page Header用来记录数据页的状态信息</p></li> <li><p>每个页中都有两个虚拟行记录，用来限定记录的边界：Infimum和Supremum Record，如下：</p></li></ul> <img src="/assets/img/11.3.1-page.6c399fa0.png" alt="1560836385634" style="zoom:80%;"> <ul><li>User Record是实际存储行记录的内容。</li> <li>Page Directory存放了记录的相对位置，这些记录指针也称为Slots（槽）。在Slots中记录按照索引键值顺序存放，这样可以利用二叉查找迅速找到记录的指针。</li> <li>File Trailer用于检测页是否完整地写入磁盘</li></ul> <h4 id="_4-行"><a href="#_4-行" class="header-anchor">#</a> （4）行</h4> <p>InnoDB存储引擎是按行进行存放的。<code>一个页中存放的行数据越多，其性能越高，这也是为什么创建字段的时候应该按照最小可用原则</code>。
+InnoDB存储引擎提供了Compact和Redundant两种格式来存放行记录数据，默认设置为Compact行格式。可以通过如下命令查看：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show table status like 't_ci_sessions'\G;
+*************************** 1. row ***************************
+           Name: t_ci_sessions
+         Engine: InnoDB
+        Version: 10
+     Row_format: Compact
+           Rows: 9
+ Avg_row_length: 1820
+    Data_length: 16384
+Max_data_length: 0
+   Index_length: 16384
+      Data_free: 0
+ Auto_increment: NULL
+    Create_time: 2019-06-10 13:04:27
+    Update_time: NULL
+     Check_time: NULL
+      Collation: utf8_general_ci
+       Checksum: NULL
+ Create_options: 
+        Comment: 
+1 row in set (0.00 sec)
+</code></pre></div><p>Compact行记录格式：</p> <img src="/assets/img/11.3.1-Compact行记录的格式.3f9e98ac.png" alt="1560655448122" style="zoom:80%;"> <p>Compact记录头信息的格式如下：</p> <img src="/assets/img/11.3.1-Compact记录头信息格式.546c0aac.png" alt="1560655619940" style="zoom:80%;"> <p>数据库表结构设计原则如下：</p> <ul><li>尽量避免过度设计，例如设计极其复杂查询的schema设计，或者有很多列的表设计</li> <li>使用小而简单的合适数据类型，除非真实数据模型中有确切的需要，否则应该尽可能地避免使用NULL值</li> <li>尽量使用相同的数据类型存储相似的值，尤其是要在关联条件中使用的列</li> <li>注意可变长字符串，其在临时表和排序时可能导致悲观的按最大长度分配内存</li> <li>尽量使用整形定义标识列</li> <li>小心使用ENUM和SET，最好避免使用BIT</li> <li>范式是好的，但是反范式有时也是必须的，并且能带来好处。预先计算、缓存或生成汇总表也可能获得大的好处</li> <li>ALTER TABLE是让人痛苦的操作，因为大部分情况下，它都会锁表并且重建整张表。 解决方法有两种：一种是在一台不提供服务的机器上执行ALTER TABLE操作，然后和提供服务的主库进行切换；另一种方法是“影子拷贝”，即用要求的表结构创建一张和源表无关的新表，然后通过重命名和删表操作交换两张表</li> <li>在查找表时采用整数逐渐而避免采用基于字符串的值进行关联</li></ul> <h2 id="四、索引设计优化"><a href="#四、索引设计优化" class="header-anchor">#</a> 四、索引设计优化</h2> <p><strong>关键原则：通过分层缩小数据范围，提高数据区分度，扫描的记录数就越少。例如主键ID做索引，只有唯一一个，数据区分度最高。如果用例如性别做索引，则数据范围还是很大，数据区分度不高，索引效果就很差。</strong></p> <p>InnoDB存储引擎支持以下几种常见索引：</p> <ul><li>B+树索引</li> <li>全文索引</li> <li>哈希索引</li></ul> <p>这里我们重点介绍B+树索引，也是使用最频繁的。</p> <p>B+树索引，可以分为聚集索引（clustered index）和辅助索引（secondary index）。两者区别是，叶子节点存放的是否一整行的信息。</p> <h3 id="_1、数据结构和算法"><a href="#_1、数据结构和算法" class="header-anchor">#</a> 1、数据结构和算法</h3> <p>B+树索引是目前关系型数据库系统中查找最为常用和最为有效的索引。B+树索引类似于二叉树，根据键值快速找到数据。</p> <p>注意，B+树本身不一定找到具体的一条记录，能找到的只是该记录所在的页。数据库把页加载到内存，然后通过Page Directory再进行二分查找。</p> <h4 id="_1-二分查找法"><a href="#_1-二分查找法" class="header-anchor">#</a> （1）二分查找法</h4> <p>也叫折半查找法。详细算法原理不展开讲，网上有很多，可以查看：<a href="%5Bhttps://zh.wikipedia.org/wiki/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95%5D(https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95)">二分查找法</a></p> <p>这里为什么要介绍二分查找法，是因为：</p> <p>我们知道每个数据页中包含Page Directory，Page Directory中的槽是按照主键的顺序存放的，对于某一条具体记录的查询是通过对Page Directory进行二分查找法得到的。也就是说，通过B+树索引定位到具体页以后，就需要引用二分查找法定位具体的键值。</p> <h4 id="_2-二叉查找树"><a href="#_2-二叉查找树" class="header-anchor">#</a> （2）二叉查找树</h4> <p><a href="%5Bhttps://zh.wikipedia.org/wiki/%E4%BA%8C%E5%85%83%E6%90%9C%E5%B0%8B%E6%A8%B9%5D(https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%85%83%E6%90%9C%E5%B0%8B%E6%A8%B9)">二叉查找树</a>的原理，请自行查阅。</p> <h4 id="_3-平衡二叉树"><a href="#_3-平衡二叉树" class="header-anchor">#</a> （3）平衡二叉树</h4> <p><a href="%5Bhttps://baike.baidu.com/item/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%5D(https://baike.baidu.com/item/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91)">平衡二叉树</a>的原理，请自行查阅。</p> <h4 id="_4-b-树"><a href="#_4-b-树" class="header-anchor">#</a> （4）B+树</h4> <p>如下是一颗B+索引树，如果主键是按照顺序递增地，则新插入的数据只需追加到末尾或生成新的叶子节点即可，不会对前面的节点造成修改。而假如主键是随机并非递增的，则新插入的主键有可能需要插入到之前的叶子节点中，这就可能导致叶子节点的分裂以及B+树的重新平衡，这造成的代价是比较大的。<code>这也是为什么主键索引建议顺序递增，而不建议采用类似md5作为主键或索引</code>。</p> <p>​    同样的，删除或者修改操作都会导致B+树进行重新平衡，也需要付出一定的代价。<code>所以，使用索引，对于查询是非常友好的，可以极大提高速度，但是对于增、删、改操作者成本变高</code>。</p> <img src="/assets/img/11-1560994779063.2b04bac6.png" alt="1560994779063" style="zoom:50%;"> <h3 id="_2、聚集索引"><a href="#_2、聚集索引" class="header-anchor">#</a> 2、聚集索引</h3> <p>InnoDB的聚集索引实际上在同一个结构中保存了B-Tree索引和数据行，一个表只能有一个聚集索引。</p> <p>如下图，聚集索引，叶子页包含了行的全部数据，但节点页只包含索引列。</p> <img src="/assets/img/11-聚集索引.35039601.png" alt="image-20240408132208997"> <h3 id="_3、辅助索引"><a href="#_3、辅助索引" class="header-anchor">#</a> 3、辅助索引</h3> <p>辅助索引也称为非聚集索引，叶子节点并不包含行记录的全部数据。每个叶子节点除了索引列还包含主键列，通过这个主键列就可以找到一个完整的行记录。也就是说，通过辅助索引，除了首先要在辅助索引树中查找到主键，还需要在聚集索引树中通过该主键找到对应的完整行数据所在的页。这也是为什么辅助索引需要进行两次索引查找的原因。</p> <p>如下图所示：</p> <img src="/assets/img/11-1560907290323.07594010.png" alt="1560907290323" style="zoom:50%;"> <h3 id="_4、例子说明"><a href="#_4、例子说明" class="header-anchor">#</a> 4、例子说明</h3> <p>如下表，我们有一个主键col1以及三个索引。假设主键取值为1~10000，按随机顺序插入并使用OPTIMIZE TABLE命令做优化。col2和col3随机赋值，数据如下表所示。</p> <div class="language-mysql extra-class"><pre class="language-text"><code>CREATE TABLE layout_test (
+    id int NOT NULL,
+    col2 varchar(16) NOT NULL DEFAULT '',
+    col3 varchar(16) NOT NULL DEFAULT '',
+    PRIMARY KEY(id),
+    KEY(col2),
+    KEY(col3)
+);
+</code></pre></div><table><thead><tr><th>行号</th> <th>id</th> <th>col2</th> <th>col3</th></tr></thead> <tbody><tr><td>0</td> <td>99</td> <td>Tom</td> <td>apple</td></tr> <tr><td>1</td> <td>12</td> <td>Mary</td> <td>banana</td></tr> <tr><td>2</td> <td>3000</td> <td>John</td> <td>milk</td></tr> <tr><td>...</td> <td>...</td> <td>...</td> <td>...</td></tr> <tr><td>9997</td> <td>18</td> <td>Judi</td> <td>tea</td></tr> <tr><td>9998</td> <td>4700</td> <td>Tom</td> <td>apple</td></tr> <tr><td>9999</td> <td>3</td> <td>Peter</td> <td>coffee</td></tr></tbody></table> <p>聚集索引叶子节点分布如下图所示（按id排序）：</p> <img src="/assets/img/11-1560993470695.e6f0e81c.png" alt="1560993470695" style="zoom:67%;"> <p>以col2为索引列的辅助索引叶子节点分布图（按col2排序）：</p> <img src="/assets/img/11-1560993817672.e935b966.png" alt="1560993817672" style="zoom:67%;"> <p>以col3为索引列的辅助索引叶子节点分布图（按col3排序）：</p> <img src="/assets/img/11-1560993904422.1c3e62ff.png" alt="1560993904422" style="zoom:67%;"> <blockquote><p>覆盖索引</p></blockquote> <p>严格地说，覆盖索引只是辅助索引的一个衍生定义，即从辅助索引中就可以得到查询的记录，而不需要查询聚集索引中的记录。使用覆盖索引的一个好处是辅助索引不包含整行记录的所有信息，所以它要比聚集索引小很多，因此一页包含的辅助索引数量更多，从而可以减少大量的IO操作。</p> <h3 id="_5、总结"><a href="#_5、总结" class="header-anchor">#</a> 5、总结</h3> <p>设计和使用索引时，可以遵循以下原则：</p> <ul><li><p>选择数据类型遵循小而简单的原则，这样做的好处是可以节省索引空间，对于较短的键值，索引页中能容纳更多的键值，这样查找速度也会提升。下表是mysql各个字段类型的大小和使用范围：</p> <table><thead><tr><th>字段</th> <th>存储大小(单位：字节)</th> <th>最小值</th> <th>最大值</th></tr></thead> <tbody><tr><td>TINYINT</td> <td>1</td> <td>-128</td> <td>127</td></tr> <tr><td>SMALLINT</td> <td>2</td> <td>-32768</td> <td>32767</td></tr> <tr><td>MEDIUMINT</td> <td>3</td> <td>-8,388,608</td> <td>8,388,607 (838萬)</td></tr> <tr><td>INT</td> <td>4</td> <td>-2,147,483,648</td> <td>2,147,483,647 (21億)</td></tr> <tr><td>BIGINT</td> <td>8</td> <td>-9,223,372,036,854,775,808</td> <td>9,223,372,036,854,775,807 (922京)</td></tr> <tr><td>FLOAT</td> <td>4</td> <td>-3.402823466E+38</td> <td>3.402823466E+38</td></tr> <tr><td>DOUBLE</td> <td>8</td> <td>-1.7976931348623157E+308</td> <td>1.7976931348623157E+308</td></tr> <tr><td>DECIMAL*</td> <td>每9个数字4个字节</td> <td>~ -1E+66</td> <td>~ 1E+66</td></tr> <tr><td>TIMESTAMP</td> <td>4</td> <td>1970（unix时间戳）</td> <td>2038（unix时间戳）</td></tr> <tr><td>DATETIME</td> <td>8</td> <td>1001年</td> <td>9999年</td></tr></tbody></table> <p>所以，如果存储IP地址，使用UNSIGNED INT存储，刚好够用，比使用字符串占用更少空间，搜索更快。</p> <p>同样的。而时间使用DATETIME存储，比使用字符串（19字节）足足少了11字节。</p></li> <li><p>整形数据比起字符，处理开销更小，在MySQL中，建议使用内置的日期和时间数据类型，而不是用字符串来存储时间。</p></li> <li><p>利用覆盖索引进行查询，避免回表。Explain返回的Using index就代表从索引中查询。这也是为什么要避免使用SELECT *的原因之一。</p></li> <li><p>尽量指定列为NOT NULL，NULL会使索引、索引统计和值更加复杂，并且需要额外的存储空间。这个可以查看这篇文章<a href="https://my.oschina.net/leejun2005/blog/1342985" target="_blank" rel="noopener noreferrer">《一千个不用NULL的理由》<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>。</p></li> <li><p>建议在选择性高的列上建立索引，最好是唯一索引，区分度越大，则我们扫描的记录数越少，例如性别区分度不大，就不适合做索引。</p></li> <li><p>更新非常频繁的数据不适合建索引。频繁更新会导致变更B+索引树，重建索引，这个过程很消耗数据库性能。</p></li> <li><p>利用最左前缀原则，比如建立一个联合索引(a,b,c)，我们可以利用的索引就有(a),(a,b),(a,b,c)</p></li> <li><p>如果确定有多少条数据，使用limit限制一下，MySQL在查找到对应条数的数据的时候，会停止继续查找</p></li> <li><p>删除不再使用的索引</p></li> <li><p>join语法，尽量将小的表放在前面，在需要on的字段上，数据类型保持一致，并设置素银，否则MySQL无法使用索引来Join查询</p></li> <li><p>like &quot;xxx%&quot;可以用到索引，like&quot;%xxx%&quot;则不行</p></li> <li><p>在设计开发阶段，数据库字段的定义要避免出现由数据类型定义不当造成的隐式转换</p></li></ul> <h2 id="五、sql查询优化"><a href="#五、sql查询优化" class="header-anchor">#</a> 五、SQL查询优化</h2> <h3 id="_1、分解关联查询"><a href="#_1、分解关联查询" class="header-anchor">#</a> 1、分解关联查询</h3> <p>很多高性能的应用都会对关联查询进行分解。简单地，可以对每一个表进行一次单表查询，然后将结果都再应用程序中进行管理。如下这个查询:</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; SELECT * FROM tag
+     -&gt; JOIN tag_post ON tag_post.tag_id=tag.id
+     -&gt; JOIN post ON tag_post.post_id=post.id
+     -&gt; WHERE tag.tag='mysql;
+</code></pre></div><p>可以分解成下面这些查询来代替：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; SELECT * FROM tag WHERE tag='mysql';
+mysql&gt; SELECT * FROM tag_post WHERE tag_id=1234;
+mysql&gt; SELECT * FROM post WHERE post.id in (123,456,567,9098,8904);
+</code></pre></div><p>用分解关联查询的方式重构查询有如下的优势：</p> <ul><li>让缓存的效率更高。</li> <li>将查询分解后，执行单个查询可以减少锁的竞争。</li> <li>在应用层做关联，可以更容易对数据库进行拆分，更容易做到高性能和可扩展。</li> <li>查询效率也有可能会有所提升。</li> <li>可以减少冗余记录的查询。</li> <li>更进一步，这样做相当于在应用层中实现了哈希关联，而不是是使用MySQL的嵌套循环关联。</li></ul> <h3 id="_2、优化count-查询"><a href="#_2、优化count-查询" class="header-anchor">#</a> 2、优化COUNT()查询</h3> <p>count()可以统计某个列值的数量，也可以统计行数。</p> <p>一个常见的错误是，在括号内指定了一个列却希望统计结果集的行数。如果希望知道的是结果集的行数，最好使用COUNT(*)，这样写意义清晰，性能也会很好。</p> <p>一般，COUNT都需扫描大量的行才能获得精确的结果，因此很难优化。在MySQL层面还能做的就只有索引覆盖扫描（不回表查询）。如果这样还不能满足，就需要考虑修改应用架构或者增加缓存（如redis）统计。</p> <h3 id="_3、关联查询优化"><a href="#_3、关联查询优化" class="header-anchor">#</a> 3、关联查询优化</h3> <ul><li>确保ON或者USING子句的列上有索引。一般来说，除非有其他理由，否则只需要在关联顺序中的第二个表的相应列上创建索引</li> <li>确保任何GROUP BY和ORDER BY中的表达式值涉及到一个表中的列，这样MySQL才有可能使用索引来优化这个过程。</li></ul> <h3 id="_4、优化子查询"><a href="#_4、优化子查询" class="header-anchor">#</a> 4、优化子查询</h3> <p>关于子查询优化，建议就是尽可能使用关联查询代替。</p> <h3 id="_5、优化group-by和distinct"><a href="#_5、优化group-by和distinct" class="header-anchor">#</a> 5、优化GROUP BY和DISTINCT</h3> <ul><li>如果需要对关联查询做分组（GROUP BY)，并且是按照查找表中的某个列进行分组，那么通常采用查找表的主键分组的效率比其他列更高。</li> <li>如果没有通过ORDER BY子句显示地指定排序列，当查询使用GROUP BY子句的时候，结果集会自动按照分组的字段进行排序。如果不关心结果集的顺寻，而这种默认又导致了需要文件排序，则可以使用ORDER BY NULL，让MySQL不再进行文件排序。</li></ul> <h3 id="_6、优化limit分页"><a href="#_6、优化limit分页" class="header-anchor">#</a> 6、优化LIMIT分页</h3> <p>一个非常常见的问题是，在偏移量很大的时候，例如：limit 10000,20这样的查询，MySQL需要查询10020条记录后只返回最后20条，前面10000条记录都将被抛弃，这样代价非常高。针对这个问题，有以下几个方法：</p> <ul><li><p>最简单的办法就是尽可能地使用覆盖扫描，而不是查询所有的列。</p> <p>例如下面的查询：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; SELECT file_id,description FROM sakila.film ORDER BY title LIMIT 50,5
+</code></pre></div><p>如果表数据非常大，可以改成如下:</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; SELECT file_id,description FROM sakila.film
+    -&gt; INNER JOIN(
+    -&gt;    SELECT file_id FROM sakila.film ORDER BY title LIMIT 50,5    
+    ) AS lim USING(film_id);
+</code></pre></div><p>这里“延迟关联”大大提高了查询效率，它让MySQL扫描尽可能少的页面，获取需要访问的记录后在根据关联列回原表查询需要的所有列</p></li> <li><p>可以记录上次取数据的主键ID位置，那么下次就可以直接从该记录的位置开始扫描，这样就可以避免OFFSET导致MySQL扫描大量不需要的行然后抛弃掉。</p> <p>例如：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; SELECT * FROM sakila.rental ORDER BY rental_id DESC LIMIT 20;
+</code></pre></div><p>假如上面的查询返回的是主键为16049到16030的记录，那么下一页查询就可以从16030这个点开始：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; SELECT * FROM sakila.rental WHERE rental_id &lt; 16030 ORDER BY rental_id DSEC LIMIT 20;
+</code></pre></div><p>该技术的好处是，无论翻页到多么后面，性能都会很好。</p></li></ul> <h3 id="_7、优化union查询"><a href="#_7、优化union查询" class="header-anchor">#</a> 7、优化UNION查询</h3> <ul><li>MySQL总是通过创建并填充临时表的方式来执行UNION查询。在UNION查询优化中，经常需要手工地将WHERE,LIMIT,ORDER BY等子句下推到UNION的各个子查询中，一边优化器可以充分利用这些条件进行优化。</li> <li>除非确实需要服务器消除重复的行，否则就一定要使用UNION ALL。如果没有ALL关键字，MySQL会给临时表加上DISTINCT选项，这回导致对整个临时表的数据做唯一性检查，代价很高。</li></ul> <h2 id="六、读写分离"><a href="#六、读写分离" class="header-anchor">#</a> 六、读写分离</h2> <p>读写分离是数据库架构中的一种常见模式，主要是为了解决数据库的性能瓶颈。读写分离的基本原理是将读操作和写操作分开，分别发送到不同的服务器上执行，从而提高数据库的处理能力和性能。</p> <p>在MySQL中，实现读写分离架构通常使用主从复制技术。主从复制技术是指设置一个主数据库（Master）和一个或多个从数据库（Slave）。主数据库处理所有的写操作（INSERT、UPDATE、DELETE），从数据库处理所有的读操作（SELECT）。主数据库在处理完写操作后，会把数据的变更记录到二进制日志（Binary Log）中，然后从数据库通过复制线程将这些变更同步到自己的数据库中。</p> <h3 id="物理层设计"><a href="#物理层设计" class="header-anchor">#</a> 物理层设计</h3> <p>下面是实现MySQL读写分离架构的步骤：</p> <ol><li>配置主数据库</li></ol> <p>在主数据库的配置文件（my.cnf或my.ini）中，需要开启二进制日志，并设置一个唯一的服务器ID。例如：</p> <div class="language-ini extra-class"><pre class="language-ini"><code><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">mysqld</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">log-bin</span><span class="token punctuation">=</span><span class="token value attr-value">mysql-bin</span>
+<span class="token key attr-name">server-id</span><span class="token punctuation">=</span><span class="token value attr-value">1</span>
+</code></pre></div><p>然后重启MySQL服务使配置生效。</p> <ol start="2"><li>配置从数据库</li></ol> <p>在从数据库的配置文件中，也需要设置一个唯一的服务器ID（不能和主数据库的ID相同）。例如：</p> <div class="language-ini extra-class"><pre class="language-ini"><code><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">mysqld</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">server-id</span><span class="token punctuation">=</span><span class="token value attr-value">2</span>
+</code></pre></div><p>然后重启MySQL服务使配置生效。</p> <ol start="3"><li>在主数据库中创建一个用于复制的用户，并授权：</li></ol> <div class="language- extra-class"><pre class="language-text"><code>GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+</code></pre></div><ol start="4"><li>在从数据库中配置主数据库的信息：</li></ol> <div class="language-sql extra-class"><pre class="language-sql"><code>CHANGE MASTER <span class="token keyword">TO</span>
+  MASTER_HOST<span class="token operator">=</span><span class="token string">'master_host'</span><span class="token punctuation">,</span>
+  MASTER_USER<span class="token operator">=</span><span class="token string">'replica'</span><span class="token punctuation">,</span>
+  MASTER_PASSWORD<span class="token operator">=</span><span class="token string">'password'</span><span class="token punctuation">,</span>
+  MASTER_LOG_FILE<span class="token operator">=</span><span class="token string">'mysql-bin.000001'</span><span class="token punctuation">,</span>
+  MASTER_LOG_POS<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+</code></pre></div><p>然后启动从数据库的复制线程：</p> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">START</span> SLAVE<span class="token punctuation">;</span>
+</code></pre></div><p>以上就是实现MySQL读写分离架构的基本步骤。在应用程序中，需要根据操作类型（读或写）将数据库请求发送到相应的数据库服务器（主或从）。这通常可以通过数据库中间件或连接池来实现。</p> <p>需要注意的是，读写分离架构虽然可以提高数据库性能，但也会带来数据一致性的问题。因为主从数据库的数据同步是有延迟的，如果一个写操作后立即进行读操作，可能会读到旧的数据。因此，对数据一致性要求很高的系统需要谨慎使用读写分离架构。</p> <p>当然，如果使用云计算产品，例如腾讯云、阿里云等云上的CDB产品，他们本身就自带支持设置读写分离以及异地的架构。</p> <img src="/assets/img/13 读写分离-腾讯云架构图.1e34f652.png" alt="image-20231212131722216" style="zoom:50%;"> <h3 id="应用层设计"><a href="#应用层设计" class="header-anchor">#</a> 应用层设计</h3> <p>要通过数据库中间件实现读写分离，首先需要创建一个中间件，该中间件可以拦截数据库请求，并根据请求类型（读或写）将请求路由到不同的数据库服务器（主或从）。在Golang中，可以使用<code>database/sql</code>包来实现这个中间件。</p> <p>以下是使用Golang实现一个简单的读写分离中间件的示例：</p> <ol><li>安装Golang的MySQL驱动：</li></ol> <div class="language-bash extra-class"><pre class="language-bash"><code>go get <span class="token parameter variable">-u</span> github.com/go-sql-driver/mysql
+</code></pre></div><ol start="2"><li>创建一个名为<code>dbmiddleware.go</code>的文件，实现读写分离中间件：</li></ol> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">&quot;database/sql&quot;</span>
+    <span class="token string">&quot;fmt&quot;</span>
+    <span class="token string">&quot;strings&quot;</span>
+
+    <span class="token boolean">_</span> <span class="token string">&quot;github.com/go-sql-driver/mysql&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">type</span> DBMiddleware <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    master <span class="token operator">*</span>sql<span class="token punctuation">.</span>DB
+    slave  <span class="token operator">*</span>sql<span class="token punctuation">.</span>DB
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">NewDBMiddleware</span><span class="token punctuation">(</span>masterDSN<span class="token punctuation">,</span> slaveDSN <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>DBMiddleware<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    master<span class="token punctuation">,</span> err <span class="token operator">:=</span> sql<span class="token punctuation">.</span><span class="token function">Open</span><span class="token punctuation">(</span><span class="token string">&quot;mysql&quot;</span><span class="token punctuation">,</span> masterDSN<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">&quot;failed to connect to master: %w&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    slave<span class="token punctuation">,</span> err <span class="token operator">:=</span> sql<span class="token punctuation">.</span><span class="token function">Open</span><span class="token punctuation">(</span><span class="token string">&quot;mysql&quot;</span><span class="token punctuation">,</span> slaveDSN<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">&quot;failed to connect to slave: %w&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>DBMiddleware<span class="token punctuation">{</span>
+        master<span class="token punctuation">:</span> master<span class="token punctuation">,</span>
+        slave<span class="token punctuation">:</span>  slave<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>dbm <span class="token operator">*</span>DBMiddleware<span class="token punctuation">)</span> <span class="token function">Exec</span><span class="token punctuation">(</span>query <span class="token builtin">string</span><span class="token punctuation">,</span> args <span class="token operator">...</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>sql<span class="token punctuation">.</span>Result<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> dbm<span class="token punctuation">.</span>master<span class="token punctuation">.</span><span class="token function">Exec</span><span class="token punctuation">(</span>query<span class="token punctuation">,</span> args<span class="token operator">...</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>dbm <span class="token operator">*</span>DBMiddleware<span class="token punctuation">)</span> <span class="token function">Query</span><span class="token punctuation">(</span>query <span class="token builtin">string</span><span class="token punctuation">,</span> args <span class="token operator">...</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>sql<span class="token punctuation">.</span>Rows<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token function">isWriteOperation</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> dbm<span class="token punctuation">.</span>master<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span>query<span class="token punctuation">,</span> args<span class="token operator">...</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dbm<span class="token punctuation">.</span>slave<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span>query<span class="token punctuation">,</span> args<span class="token operator">...</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">isWriteOperation</span><span class="token punctuation">(</span>query <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 简单判断是否为写操作，实际项目中应该更严格地检查SQL语句</span>
+    <span class="token keyword">return</span> strings<span class="token punctuation">.</span><span class="token function">HasPrefix</span><span class="token punctuation">(</span>strings<span class="token punctuation">.</span><span class="token function">ToUpper</span><span class="token punctuation">(</span>strings<span class="token punctuation">.</span><span class="token function">TrimSpace</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;INSERT&quot;</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+        strings<span class="token punctuation">.</span><span class="token function">HasPrefix</span><span class="token punctuation">(</span>strings<span class="token punctuation">.</span><span class="token function">ToUpper</span><span class="token punctuation">(</span>strings<span class="token punctuation">.</span><span class="token function">TrimSpace</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;UPDATE&quot;</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+        strings<span class="token punctuation">.</span><span class="token function">HasPrefix</span><span class="token punctuation">(</span>strings<span class="token punctuation">.</span><span class="token function">ToUpper</span><span class="token punctuation">(</span>strings<span class="token punctuation">.</span><span class="token function">TrimSpace</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;DELETE&quot;</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 示例代码，使用DBMiddleware进行读写操作</span>
+    dbm<span class="token punctuation">,</span> err <span class="token operator">:=</span> <span class="token function">NewDBMiddleware</span><span class="token punctuation">(</span><span class="token string">&quot;user:password@tcp(master_host:3306)/dbname&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;user:password@tcp(slave_host:3306)/dbname&quot;</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Error:&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// 写操作</span>
+    result<span class="token punctuation">,</span> err <span class="token operator">:=</span> dbm<span class="token punctuation">.</span><span class="token function">Exec</span><span class="token punctuation">(</span><span class="token string">&quot;INSERT INTO users (name, age) VALUES (?, ?)&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;John&quot;</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Error:&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    <span class="token punctuation">}</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Insert result:&quot;</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span>
+
+    <span class="token comment">// 读操作</span>
+    rows<span class="token punctuation">,</span> err <span class="token operator">:=</span> dbm<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span><span class="token string">&quot;SELECT * FROM users&quot;</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Error:&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">defer</span> rows<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> rows<span class="token punctuation">.</span><span class="token function">Next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">var</span> id <span class="token builtin">int</span>
+        <span class="token keyword">var</span> name <span class="token builtin">string</span>
+        <span class="token keyword">var</span> age <span class="token builtin">int</span>
+        err <span class="token operator">=</span> rows<span class="token punctuation">.</span><span class="token function">Scan</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>id<span class="token punctuation">,</span> <span class="token operator">&amp;</span>name<span class="token punctuation">,</span> <span class="token operator">&amp;</span>age<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Error:&quot;</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        <span class="token punctuation">}</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;User: id=%d, name=%s, age=%d\n&quot;</span><span class="token punctuation">,</span> id<span class="token punctuation">,</span> name<span class="token punctuation">,</span> age<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>在这个示例中，我们创建了一个名为<code>DBMiddleware</code>的结构体，它包含两个<code>*sql.DB</code>对象，分别表示主数据库和从数据库。然后，我们实现了<code>Exec</code>和<code>Query</code>方法，分别用于执行写操作和读操作。在<code>Query</code>方法中，我们根据SQL语句是否为写操作，将请求路由到主数据库或从数据库。</p> <p>需要注意的是，这个示例中的<code>isWriteOperation</code>函数只是一个简单的判断，实际项目中应该更严格地检查SQL语句。此外，这个示例没有考虑连接池、错误处理和事务等高级功能。在实际项目中，应该根据需求进行相应的扩展和优化。</p> <h2 id="七、分库、分表、分区"><a href="#七、分库、分表、分区" class="header-anchor">#</a> 七、分库、分表、分区</h2> <p>为了适应大数据量（亿级别）的业务场景，需要对架构进行分层设计，这里采用类似地图的分层理念：国家-&gt;省份-&gt;城市-&gt;镇-&gt;乡。</p> <p>分层越多，具体到最底层的级别，数据量的级别就下降越多，查询速度就越快。</p> <p>我们这里就采用三层结构</p> <img src="/assets/img/13-2 分库、分表、分区结构图.4715f1aa.png" alt="image-20230925093329669" style="zoom:50%;"> <h3 id="第一层-分库-按业务分db"><a href="#第一层-分库-按业务分db" class="header-anchor">#</a> 第一层：分库（按业务分db）</h3> <p>这里可以根据实际的业务模块进行数据库的划分，可以避免一个业务的数据量过大导致影响到其他业务的数据库查询。</p> <p>具体到实际的操作划分，有几种方案可以参考：</p> <ul><li><p>一种是根据业务模块将数据分布到不同的数据库中</p> <p>例如，您可以将用户信息、订单信息、商品信息等分别存储在不同的数据库中。这样可以降低单个数据库的压力，提高系统的可扩展性。</p> <p>示例：</p> <ul><li>用户库：存储用户相关信息，如用户基本信息、用户登录记录等；</li> <li>订单库：存储订单相关信息，如订单详情、支付记录等；</li> <li>商品库：存储商品相关信息，如商品基本信息、库存信息等。</li></ul></li> <li><p>根据URL的访问路径进行路由来划分db，例如：</p> <p>http://xxxx.com/v1/api/workspace_id/execution/xxx</p></li></ul> <p>​   可以对/v1/api/workspace_id进行路由区分到不同db</p> <p>​   如下，我们把数据库中数据量最大的appinst表和execution表分离出来，剩下的其他表由于数据量比较少就放在同一个数据库里。</p> <p>而对于不同的业务，可以使用不同的数据库来存储appinst表和execution表。</p> <p>​    当用户访问workflow数据时，就去总表查询，如果想要访问具体的execution和appinst执行数据，则要根据前面的访问路径进行路由到某个数据库上。</p> <img src="/assets/img/13-2 分区.9f5f892b.png" alt="image-20230926230635018" style="zoom:50%;"> <h3 id="第二层-分表-按周分表"><a href="#第二层-分表-按周分表" class="header-anchor">#</a> 第二层：分表（按周分表）</h3> <p>对于访问量较大的数据表，可以按照时间维度进行分表，例如按周分表操作。这样可以减少单表的数据量，提高查询效率。</p> <p>我们用上一节snowflake雪花算法生成的uid作为execution_xx和appinst_xx表的主键。</p> <p>同时，表明的命名格式如下：</p> <blockquote><p>execution_年周，例如今天是2023年9月，则是第39周，那么execution表名为：execuiton_202339
+appinst_年周，例如今天是2023年9月，则是第39周，那么appinst表名为：appinst_202339</p></blockquote> <p>根据雪花算法的生成原理，我们知道雪花算法的第二部分是毫秒时间戳。通过这个时间戳我们可以知道对应数据存储到哪一张表里。</p> <img src="/assets/img/12 snowflake算法.9f0d9656.png" alt="img" style="zoom:50%;"> <p>这种根据每周来对表明进行划分，需要对下一周的表提前创建。</p> <p>例如下面的分表方式：</p> <div class="language- extra-class"><pre class="language-text"><code>mysql&gt; show tables;
++-------------+
+| Tables_in_test|
++-----------+
+| tb_202013 |
+| tb_202014 |
+| tb_202015 |
+| tb_202016 |
+| tb_202017 |
+| tb_202018 |
+| tb_202019 |
+| tb_202020 |
+| tb_202021 |
+| tb_202022 |
+| tb_202023 |
+| tb_202024 |
+| tb_202025 |
+| tb_202026 |
+| tb_202027 |
+| tb_202028 |
+| tb_202029 |
+| tb_202030 |
++-----------+
+</code></pre></div><p>然后再按照表中某个字段，如手机号、用户id去hash分区：</p> <div class="language- extra-class"><pre class="language-text"><code>CREATE TABLE `tb_202013` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) DEFAULT NULL,
+  `telephone` int(10) NOT NULL DEFAULT '0'
+  //...
+) ENGINE=InnoDB AUTO_INCREMENT=202013278841900 DEFAULT CHARSET=utf8
+/*!50100 PARTITION BY HASH (telephone)
+PARTITIONS 4 */ |
+</code></pre></div><h3 id="第三层-分区-按用户名做hash分区"><a href="#第三层-分区-按用户名做hash分区" class="header-anchor">#</a> 第三层：分区（按用户名做hash分区）</h3> <p>MySQL的分区是一种将数据分散到多个独立的物理分区的数据库设计方案。分区表现得就像一个普通的MySQL表，但实际上，它是由多个子表（分区）组成的，每个分区包含表的一部分数据。分区可以基于多种方式，比如按照范围、列表、哈希或键进行。</p> <p>分区能提高查询和写入效率的原因主要有以下几点：</p> <ol><li>分区剪枝（Partition Pruning）：当执行查询时，MySQL能够确定只从一个或少数几个分区中检索数据，而不是全表扫描。这大大减少了查询所需检查的数据量，从而提高查询速度。</li> <li>并行执行：在某些情况下，如果查询涉及多个分区，MySQL可以并行地从每个分区检索数据，从而提高查询速度。</li> <li>数据管理：通过分区，可以更容易地管理数据。例如，可以通过删除一个分区来快速地删除大量数据，这比删除表中的行要快得多。</li> <li>I/O吞吐量：如果分区位于不同的物理设备上，可以利用更多的硬件并行性来提高查询速度，因为I/O操作可以在多个设备上并行进行。</li> <li>写入效率：对于插入和更新操作，如果它们能够定位到特定的分区，那么这些操作只会锁定该分区，而不会影响到其他分区，从而提高并发性能。</li></ol> <p>所以，分区可以提高大型表的查询性能，简化大量数据的管理，并可能提高多用户并发性能。但是，分区并不总是适用，对于小型表或不符合分区策略的查询，分区可能不会带来性能提升，甚至可能导致性能下降。因此，是否使用分区需要根据具体情况来决定。</p> <p>例如，可以将用户表按照用户ID的hash值进行分区，将数据分布到不同的表空间中。</p> <p>示例，用户表：将用户表按照用户ID的hash值分为多个分区，如 user_partition_1, user_partition_2, user_partition_3...，每个分区存储一部分用户数据。</p> <p>MySQL支持以下几种分区方式：</p> <h4 id="range分区"><a href="#range分区" class="header-anchor">#</a> RANGE分区</h4> <p>基于给定列的连续范围值进行分区。例如，按日期范围分区。</p> <p>创建RANGE分区的示例：</p> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> orders <span class="token punctuation">(</span>
+  order_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+  user_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+  order_date <span class="token keyword">DATE</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span><span class="token keyword">YEAR</span><span class="token punctuation">(</span>order_date<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+  <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2010</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2020</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN MAXVALUE
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>这个示例中，orders表按照order_date的年份进行RANGE分区，分为4个分区。分区p0包含2000年以前的数据，分区p1包含2000-2009年的数据，分区p2包含2010-2019年的数据，分区p3包含2020年及以后的数据。</p> <p>使用EXPLAIN分析查询：</p> <div class="language-sql extra-class"><pre class="language-sql"><code>mysql<span class="token operator">&gt;</span> <span class="token keyword">EXPLAIN</span> <span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> orders <span class="token keyword">WHERE</span> order_date <span class="token operator">&gt;=</span> <span class="token string">'2010-01-01'</span> <span class="token operator">AND</span> order_date <span class="token operator">&lt;=</span> <span class="token string">'2019-12-31'</span><span class="token punctuation">;</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+--------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token operator">|</span> id <span class="token operator">|</span> select_type <span class="token operator">|</span> <span class="token keyword">table</span>  <span class="token operator">|</span> partitions <span class="token operator">|</span> <span class="token keyword">type</span> <span class="token operator">|</span> possible_keys <span class="token operator">|</span> <span class="token keyword">key</span>  <span class="token operator">|</span> key_len <span class="token operator">|</span> ref  <span class="token operator">|</span> <span class="token keyword">rows</span> <span class="token operator">|</span> filtered <span class="token operator">|</span> Extra       <span class="token operator">|</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+--------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token operator">|</span>  <span class="token number">1</span> <span class="token operator">|</span> <span class="token keyword">SIMPLE</span>      <span class="token operator">|</span> orders <span class="token operator">|</span> p2         <span class="token operator">|</span> <span class="token keyword">ALL</span>  <span class="token operator">|</span> <span class="token boolean">NULL</span>          <span class="token operator">|</span> <span class="token boolean">NULL</span> <span class="token operator">|</span> <span class="token boolean">NULL</span>    <span class="token operator">|</span> <span class="token boolean">NULL</span> <span class="token operator">|</span>    <span class="token number">1</span> <span class="token operator">|</span>   <span class="token number">100.00</span> <span class="token operator">|</span> <span class="token keyword">Using</span> <span class="token keyword">where</span> <span class="token operator">|</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+--------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token number">1</span> <span class="token keyword">row</span> <span class="token operator">in</span> <span class="token keyword">set</span><span class="token punctuation">,</span> <span class="token number">1</span> warning <span class="token punctuation">(</span><span class="token number">0.01</span> sec<span class="token punctuation">)</span>
+</code></pre></div><p>在查询结果中，可以看到MySQL只会扫描分区p2，因为它知道这个时间范围的数据只存在于这个分区中。这就是分区剪枝，它可以提高查询性能。</p> <h4 id="list分区"><a href="#list分区" class="header-anchor">#</a> LIST分区</h4> <p>基于给定列的离散值列表进行分区。例如，按国家/地区代码分区。</p> <p>创建LIST分区的示例：</p> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> users <span class="token punctuation">(</span>
+  user_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+  user_name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  country_code <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  country_id <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span>country_id<span class="token punctuation">)</span> <span class="token punctuation">(</span>
+  <span class="token keyword">PARTITION</span> p_us <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token keyword">PARTITION</span> p_uk <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token keyword">PARTITION</span> p_other <span class="token keyword">VALUES</span> LESS THAN MAXVALUE
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>在这个示例中，我们为每个国家/地区分配了一个整数ID（例如，'US'为1，'UK'为2，'OTHER'为3）。然后我们根据country_id进行RANGE分区。</p> <p>使用EXPLAIN分析查询：</p> <div class="language-sql extra-class"><pre class="language-sql"><code>mysql<span class="token operator">&gt;</span> <span class="token keyword">EXPLAIN</span> <span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> country_id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token operator">|</span> id <span class="token operator">|</span> select_type <span class="token operator">|</span> <span class="token keyword">table</span> <span class="token operator">|</span> partitions <span class="token operator">|</span> <span class="token keyword">type</span> <span class="token operator">|</span> possible_keys <span class="token operator">|</span> <span class="token keyword">key</span>  <span class="token operator">|</span> key_len <span class="token operator">|</span> ref  <span class="token operator">|</span> <span class="token keyword">rows</span> <span class="token operator">|</span> filtered <span class="token operator">|</span> Extra       <span class="token operator">|</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token operator">|</span>  <span class="token number">1</span> <span class="token operator">|</span> <span class="token keyword">SIMPLE</span>      <span class="token operator">|</span> users <span class="token operator">|</span> p_us       <span class="token operator">|</span> <span class="token keyword">ALL</span>  <span class="token operator">|</span> <span class="token boolean">NULL</span>          <span class="token operator">|</span> <span class="token boolean">NULL</span> <span class="token operator">|</span> <span class="token boolean">NULL</span>    <span class="token operator">|</span> <span class="token boolean">NULL</span> <span class="token operator">|</span>    <span class="token number">1</span> <span class="token operator">|</span>   <span class="token number">100.00</span> <span class="token operator">|</span> <span class="token keyword">Using</span> <span class="token keyword">where</span> <span class="token operator">|</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token number">1</span> <span class="token keyword">row</span> <span class="token operator">in</span> <span class="token keyword">set</span><span class="token punctuation">,</span> <span class="token number">1</span> warning <span class="token punctuation">(</span><span class="token number">0.01</span> sec<span class="token punctuation">)</span>
+</code></pre></div><p>在查询结果中，可以看到MySQL只会扫描分区p_us，因为它知道美国用户的数据只存在于这个分区中。</p> <h4 id="hash分区"><a href="#hash分区" class="header-anchor">#</a> HASH分区</h4> <p>基于给定列的哈希值进行分区。这种分区方式可以实现均匀的数据分布。</p> <p>创建HASH分区的示例：</p> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> products <span class="token punctuation">(</span>
+  product_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+  product_name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  price <span class="token keyword">DECIMAL</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">HASH</span> <span class="token punctuation">(</span>product_id<span class="token punctuation">)</span>
+PARTITIONS <span class="token number">4</span><span class="token punctuation">;</span>
+</code></pre></div><p>这个示例中，products表按照product_id的哈希值进行分区，分为4个分区。数据将根据product_id的哈希值均匀分布在这4个分区中。</p> <p>使用EXPLAIN分析查询：</p> <div class="language-sql extra-class"><pre class="language-sql"><code>mysql<span class="token operator">&gt;</span> <span class="token keyword">EXPLAIN</span> <span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> products <span class="token keyword">WHERE</span> product_id <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token operator">|</span> id <span class="token operator">|</span> select_type <span class="token operator">|</span> <span class="token keyword">table</span>    <span class="token operator">|</span> partitions <span class="token operator">|</span> <span class="token keyword">type</span> <span class="token operator">|</span> possible_keys <span class="token operator">|</span> <span class="token keyword">key</span>  <span class="token operator">|</span> key_len <span class="token operator">|</span> ref  <span class="token operator">|</span> <span class="token keyword">rows</span> <span class="token operator">|</span> filtered <span class="token operator">|</span> Extra       <span class="token operator">|</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token operator">|</span>  <span class="token number">1</span> <span class="token operator">|</span> <span class="token keyword">SIMPLE</span>      <span class="token operator">|</span> products <span class="token operator">|</span> p0         <span class="token operator">|</span> <span class="token keyword">ALL</span>  <span class="token operator">|</span> <span class="token boolean">NULL</span>          <span class="token operator">|</span> <span class="token boolean">NULL</span> <span class="token operator">|</span> <span class="token boolean">NULL</span>    <span class="token operator">|</span> <span class="token boolean">NULL</span> <span class="token operator">|</span>    <span class="token number">1</span> <span class="token operator">|</span>   <span class="token number">100.00</span> <span class="token operator">|</span> <span class="token keyword">Using</span> <span class="token keyword">where</span> <span class="token operator">|</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token number">1</span> <span class="token keyword">row</span> <span class="token operator">in</span> <span class="token keyword">set</span><span class="token punctuation">,</span> <span class="token number">1</span> warning <span class="token punctuation">(</span><span class="token number">0.00</span> sec<span class="token punctuation">)</span>
+</code></pre></div><p>在查询结果中，可以看到MySQL会根据product_id的哈希值定位到一个特定的分区p0，然后只扫描这个分区。</p> <h4 id="key分区"><a href="#key分区" class="header-anchor">#</a> KEY分区</h4> <p>类似于HASH分区，但是使用MySQL的内置哈希函数进行分区。当分区键是字符串时，这种分区方式比HASH分区更高效。</p> <p>创建KEY分区的示例：</p> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> sessions <span class="token punctuation">(</span>
+  session_id <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  user_id <span class="token keyword">INT</span><span class="token punctuation">,</span>
+  login_time <span class="token keyword">DATETIME</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>session_id<span class="token punctuation">)</span>
+PARTITIONS <span class="token number">4</span><span class="token punctuation">;</span>
+</code></pre></div><p>这个示例中，sessions表按照session_id的哈希值进行分区，分为4个分区。数据将根据session_id的哈希值均匀分布在这4个分区中。</p> <p>使用EXPLAIN分析查询：</p> <div class="language-sql extra-class"><pre class="language-sql"><code>mysql<span class="token operator">&gt;</span> <span class="token keyword">EXPLAIN</span> <span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> sessions <span class="token keyword">WHERE</span> session_id <span class="token operator">=</span> <span class="token string">'abcdef1234567890abcdef1234567890'</span><span class="token punctuation">;</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token operator">|</span> id <span class="token operator">|</span> select_type <span class="token operator">|</span> <span class="token keyword">table</span>    <span class="token operator">|</span> partitions <span class="token operator">|</span> <span class="token keyword">type</span> <span class="token operator">|</span> possible_keys <span class="token operator">|</span> <span class="token keyword">key</span>  <span class="token operator">|</span> key_len <span class="token operator">|</span> ref  <span class="token operator">|</span> <span class="token keyword">rows</span> <span class="token operator">|</span> filtered <span class="token operator">|</span> Extra       <span class="token operator">|</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token operator">|</span>  <span class="token number">1</span> <span class="token operator">|</span> <span class="token keyword">SIMPLE</span>      <span class="token operator">|</span> sessions <span class="token operator">|</span> p0         <span class="token operator">|</span> <span class="token keyword">ALL</span>  <span class="token operator">|</span> <span class="token boolean">NULL</span>          <span class="token operator">|</span> <span class="token boolean">NULL</span> <span class="token operator">|</span> <span class="token boolean">NULL</span>    <span class="token operator">|</span> <span class="token boolean">NULL</span> <span class="token operator">|</span>    <span class="token number">1</span> <span class="token operator">|</span>   <span class="token number">100.00</span> <span class="token operator">|</span> <span class="token keyword">Using</span> <span class="token keyword">where</span> <span class="token operator">|</span>
+<span class="token operator">+</span><span class="token comment">----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="token number">1</span> <span class="token keyword">row</span> <span class="token operator">in</span> <span class="token keyword">set</span><span class="token punctuation">,</span> <span class="token number">1</span> warning <span class="token punctuation">(</span><span class="token number">0.01</span> sec<span class="token punctuation">)</span>
+</code></pre></div><p>在查询结果中，可以看到MySQL会根据session_id的哈希值定位到分区p0，然后只扫描这个分区。</p> <p>综上，可以根据实际业务需求和数据量进行分库、分表、分区的设计。同时，还需要注意以下几点：</p> <ol><li>在进行数据库架构优化时，需要考虑数据迁移和同步的问题，确保数据的一致性和完整性。</li> <li>在应用层，需要实现相应的路由策略，将请求分发到正确的数据库、表和分区中。</li> <li>需要定期对数据库进行监控和维护，以确保系统的稳定性和性能。</li></ol> <h2 id="八、上线后监控优化"><a href="#八、上线后监控优化" class="header-anchor">#</a> 八、上线后监控优化</h2> <p>MySQL数据库上线后，可以等其稳定运行一段时间后再根据服务器的status装填进行适当优化，可以用如下命令列出MySQL服务器运行的各种状态值。</p> <div class="language- extra-class"><pre class="language-text"><code># 查询所有状态值
+show global status;
+# 查询具体某个状态值
+show status like '%xx%';
+</code></pre></div><p><em><strong>从我实际的线上系统运维经验来看，CDB上线后的监控最最重要的还是监控慢查询日志，及时发现慢查询SQL并优化修复，可以解决很多问题。大部分时候，我们碰到的CDB高负载，很多是因为慢查询语句堆积导致的。</strong></em></p> <p>如果使用的是云厂商的CDB产品，可以直接使用他们的慢查询日志查询功能：</p> <img src="/assets/img/11.3.1 qcloud-mysql-slow-sql.42045910.png" alt="image-20240930172141978" style="zoom:80%;"> <p>现在很多云厂商的CDB在这方面的监控已经做得非常好了，下面是某个云厂商CDB的监控，但是如果自建CDB的话就需要自己去关注各种指标。</p> <img src="/assets/img/11.3.1 qcloud-mysql-monitor.f992ab1c.png" alt="image-20240930171813511" style="zoom:80%;"> <h3 id="_1、慢查询"><a href="#_1、慢查询" class="header-anchor">#</a> 1、慢查询</h3> <p>为了定位系统中效率比较低下的查询语句，需要通过慢查询日志来定位：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show variables like '%slow%';
++---------------------------+---------------------------------------------+
+| Variable_name             | Value                                       |
++---------------------------+---------------------------------------------+
+| log_slow_admin_statements | OFF                                         |
+| log_slow_slave_statements | OFF                                         |
+| slow_launch_time          | 2                                           |
+| slow_query_log            | ON                                          |
+| slow_query_log_file       | /data1/mysql_root/data/20144/slow_query.log |
++---------------------------+---------------------------------------------+
+</code></pre></div><div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like '%slow%';
++---------------------+-------+
+| Variable_name       | Value |
++---------------------+-------+
+| Slow_launch_threads | 0     |
+| Slow_queries        | 18014 |
++---------------------+-------+
+</code></pre></div><p>一个好的性能分析工具，能很好地提高数据库性能的管理效率，而pt-query-diget就是专门针对MySQL数据库慢查询的一个分析工具，相比于官方的mysqldumpslow，这个工具分析结果更加具体完善。</p> <h4 id="_1-pt-query-digest工具安装"><a href="#_1-pt-query-digest工具安装" class="header-anchor">#</a> （1）pt-query-digest工具安装</h4> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 安装最新的 percona release package</span>
+yum <span class="token parameter variable">-y</span> <span class="token function">install</span> https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+
+<span class="token comment"># 安装 percona toolkit</span>
+yum <span class="token parameter variable">-y</span> <span class="token function">install</span> percona-toolkit
+
+<span class="token comment"># 验证 pt-queyr-digest 是否可以使用</span>
+pt-query-digest <span class="token parameter variable">--help</span>
+</code></pre></div><h4 id="_2-慢查询日志分析"><a href="#_2-慢查询日志分析" class="header-anchor">#</a> （2）慢查询日志分析</h4> <p>首先获取MySQL服务器上慢查询日志的路径：</p> <div class="language- extra-class"><pre class="language-text"><code>mysql&gt; show variables like '%slow_query_log%';
++---------------------+----------------------+
+| Variable_name       | Value                |
++---------------------+----------------------+
+| slow_query_log      | ON                   |
+| slow_query_log_file | /data/mysql/slow.log |
++---------------------+----------------------+
+</code></pre></div><p>然後通過pt-query-digest工具分析下，看看是否有什么问题：</p> <div class="language- extra-class"><pre class="language-text"><code> pt-query-digest --report /data/mysql/slow.log  /data/mysql/report.log 
+</code></pre></div><p>分析报告分为三部分：</p> <h5 id="第一部分-总体统计结果"><a href="#第一部分-总体统计结果" class="header-anchor">#</a> 第一部分：总体统计结果</h5> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># 700ms user time, 20ms system time, 27.61M rss, 214.82M vsz</span>
+<span class="token comment"># Current date: Mon Jun 10 09:13:13 2019</span>
+<span class="token comment"># Hostname: VM_16_17_centos</span>
+<span class="token comment"># Files: /data/mysql/slow.log</span>
+<span class="token comment"># Overall: 3.24k total, 12 unique, 0.01 QPS, 0.01x concurrency ___________</span>
+<span class="token comment"># Time range: 2019-06-03 13:18:15 to 2019-06-08 17:25:52</span>
+<span class="token comment"># Attribute          total     min     max     avg     95%  stddev  median</span>
+<span class="token comment"># ============     ======= ======= ======= ======= ======= ======= =======</span>
+<span class="token comment"># Exec time          4296s      1s    194s      1s      2s      5s      1s</span>
+<span class="token comment"># Lock time          244ms       0     3ms    75us   103us    72us    66us</span>
+<span class="token comment"># Rows sent          3.13k       0      10    0.99    0.99    0.22    0.99</span>
+<span class="token comment"># Rows examine       4.14G       0   1.38M   1.31M   1.32M 228.71k   1.32M</span>
+<span class="token comment"># Query size       781.01k      15     425  247.14  246.02   27.68  246.02</span>
+</code></pre></div><p>参数说明：</p> <ul><li>Overall: 总共有多少条查询，上例为总共3.24k个查询。</li> <li>Time range: 查询执行的时间范围。</li> <li>unique: 唯一查询数量，即对查询条件进行参数化以后，总共有多少个不同的查询，该例为12。</li> <li>total: 总计 min:最小 max: 最大 avg:平均</li> <li>95%: 把所有值从小到大排列，位置位于95%的那个数，这个数一般最具有参考价值。</li> <li>median: 中位数，把所有值从小到大排列，位置位于中间那个数。</li></ul> <h5 id="第二部分-查询分组统计结果"><a href="#第二部分-查询分组统计结果" class="header-anchor">#</a> 第二部分: 查询分组统计结果:</h5> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># Profile</span>
+<span class="token comment"># Rank Query ID                     Response time   Calls R/Call   V/M   I</span>
+<span class="token comment"># ==== ============================ =============== ===== ======== ===== =</span>
+<span class="token comment">#    1 0x523892349F733C254576AB7... 3731.1533 86.8%  3140   1.1883  0.08 SELECT t_xxx_result_? t_xxx_plugin_?</span>
+<span class="token comment">#    2 0xA72A99A2AD696A84F9CCD57...  360.7725  8.4%     2 180.3862  2.08 DELETE t_xxx_result_?</span>
+<span class="token comment">#    4 0x40485EE0C3F3C643A5035DC...   62.4520  1.5%    34   1.8368  0.56 SELECT</span>
+<span class="token comment">#    5 0x266AA5D17D7ACC44DEC38DA...   53.5156  1.2%    40   1.3379  0.02 REPLACE t_xxx_result_?</span>
+<span class="token comment"># MISC 0xMISC                         88.5263  2.1%    20   4.4263   0.0 &lt;8 ITEMS&gt;</span>
+</code></pre></div><p>这部分对查询进行参数化并分组，然后对各类查询的执行情况进行分析，结果按总执行时长，从大到小排序。</p> <p>参数说明：</p> <ul><li>Response: 总的响应时间。</li> <li>time: 该查询在本次分析中总的时间占比。</li> <li>calls: 执行次数，即本次分析总共有多少条这种类型的查询语句。</li> <li>R/Call: 平均每次执行的响应时间。</li> <li>Item : 查询对象</li></ul> <h5 id="第三部分-每一种查询的详细统计结果"><a href="#第三部分-每一种查询的详细统计结果" class="header-anchor">#</a> 第三部分：每一种查询的详细统计结果:</h5> <p>这里我们以第一个查询为例:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># Query 1: 0.06 QPS, 0.07x concurrency, ID 0x523892349F733C254576AB7240430D5A at byte 204852</span>
+<span class="token comment"># This item is included in the report because it matches --limit.</span>
+<span class="token comment"># Scores: V/M = 0.08</span>
+<span class="token comment"># Time range: 2019-06-04 19:44:09 to 2019-06-05 10:20:42</span>
+<span class="token comment"># Attribute    pct   total     min     max     avg     95%  stddev  median</span>
+<span class="token comment"># ============ === ======= ======= ======= ======= ======= ======= =======</span>
+<span class="token comment"># Count         97    3140</span>
+<span class="token comment"># Exec time     86   3731s      1s      3s      1s      2s   314ms      1s</span>
+<span class="token comment"># Lock time     97   237ms    48us     2ms    75us   103us    53us    66us</span>
+<span class="token comment"># Rows sent     98   3.07k       1       1       1       1       0       1</span>
+<span class="token comment"># Rows examine  99   4.13G 677.82k   1.38M   1.35M   1.32M  72.24k   1.32M</span>
+<span class="token comment"># Query size    97 760.47k     248     248     248     248       0     248</span>
+<span class="token comment"># String:</span>
+<span class="token comment"># Databases    vul_xxx</span>
+<span class="token comment"># Hosts        localhost</span>
+<span class="token comment"># Users        scan</span>
+<span class="token comment"># Query_time distribution</span>
+<span class="token comment">#   1us</span>
+<span class="token comment">#  10us</span>
+<span class="token comment"># 100us</span>
+<span class="token comment">#   1ms</span>
+<span class="token comment">#  10ms</span>
+<span class="token comment"># 100ms</span>
+<span class="token comment">#    1s  ################################################################</span>
+<span class="token comment">#  10s+</span>
+<span class="token comment"># Tables</span>
+<span class="token comment">#    SHOW TABLE STATUS FROM `vul_xxx` LIKE 't_xxx_result_0'\G</span>
+<span class="token comment">#    SHOW CREATE TABLE `vul_xxx`.`t_xxx_result_0`\G</span>
+<span class="token comment">#    SHOW TABLE STATUS FROM `vul_xxx` LIKE 't_xxx_plugin_xxx'\G</span>
+<span class="token comment">#    SHOW CREATE TABLE `vul_xxx`.`t_xxx_plugin_xxx`\G</span>
+<span class="token comment"># EXPLAIN /*!50100 PARTITIONS*/</span>
+SELECT count<span class="token punctuation">(</span>distinct resultId<span class="token punctuation">)</span> as cnt, p.level
+FROM <span class="token variable"><span class="token variable">`</span>t_xxx_result_0<span class="token variable">`</span></span> as <span class="token variable"><span class="token variable">`</span>result<span class="token variable">`</span></span>
+JOIN <span class="token variable"><span class="token variable">`</span>t_xxx_plugin_xxx<span class="token variable">`</span></span> as <span class="token variable"><span class="token variable">`</span>p<span class="token variable">`</span></span> ON <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span>result<span class="token variable">`</span></span><span class="token builtin class-name">.</span><span class="token variable"><span class="token variable">`</span>pId<span class="token variable">`</span></span><span class="token operator">=</span>p.pId<span class="token punctuation">)</span>
+WHERE <span class="token variable"><span class="token variable">`</span>tId<span class="token variable">`</span></span> <span class="token operator">=</span> <span class="token string">'100011'</span>
+GROUP BY <span class="token variable"><span class="token variable">`</span>level<span class="token variable">`</span></span>
+ORDER BY <span class="token variable"><span class="token variable">`</span>level<span class="token variable">`</span></span> DESC<span class="token punctuation">\</span>G
+</code></pre></div><p>我们通过explain来分析该sql语句：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; explain SELECT count(distinct resultId) as cnt, plugin.level FROM `t_xxx_result` as `result` JOIN `t_plugin` as `plugin` ON (`result`.`pId`=plugin.pId) WHERE `tId` = '1001' GROUP BY `level` ORDER BY `level` DESC\G
+*************************** 1. row ***************************
+           id: 1
+  select_type: SIMPLE
+        table: result
+         type: ref
+possible_keys: tId,pId
+          key: tId
+      key_len: 4
+          ref: const
+         rows: 1
+        Extra: Using temporary; Using filesort
+*************************** 2. row ***************************
+           id: 1
+  select_type: SIMPLE
+        table: plugin
+         type: eq_ref
+possible_keys: PRIMARY,level
+          key: PRIMARY
+      key_len: 4
+          ref: vul_xxx.result.pId
+         rows: 1
+        Extra: NULL
+2 rows in set (0.00 sec)
+</code></pre></div><p>可见，这里使用了文件排序，导致了查询速度变慢。</p> <p>通过pt-query-digest定位到具体的问题sql语句，然后通过explain具体分析sql语句并优化。</p> <h3 id="_2、连接数"><a href="#_2、连接数" class="header-anchor">#</a> 2、连接数</h3> <p>如果经常遇到MySQL：ERROR 1040：Too many connections的情况，一般有两种可能：</p> <ul><li>访问量确实很高，MySQL服务器扛不住，这个时候需要考虑增加从服务器分散读压力</li> <li>MySQL配置文件中max_connections的值过小，达到了max_connections限制。此时，它就会开始拒绝新连接，同时Connection_errors_max_connections指标会开始增加，追踪所有失败连接尝试的Aborted_connects指标也会开始增加。</li></ul> <p>（1）查询MySQL服务器的最大连接数</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show variables like 'max_connections';
++-----------------+-------+
+| Variable_name   | Value |
++-----------------+-------+
+| max_connections | 1000  |
++-----------------+-------+
+</code></pre></div><div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like '%errors_max_connections%';
++-----------------------------------+-------+
+| Variable_name                     | Value |
++-----------------------------------+-------+
+| Connection_errors_max_connections | 0     |
++-----------------------------------+-------+
+
+mysql&gt; show global status like '%Aborted_connects%';
++------------------+-------+
+| Variable_name    | Value |
++------------------+-------+
+| Aborted_connects | 216   |
++------------------+-------+
+</code></pre></div><p>（2）查询MySQL服务器历史的最大连接数</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'max_used_connections';
++----------------------+-------+
+| Variable_name        | Value |
++----------------------+-------+
+| Max_used_connections | 3     |
++----------------------+-------+
+</code></pre></div><p>由于MySQL历史最大的连接数只有3，没有达到MySQL服务器最大连接数上限1000，所以不会出现1040错误。</p> <h3 id="_3、缓存使用情况"><a href="#_3、缓存使用情况" class="header-anchor">#</a> 3、缓存使用情况</h3> <p>key_buffer_size是设置MyISAM表索引缓存空间的大小，此参数对MyISAM表性能影响最大。下面是一台MyISAM为主要存储引擎服务器的配置：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show variables like 'key_buffer_size';
++-----------------+-----------+
+| Variable_name   | Value   |
++-----------------+-----------+
+| key_buffer_size | 536870912 |
++-----------------+-----------+
+</code></pre></div><p>从上面知道，分配了512MB内存给key_buffer_size。再来看看key_buffer_size的使用情况：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'key_read%';
++-------------------+--------------+
+| Variable_name     | Value |
++-------------------+-------+
+| Key_read_requests | 27813678766 |
+| Key_reads          |  6798830      |
++-------------------+--------------+
+</code></pre></div><p>一共有27813678766个索引读取请求，有6798830个请求在内存中没有找到，直接从硬盘读取索引。</p> <div class="language- extra-class"><pre class="language-text"><code>key_cache_miss_rate = key_reads /key_read_requests * 100%
+</code></pre></div><p>比如上面的数据，key_cache_miss_rate为0.0244%，效果非常好，key_cache_miss_rate在0.1%以下都很好，如果key_cache_miss_rate在0.01%以下的话，说明key_cache_miss_rate分配得过多，可以适当减少。</p> <h3 id="_4、临时表"><a href="#_4、临时表" class="header-anchor">#</a> 4、临时表</h3> <p>每次创建临时表，Created_tmp_tables都会增加，如果在磁盘上创建临时表，Created_tmp_disk_tables也会增加，Created_tmp_files表示MySQL服务创建临时文件数。</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'created_tmp%';
++-------------------------+-------+
+| Variable_name           | Value |
++-------------------------+-------+
+| Created_tmp_disk_tables | 0     |
+| Created_tmp_files       | 5     |
+| Created_tmp_tables      | 502   |
++-------------------------+-------+
+</code></pre></div><p><strong>理想的配置如下</strong>：</p> <div class="language- extra-class"><pre class="language-text"><code>Created_tmp_disk_tables/ Created_tmp_files * 100% &lt;= 25%
+</code></pre></div><p>查看MySQL服务器对临时表的配置：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show variables where Variable_name in ('tmp_table_size','max_heap_table_size');
++---------------------+----------+
+| Variable_name       | Value    |
++---------------------+----------+
+| max_heap_table_size | 16777216 |
+| tmp_table_size      | 16777216 |
++---------------------+----------+
+</code></pre></div><h3 id="_5、线程使用情况"><a href="#_5、线程使用情况" class="header-anchor">#</a> 5、线程使用情况</h3> <p>如果在MySQL服务器的配置中设置了thread_cache_size，当客户端断开时，服务器处理此客户请求的线程将会缓存起来以响应下一个客户而不是销毁（前提是缓存数未达到上线）。即可以重新利用保存在缓存中线程的数量，当断开连接时如果缓存中还有空间，那么客户端的线程将被放到缓存中，如果线程重新被请求，那么请求将从缓存中读取，如果缓存中是空的或者是新的请求，那么这个线程将被重新创建，如果有很多新的线程，增加这个值可以改善系统性能。查看命令如下：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show variables like 'thread_cache_size';
++-------------------+-------+
+| Variable_name     | Value |
++-------------------+-------+
+| thread_cache_size | 512   |
++-------------------+-------+
+</code></pre></div><p>查看当前MySQL服务器的线程使用情况：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'thread%';
++-------------------------+-------+
+| Variable_name           | Value |
++-------------------------+-------+
+| Threadpool_idle_threads | 0     |
+| Threadpool_threads      | 0     |
+| Threads_cached          | 381   |
+| Threads_connected       | 5     |
+| Threads_created         | 386   |
+| Threads_running         | 2     |
++-------------------------+-------+
+
+mysql&gt; show global status like 'Connection_errors_internal';
++----------------------------+-------+
+| Variable_name              | Value |
++----------------------------+-------+
+| Connection_errors_internal | 0     |
++----------------------------+-------+
+1 row in set (0.00 sec)
+
+mysql&gt; show global status like 'Aborted_connects';
++------------------+---------+
+| Variable_name    | Value   |
++------------------+---------+
+| Aborted_connects | 1044566 |
++------------------+---------+
+1 row in set (0.00 sec)
+
+mysql&gt; show global status like 'Connection_error_max_connections';
+Empty set (0.00 sec)
+</code></pre></div><p>说明：</p> <ul><li>Threads_cached：代表当前此时此刻线程缓存中有多少<strong>空闲线程</strong></li> <li>Threads_connected：代表当前<strong>已建立连接的线程数量</strong>，每个连接对应一个线程。当所有可用连接都被占用时，如果一个客户端试图连接至MySQL，后者会返回&quot;Too many connections&quot;的错误，同时将Connection_errors_max_connections的值增加</li> <li>Threads_created：代表从最近一次服务启动，已创建线程的数量</li> <li>Threads_running：当前运行的连接</li> <li>Connection_errors_internal：由于服务器内部本身导致的错误</li> <li>Aborted_connects：尝试与服务器建立连接但是失败的次数</li></ul> <h3 id="_6、缓冲池利用情况"><a href="#_6、缓冲池利用情况" class="header-anchor">#</a> 6、缓冲池利用情况</h3> <img src="/assets/img/11.3.1-InnoDB存储引擎内存结构2.0128bfef.jpg" alt="InnoDB存储引擎内存结构" style="zoom:60%;"> <p>InnoDB在内存中使用一片区域作为缓冲区，用来缓存数据表、索引等数据（如上表），缓冲区太小，会导致数据库性能下降，致使磁盘IO增加。</p> <p>我们知道，内存的读取速度比磁盘读取速度要快很多，当Innodb_buffer_pool_reads的值开始增加，就意味着数据库性能有可能出现问题。</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'Innodb_buffer_pool_read%';
++---------------------------------------+---------------+
+| Variable_name                         | Value         |
++---------------------------------------+---------------+
+| Innodb_buffer_pool_read_ahead_rnd     | 0             |
+| Innodb_buffer_pool_read_ahead         | 60272         |
+| Innodb_buffer_pool_read_ahead_evicted | 0             |
+| Innodb_buffer_pool_read_requests      | 3959122635741 |
+| Innodb_buffer_pool_reads              | 30673         |
++---------------------------------------+---------------+
+</code></pre></div><p>说明：</p> <ul><li>Innodb_buffer_pool_read_requests：总共从缓冲池中缓存的页面中读取出的页数</li> <li>Innodb_buffer_pool_reads：从磁盘上一页一页的读取的页数，从缓冲池中读取页面， 若缓冲池里面没， 就会从磁盘读取</li></ul> <p>缓冲池利用率是在考虑扩大缓冲池之前应该检查的重要指标，可以通过如下方式计算得到：</p> <div class="language- extra-class"><pre class="language-text"><code>(Innodb_buffer_pool_pages_total - Innodb_buffer_pool_pages_free) / 
+ Innodb_buffer_pool_pages_total
+</code></pre></div><p>另一个重要的指标，缓冲池的命中率计算方法：</p> <div class="language- extra-class"><pre class="language-text"><code>(Innodb_buffer_pool_read_requests - Innodb_buffer_pool_reads) /
+Innodb_buffer_pool_read_requests * 100%
+</code></pre></div><div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like '%buffer_pool_pages%';
++----------------------------------+-------------+
+| Variable_name                    | Value       |
++----------------------------------+-------------+
+| Innodb_buffer_pool_pages_data    | 852799      |
+| Innodb_buffer_pool_pages_dirty   | 31          |
+| Innodb_buffer_pool_pages_flushed | 30796616008 |
+| Innodb_buffer_pool_pages_free    | 9544        |
+| Innodb_buffer_pool_pages_misc    | 52537       |
+| Innodb_buffer_pool_pages_total   | 914880      |
++----------------------------------+-------------+
+</code></pre></div><p>缓冲池转化为字节大小的计算公式：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>Innodb_buffer_pool_pages_total * innodb_page_size
+# 上面的配置对应的缓冲池大小为：
+# 16KB * 914880 / 1024 / 1024 = 14.295GB
+</code></pre></div><p>innodb_page_size页面大小是可调整的，默认是16384字节，即16KB，可以通过如下命令查看：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show variables like 'innodb_page_size';
++------------------+-------+
+| Variable_name    | Value |
++------------------+-------+
+| innodb_page_size | 16384 |
++------------------+-------+
+</code></pre></div><p>也可以通过innodb_buffer_pool_size直接获取缓冲池大小：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show variables like '%innodb_buffer_pool_size%';
++-------------------------+-------------+
+| Variable_name           | Value       |
++-------------------------+-------------+
+| innodb_buffer_pool_size | 14989393920 |
++-------------------------+-------------+
+</code></pre></div><h3 id="_7、磁盘排序"><a href="#_7、磁盘排序" class="header-anchor">#</a> 7、磁盘排序</h3> <p>监控磁盘是否出现磁盘排序命令：</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'sort_merge_passes';
++-------------------+---------+
+| Variable_name     | Value   |
++-------------------+---------+
+| Sort_merge_passes | 2169684 |
++-------------------+---------+
+1 row in set (0.00 sec)
+</code></pre></div><p>sort_merge_passes：必须要做归并排序的次数</p> <h3 id="_8、查看网络传输量"><a href="#_8、查看网络传输量" class="header-anchor">#</a> 8、查看网络传输量</h3> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'bytes_received';
++----------------+---------------+
+| Variable_name  | Value         |
++----------------+---------------+
+| Bytes_received | 2604213103777 |
++----------------+---------------+
+1 row in set (0.00 sec)
+
+mysql&gt; show global status like 'bytes_sent';
++---------------+---------------+
+| Variable_name | Value         |
++---------------+---------------+
+| Bytes_sent    | 7074371933580 |
++---------------+---------------+
+1 row in set (0.00 sec)
+</code></pre></div><h3 id="_9、吞吐量"><a href="#_9、吞吐量" class="header-anchor">#</a> 9、吞吐量</h3> <p>MySQL中有各种不同的统计指标，其监控指标多以Com_xxx的方式命名，比较常用的有QPS和TPS。</p> <p>MySQL与QPS相关的三个监控项，分别为Queries、Questions、Com_select，一般我们采用Com_select作为QPS的指标。同样，对于TPS，采用Com_insert + Com_update + Com_delete三个统计项之和作为指标。</p> <div class="language-mysql extra-class"><pre class="language-text"><code>mysql&gt; show global status like 'Com_select';
++---------------+------------+
+| Variable_name | Value      |
++---------------+------------+
+| Com_select    | 6552507251 |
++---------------+------------+
+1 row in set (0.00 sec)
+
+mysql&gt; show global status like 'Com_insert';
++---------------+------------+
+| Variable_name | Value      |
++---------------+------------+
+| Com_insert    | 1940243238 |
++---------------+------------+
+1 row in set (0.00 sec)
+
+mysql&gt; show global status like 'Com_update';
++---------------+------------+
+| Variable_name | Value      |
++---------------+------------+
+| Com_update    | 1493408493 |
++---------------+------------+
+1 row in set (0.00 sec)
+
+mysql&gt; show global status like 'Com_delete';
++---------------+---------+
+| Variable_name | Value   |
++---------------+---------+
+| Com_delete    | 1966462 |
++---------------+---------+
+1 row in set (0.00 sec)
+</code></pre></div><h3 id="_10、查看请求来源"><a href="#_10、查看请求来源" class="header-anchor">#</a> 10、查看请求来源</h3> <p>有时候数据库并发量过大，想要定位是那个ip频繁请求，可以使用如下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>mysql&gt; SELECT substring_index(host, ':',1) AS host_name,state,count(*) FROM information_schema.processlist GROUP BY state,host_name;
++---------------+------------------------------------------------------------------+----------+
+| host_name     | state                                                            | count(*) |
++---------------+------------------------------------------------------------------+----------+
+|               |                                                                  |        2 |
+| 10.5.xx.xx |                                                                  |        3 |
+| 10.5.9.x    | executing                                                        |        1 |
+|               | Master has sent all binlog to slave; waiting for binlog to be up |        1 |
+| 10.5.xx.xx | update                                                           |       62 |
++---------------+------------------------------------------------------------------+----------+
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/11.2-分布式系统基础.html" class="prev">
+        11.2 分布式系统基础
+      </a></span> <span class="next"><a href="/11.4-全局唯一ID生成器.html">
+        11.4 全局唯一ID生成器
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/12.49270403.js" defer></script>
+  </body>
+</html>

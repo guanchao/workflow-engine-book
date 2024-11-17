@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/27.a66d9ab9.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第三部份：流程引擎进阶</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/9-流程分析.html" class="sidebar-link">9 流程分析</a></li><li><a href="/10-云原生工作流.html" class="sidebar-link">10 云原生工作流</a></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>11 多引擎分布式系统实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/11.1-系统架构.html" class="sidebar-link">11.1 系统架构</a></li><li><a href="/11.2-分布式系统基础.html" class="sidebar-link">11.2 分布式系统基础</a></li><li><a href="/11.3-数据库架构与优化.html" class="sidebar-link">11.3 数据库架构与优化</a></li><li><a href="/11.4-全局唯一ID生成器.html" class="sidebar-link">11.4 全局唯一ID生成器</a></li><li><a href="/11.5-缓存技术.html" class="sidebar-link">11.5 缓存技术</a></li><li><a href="/11.6-异步化技术.html" class="sidebar-link">11.6 异步化技术</a></li><li><a href="/11.7-池化技术.html" class="active sidebar-link">11.7 池化技术</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#流程引擎中的应用" class="sidebar-link">流程引擎中的应用</a></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#线程池" class="sidebar-link">线程池</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#线程池原理" class="sidebar-link">线程池原理</a></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#ants介绍" class="sidebar-link">ants介绍</a></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#ants实现原理" class="sidebar-link">ants实现原理</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#连接池" class="sidebar-link">连接池</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#连接池原理" class="sidebar-link">连接池原理</a></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#database-sql介绍" class="sidebar-link">database/sql介绍</a></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#database-sql实现原理" class="sidebar-link">database/sql实现原理</a></li></ul></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#对象池" class="sidebar-link">对象池</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#对象池原理" class="sidebar-link">对象池原理</a></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#sync-pool介绍" class="sidebar-link">sync.Pool介绍</a></li><li class="sidebar-sub-header"><a href="/11.7-池化技术.html#sync-pool实现原理" class="sidebar-link">sync.Pool实现原理</a></li></ul></li></ul></li><li><a href="/11.8-分布式锁.html" class="sidebar-link">11.8 分布式锁</a></li><li><a href="/11.9-限流.html" class="sidebar-link">11.9 限流</a></li></ul></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>在软件开发中，池化技术主要用于管理和优化系统资源的使用，提高软件性能和响应速度。常见的池化技术包括线程池、连接池、对象池等。这些技术通过预先创建和复用资源，避免了频繁地创建和销毁资源，从而降低了系统开销。</p> <ol><li>线程池：线程池用于管理和调度多线程任务，通过预先创建一定数量的线程，将这些线程放入线程池中。当有新任务到来时，从线程池中分配一个线程来执行任务，任务完成后线程返回线程池，而不是被销毁。线程池可以避免频繁地创建和销毁线程，减少系统开销，提高性能。</li> <li>连接池：连接池用于管理和复用数据库连接。在软件中，频繁地建立和断开数据库连接会消耗大量的系统资源和时间。通过使用连接池，可以预先创建一定数量的数据库连接，并在需要时从连接池中获取连接。连接使用完毕后，将其归还到连接池而不是直接关闭。这样可以避免频繁地创建和销毁数据库连接，提高数据库访问效率。</li> <li>对象池：对象池用于管理对象的创建和销毁。对象的创建和销毁通常需要大量的系统资源，通过对象池可以复用已有的对象，避免频繁的创建和销毁操作，提高系统性能。对象池中的对象在创建后就会一直保存在内存中，直到程序结束才会被销毁。</li></ol> <p>池化技术在软件开发中有很多应用场景，如Web服务器、数据库系统、大型分布式系统等。通过使用池化技术，可以有效地提高软件性能，降低系统资源消耗，提高资源利用率。</p> <h2 id="流程引擎中的应用"><a href="#流程引擎中的应用" class="header-anchor">#</a> 流程引擎中的应用</h2> <p>我们知道，一个流程实例（基于流程创建的实例）创建后，系统会实例化一个流程引擎实例来执行，然后执行完以后就销毁这个流程引擎实例。但是如果每次来一个流程实例，我们每次都去实例化一个流程引擎去执行，那么这里会产生很多重复性的操作（重复的实例化引擎和销毁引擎实例），导致执行效率降低。</p> <p>所以这里就很有必要采用池化技术的思想，我们可以事先创建一批流程引擎实例，也就是<strong>引擎实例池</strong>，然后所有的流程实例都分发给池里空闲状态的引擎实例，这样可以避免前面重复性的创建和销毁引擎实例的动作，减少很多性能和时间上的开销。</p> <img src="/assets/img/11.3.5-引擎实例池.72b1d4ff.png" alt="image-20241031125624792" style="zoom:50%;"> <h2 id="线程池"><a href="#线程池" class="header-anchor">#</a> 线程池</h2> <h3 id="线程池原理"><a href="#线程池原理" class="header-anchor">#</a> 线程池原理</h3> <p>线程池是一种多线程处理的设计模式，用于在程序中并发地执行多个任务。线程池的原理是通过预先创建一定数量的线程，将这些线程放入一个池（容器）中，并在需要执行任务时从池中取出线程执行。当任务执行完成后，线程会被归还到线程池中，供后续任务使用。线程池的主要优势在于减小了创建和销毁线程的开销，提高系统性能，避免了过多线程导致的资源竞争问题。</p> <p>线程池的通用实现方案包括以下几个部分：</p> <ol><li>线程池管理器（ThreadPoolManager）：负责创建、销毁和管理线程池，以及向线程池分配任务。</li> <li>工作线程（WorkerThread）：线程池中的线程，负责执行任务。工作线程在启动时会从任务队列中获取任务并执行，执行完成后再次获取任务，直到任务队列为空或线程被销毁。</li> <li>任务队列（TaskQueue）：用于存储待处理的任务。任务队列通常采用先进先出（FIFO）的数据结构，如队列（Queue）。</li> <li>任务接口（Task）：表示一个任务，包含任务的具体执行逻辑。用户需要实现任务接口，以便将任务提交给线程池执行。</li></ol> <p>线程池的工作流程如下：</p> <ol><li>初始化线程池：创建一个线程池管理器，预先创建一定数量的工作线程，并将这些线程放入线程池中。</li> <li>提交任务：用户创建任务并提交给线程池管理器，线程池管理器将任务添加到任务队列中。</li> <li>执行任务：工作线程从任务队列中获取任务并执行。如果任务队列为空，线程会进入等待状态，直到有新任务到来。</li> <li>销毁线程池：当线程池不再需要时，线程池管理器会销毁线程池，释放资源。</li></ol> <p>线程池的实现方案有很多，例如Java中的Executor框架、Python中的concurrent.futures.ThreadPoolExecutor以及Golang中的ants第三方开源框架等。这些实现方案都遵循了线程池的基本原理，并提供了丰富的配置选项，以满足不同场景下的需求。</p> <p>接下来，我们通过分析ants这个高性能的goroutine池，来深入了解线程池的实现原理。注意，由于Golang采用的是协程而不是线程的概念，所以下面的分析我们会用协程池（即goroutine池）来进行分析，其实现原理本质上跟线程池是一致的。</p> <h3 id="ants介绍"><a href="#ants介绍" class="header-anchor">#</a> ants介绍</h3> <p>Golang的ants框架是一个高性能且轻量级的goroutine池（Go协程池），用于管理和复用大量的goroutine，以减少系统资源的消耗和提高性能。ants框架的目标是在保持简单和易用的同时，实现对goroutine的高效调度和管理。</p> <p>在Go语言中，goroutine是一种轻量级的线程，用于并发执行任务。然而，当需要处理大量并发任务时，创建大量的goroutine可能会导致内存消耗过大和调度开销增加。为了解决这个问题，ants框架提供了一个goroutine池，可以在一定程度上限制并发任务的数量，复用已经创建的goroutine，减少创建和销毁goroutine的开销。</p> <p>ants框架的主要特性有：</p> <ul><li><p>简单易用：提供简洁的API，方便用户快速上手和使用。</p></li> <li><p>高性能：通过复用goroutine，减少创建和销毁goroutine的开销，提高程序的运行效率。</p></li> <li><p>动态调整：可以根据实际需求动态调整goroutine池的大小，以适应不同的工作负载。</p></li> <li><p>定期清理：可以自动清理过期的goroutine，以减少资源占用。</p></li> <li><p>支持多种工作模式：支持固定大小和动态大小两种goroutine池模式。</p></li></ul> <p>按照官方的测试数据，我们可以看到，使用ants的协程池，其性能比原生的Golang协程高2-6倍，而且对内存的消耗极低，只是原来的10到20分之一，性能非常显著。</p> <img src="/assets/img/12 ants框架.1752b710.gif" style="zoom:50%;"> <h3 id="ants实现原理"><a href="#ants实现原理" class="header-anchor">#</a> ants实现原理</h3> <p>如下是ants框架官方提供的一个运行原理图：</p> <img src="/assets/img/12 ants框架原理.47d79008.png" style="zoom:50%;"> <h4 id="使用示例"><a href="#使用示例" class="header-anchor">#</a> 使用示例</h4> <p>接下来我们通过一个简单的ants使用来开始深入了解它的源码实现方式。</p> <p>使用ants框架时，用户只需要创建一个Pool对象，并通过Submit方法提交任务。Pool会负责调度和管理goroutine，确保任务得到高效执行。下面是一个简单的ants框架使用示例：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;sync&quot;</span>
+	<span class="token string">&quot;time&quot;</span>
+
+	<span class="token string">&quot;github.com/panjf2000/ants&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> wg sync<span class="token punctuation">.</span>WaitGroup
+	p<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> ants<span class="token punctuation">.</span><span class="token function">NewPool</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token comment">// 创建一个大小为10的goroutine池</span>
+	<span class="token keyword">defer</span> p<span class="token punctuation">.</span><span class="token function">Release</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		wg<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+		<span class="token boolean">_</span> <span class="token operator">=</span> p<span class="token punctuation">.</span><span class="token function">Submit</span><span class="token punctuation">(</span><span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Task is running...&quot;</span><span class="token punctuation">)</span>
+			time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+			wg<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	wg<span class="token punctuation">.</span><span class="token function">Wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;All tasks have been completed.&quot;</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>上面代码里，有几个ants的关键方法：</p> <ul><li>ants.NewPool方法：初始化goroutine池</li> <li>p.Submit方法：提交任务</li> <li>p.Release方法：释放Pool</li></ul> <p>接下来，我们将分析上述几个代码的实现方式来进一步理解线程池的实现原理。</p> <h4 id="pool结构体"><a href="#pool结构体" class="header-anchor">#</a> Pool结构体</h4> <p>Pool的结构体用于接收任务并并发处理它们，通过复用协程来限制总协程数。结构体中的各个字段用于维护协程池的状态、可用工作协程、锁和条件变量等信息。在实际使用中，可以向该协程池提交任务，协程池会并发处理这些任务，同时保证正在运行的协程数量不超过设定的上限。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// Pool接受任务并并发处理它们，通过复用协程来限制总协程数。</span>
+<span class="token keyword">type</span> Pool <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 池的容量，负值表示池的容量无限制。无限池用于避免由于池的嵌套使用导致的无限阻塞问题：</span>
+	<span class="token comment">// 向池提交一个任务，该任务向同一个池提交一个新任务。</span>
+	capacity <span class="token builtin">int32</span>
+
+	<span class="token comment">// 当前正在运行的协程数量。</span>
+	running <span class="token builtin">int32</span>
+
+	<span class="token comment">// 保护工作队列的锁。</span>
+	lock sync<span class="token punctuation">.</span>Locker
+
+	<span class="token comment">// worker列表</span>
+	workers workerQueue
+
+	<span class="token comment">// 用于通知池关闭自身。</span>
+	state <span class="token builtin">int32</span>
+
+	<span class="token comment">// 等待空闲工作协程的条件变量。</span>
+	cond <span class="token operator">*</span>sync<span class="token punctuation">.</span>Cond
+
+	<span class="token comment">// 用于加速在retrieveWorker函数中获取可用工作协程。</span>
+	workerCache sync<span class="token punctuation">.</span>Pool
+
+	<span class="token comment">// 已经在pool.Submit()上阻塞的协程数量，受pool.lock保护。</span>
+	waiting <span class="token builtin">int32</span>
+
+  <span class="token comment">// 表示清除操作是否完成。</span>
+	purgeDone <span class="token builtin">int32</span>
+  
+  <span class="token comment">// 用于停止清除操作的取消函数。</span>
+	stopPurge context<span class="token punctuation">.</span>CancelFunc
+
+  <span class="token comment">// 表示定时操作是否完成。</span>
+	ticktockDone <span class="token builtin">int32</span>
+  
+  <span class="token comment">// 用于停止定时操作的取消函数。</span>
+	stopTicktock context<span class="token punctuation">.</span>CancelFunc
+
+	now atomic<span class="token punctuation">.</span>Value
+  <span class="token comment">// 池的配置选项。</span>
+	options <span class="token operator">*</span>Options
+<span class="token punctuation">}</span>
+</code></pre></div><p>Pool结构体的lock、cond和workerCache分别使用了Golang内置的sync.Locker、sync.Cond和sync.Pool结构体。</p> <h5 id="sync-locker"><a href="#sync-locker" class="header-anchor">#</a> sync.Locker</h5> <ul><li><p>sync.Locker是一个接口，它定义了一个通用的锁机制，用于在多个goroutine之间同步访问共享资源。sync.Locker接口有两个方法：Lock()和Unlock()。任何实现了Lock()和Unlock()方法的类型都可以被认为是一个锁。Golang标准库sync包中的sync.Mutex和sync.RWMutex都实现了这个接口，分别表示互斥锁和读写锁。</p> <p>这里ants框架自己实现了一种更轻量级的自旋锁spinLock，通过syncx.NewSpinLock()方法创建。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">type</span> Locker <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li></ul> <h5 id="sync-cond"><a href="#sync-cond" class="header-anchor">#</a> sync.Cond</h5> <ul><li><p>sync.Cond是Golang标准库sync包中的一个结构体，表示条件变量。它用于协调多个goroutine之间的同步操作，当一个goroutine需要等待某个条件满足时，可以使用sync.Cond等待该条件。当条件满足时，另一个goroutine可以通过sync.Cond唤醒等待的goroutine。sync.Cond有以下三个主要方法：</p> <ul><li><code>Wait()</code>: 使当前goroutine等待在条件变量上，直到被唤醒。在调用Wait()之前，需要先锁定关联的互斥锁。Wait()会在进入等待前解锁互斥锁，并在被唤醒后重新锁定互斥锁。</li> <li><code>Signal()</code>: 唤醒一个等待在条件变量上的goroutine。如果没有等待的goroutine，Signal()不会有任何效果。</li> <li><code>Broadcast()</code>: 唤醒所有等待在条件变量上的goroutine。如果没有等待的goroutine，Broadcast()不会有任何效果。</li></ul></li></ul> <h5 id="sync-pool"><a href="#sync-pool" class="header-anchor">#</a> sync.Pool</h5> <ul><li><p>sync.Pool是用来保存可以被重复使用的临时对象的缓存池，以便在以后的同类操作中可以重复使用，从而避免了反复创建和销毁临时对象带来的消耗以及对GC造成的压力。</p> <p>sync.Pool有三个主要的方法：</p> <ul><li><code>New方法</code>：对象构造函数。</li> <li><code>Get方法</code>: 从对象池中返回一个对象，如果对象池为空，则会调用New方法创建一个新的对象。</li> <li><code>Put方法</code>: 将一个对象放入对象池中，供后续Get方法服用。</li></ul></li></ul> <p>如下图所示，是ants框架中几个比较重要的结构体和接口关系图：</p> <img src="/assets/img/12 池化技术-线程池-ants结构体和接口.3fb36b9a.png" alt="image-20240122195908770" style="zoom:67%;"> <h4 id="newpool方法"><a href="#newpool方法" class="header-anchor">#</a> NewPool方法</h4> <ul><li>首先是创建一个Pool实例，设置goroutine池的容量，互斥锁（这里使用自旋锁实现，功能跟sync.Mutex类似，不过是轻量级的，性能更好）以及其他初始化参数。</li> <li>设置workerCache成员的New创建对象方法，这里是基于golang内置的sync.Pool对象池实现，能加速goWorker对象的创建并减少创建开销来提高性能。</li> <li>这里goWorker结构体是任务执行的基础单元。</li> <li>通过队列（Queue）或栈（Stack）的方式创建workers队列。</li> <li>创建条件变量p.cond，这里使用ants框架自定义的自旋锁作为互斥锁。</li> <li>后台启动自动清理机制<code>p.goPurge()</code>和心跳机制<code>p.goTicktock()</code>。</li></ul> <p>其中workerChanCap方法返回0或1，用来决定goWorker的channel是阻塞式的还是非阻塞式的。</p> <div class="language-go extra-class"><pre class="language-go"><code>workerChanCap <span class="token operator">=</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">int</span> <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> runtime<span class="token punctuation">.</span><span class="token function">GOMAXPROCS</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> <span class="token number">0</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token keyword">return</span> <span class="token number">1</span>
+	<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><p>如下是NewPool方法的关键代码：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token function">NewPool</span><span class="token punctuation">(</span>size <span class="token builtin">int</span><span class="token punctuation">,</span> options <span class="token operator">...</span>Option<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>Pool<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> size <span class="token operator">&lt;=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		size <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>
+	<span class="token punctuation">}</span>
+
+	opts <span class="token operator">:=</span> <span class="token function">loadOptions</span><span class="token punctuation">(</span>options<span class="token operator">...</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">if</span> <span class="token operator">!</span>opts<span class="token punctuation">.</span>DisablePurge <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> expiry <span class="token operator">:=</span> opts<span class="token punctuation">.</span>ExpiryDuration<span class="token punctuation">;</span> expiry <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> ErrInvalidPoolExpiry
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> expiry <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+			opts<span class="token punctuation">.</span>ExpiryDuration <span class="token operator">=</span> DefaultCleanIntervalTime
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">if</span> opts<span class="token punctuation">.</span>Logger <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		opts<span class="token punctuation">.</span>Logger <span class="token operator">=</span> defaultLogger
+	<span class="token punctuation">}</span>
+
+  <span class="token comment">// 创建一个新的池实例。</span>
+	p <span class="token operator">:=</span> <span class="token operator">&amp;</span>Pool<span class="token punctuation">{</span>
+		capacity<span class="token punctuation">:</span> <span class="token function">int32</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		lock<span class="token punctuation">:</span>     syncx<span class="token punctuation">.</span><span class="token function">NewSpinLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		options<span class="token punctuation">:</span>  opts<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+  
+  <span class="token comment">// 设置workerCache，用于缓存goroutine。</span>
+	p<span class="token punctuation">.</span>workerCache<span class="token punctuation">.</span>New <span class="token operator">=</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token operator">&amp;</span>goWorker<span class="token punctuation">{</span>
+			pool<span class="token punctuation">:</span> p<span class="token punctuation">,</span>
+			task<span class="token punctuation">:</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> workerChanCap<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+  
+  <span class="token comment">// 如果预分配选项为true</span>
+	<span class="token keyword">if</span> p<span class="token punctuation">.</span>options<span class="token punctuation">.</span>PreAlloc <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> size <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> ErrInvalidPreAllocSize
+		<span class="token punctuation">}</span>
+    <span class="token comment">// 创建一个指定大小的Queue实现方式的worker队列。</span>
+		p<span class="token punctuation">.</span>workers <span class="token operator">=</span> <span class="token function">newWorkerQueue</span><span class="token punctuation">(</span>queueTypeLoopQueue<span class="token punctuation">,</span> size<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 创建一个指定大小的Stack实现方式的worker队列。</span>
+		p<span class="token punctuation">.</span>workers <span class="token operator">=</span> <span class="token function">newWorkerQueue</span><span class="token punctuation">(</span>queueTypeStack<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+  <span class="token comment">// 创建一个条件变量，用于等待可用的goroutine。</span>
+	p<span class="token punctuation">.</span>cond <span class="token operator">=</span> sync<span class="token punctuation">.</span><span class="token function">NewCond</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>lock<span class="token punctuation">)</span>
+
+  <span class="token comment">// 启动自动清理和心跳检测协程。</span>
+	p<span class="token punctuation">.</span><span class="token function">goPurge</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	p<span class="token punctuation">.</span><span class="token function">goTicktock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">return</span> p<span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h5 id="ants-goworker结构体"><a href="#ants-goworker结构体" class="header-anchor">#</a> ants.goWorker结构体</h5> <p>goWorker的结构体代表一个执行任务的工作单元。</p> <ul><li><code>pool *Pool</code>：这个字段表示goWorker所属的协程池，类型是*Pool，也就是指向Pool的指针。Pool是ants库中的一个协程池结构体，包含一组可以执行任务的工作单元。</li> <li><code>task chan func()</code>：这个字段是一个函数类型的通道，它用于接收并执行任务。这个通道中的每一个元素都是一个函数，这些函数就是需要执行的任务。</li> <li><code>lastUsed time.Time</code>：这个字段表示goWorker最后一次被使用的时间，类型是time.Time。当一个工作单元完成任务并被放回协程池时，这个值会被更新。这个字段通常用于实现空闲工作单元的清理，比如当一个工作单元长时间没有执行任务时，协程池可能会选择将其回收以节省资源。</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">type</span> goWorker <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	pool <span class="token operator">*</span>Pool
+	task <span class="token keyword">chan</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	lastUsed time<span class="token punctuation">.</span>Time
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="pool-submit方法"><a href="#pool-submit方法" class="header-anchor">#</a> pool.Submit方法</h4> <p><code>Submit</code>方法用于向goroutine池提交一个任务。这个任务是一个没有参数也没有返回值的函数，通常表示一个可以并发执行的任务。</p> <ul><li>在<code>Submit</code>方法中，首先检查goroutine池是否已经关闭，如果已经关闭，则返回一个错误<code>ErrPoolClosed</code>。</li> <li>如果goroutine池没有关闭，那么就尝试通过retrieveWorker方法获取一个工作单元（worker），这个工作单元是一个可以执行任务的goroutine。</li> <li>如果成功获取到工作单元，那么就将任务传递给工作单元执行。</li></ul> <p>需要注意的是，<code>Submit</code>方法可能会阻塞。当goroutine池的容量已满，也就是说，所有的工作单元都在忙碌，没有空闲的工作单元可以执行新的任务时，<code>Submit</code>方法会阻塞，直到有工作单元变得空闲。如果你希望<code>Submit</code>方法在这种情况下不阻塞，而是立即返回一个错误，那么可以在创建<code>Pool</code>时，使用<code>ants.WithNonblocking(true)</code>选项。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Pool<span class="token punctuation">)</span> <span class="token function">Submit</span><span class="token punctuation">(</span>task <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> p<span class="token punctuation">.</span><span class="token function">IsClosed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> ErrPoolClosed
+	<span class="token punctuation">}</span>
+
+	w<span class="token punctuation">,</span> err <span class="token operator">:=</span> p<span class="token punctuation">.</span><span class="token function">retrieveWorker</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> w <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		w<span class="token punctuation">.</span><span class="token function">inputFunc</span><span class="token punctuation">(</span>task<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> err
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="p-pretrieveworker方法"><a href="#p-pretrieveworker方法" class="header-anchor">#</a> p.pretrieveWorker方法</h5> <p><code>retrieveWorker</code>方法是获取一个可用的工作单元的方法。</p> <ul><li>首先通过<code>p.lock.Lock()</code>互斥锁保证协程并发安全，保证每次只有一个goroutine操作，并在结束函数调用时解锁<code>p.lock.Unlock()</code>。</li> <li>然后尝试从<code>p.workers</code>工作队列中取出一个工作单元，如果取到了就直接返回。</li> <li>如果工作队列为空，但是池的容量还没有达到上限，那么就通过对象池的<code>p.workerCache.Get()</code>方法创建一个新的工作单元并返回，然后调用goWorker的<code>w.run()</code>方法启动一个新的协程。</li> <li>如果工作队列为空，并且池的容量已经达到上限，那么就根据池的模式决定是返回错误还是阻塞等待。
+<ul><li>如果池是非阻塞模式，或者等待的任务数量已经达到了上限，那么就返回一个错误<code>ErrPoolOverload</code>。</li> <li>否则，就阻塞等待（通过<code>p.cond.Wait()</code>等待信号），直到有工作单元变得可用。</li></ul></li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Pool<span class="token punctuation">)</span> <span class="token function">retrieveWorker</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>w worker<span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+retry<span class="token punctuation">:</span>
+	<span class="token keyword">if</span> w <span class="token operator">=</span> p<span class="token punctuation">.</span>workers<span class="token punctuation">.</span><span class="token function">detach</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> w <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">if</span> capacity <span class="token operator">:=</span> p<span class="token punctuation">.</span><span class="token function">Cap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> capacity <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span> capacity <span class="token operator">&gt;</span> p<span class="token punctuation">.</span><span class="token function">Running</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		w <span class="token operator">=</span> p<span class="token punctuation">.</span>workerCache<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token operator">*</span>goWorker<span class="token punctuation">)</span>
+		w<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">if</span> p<span class="token punctuation">.</span>options<span class="token punctuation">.</span>Nonblocking <span class="token operator">||</span> <span class="token punctuation">(</span>p<span class="token punctuation">.</span>options<span class="token punctuation">.</span>MaxBlockingTasks <span class="token operator">!=</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> p<span class="token punctuation">.</span><span class="token function">Waiting</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;=</span> p<span class="token punctuation">.</span>options<span class="token punctuation">.</span>MaxBlockingTasks<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> ErrPoolOverload
+	<span class="token punctuation">}</span>
+
+	p<span class="token punctuation">.</span><span class="token function">addWaiting</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+	p<span class="token punctuation">.</span>cond<span class="token punctuation">.</span><span class="token function">Wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	p<span class="token punctuation">.</span><span class="token function">addWaiting</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">if</span> p<span class="token punctuation">.</span><span class="token function">IsClosed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> ErrPoolClosed
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">goto</span> retry
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="w-run方法"><a href="#w-run方法" class="header-anchor">#</a> w.run方法</h5> <p><code>run</code>方法是ants框架中实现任务执行的核心方法，它是ants框架中<code>goWorker</code>类型的一个方法，它用于启动一个新的goroutine来执行任务。每个<code>goWorker</code>实例表示一个工作单元，即一个可以执行任务的goroutine。</p> <p>在<code>run</code>方法中，首先将正在运行的goroutine数量加1，然后启动一个新的goroutine。在这个新的goroutine中，会执行以下操作：</p> <ul><li><p>使用<code>defer</code>语句确保在goroutine退出时执行一些清理工作，例如将正在运行的goroutine数量减1、将工作单元放回缓存、处理可能发生的panic，以及通过条件变量发送信号通知有可用的工作单元。</p></li> <li><p>使用<code>for</code>循环从<code>w.task</code>通道中获取任务。这个通道中的每一个元素都是一个函数，表示需要执行的任务。当从通道中取到一个任务时，就执行这个任务，见<code>f()</code>调用。</p></li> <li><p>当任务执行完成后，尝试将工作单元放回工作队列<code>w.pool.revertWorker(w)</code>。如果放回成功，那么继续等待下一个任务；否则，退出循环，结束goroutine。</p></li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// run starts a goroutine to repeat the process</span>
+<span class="token comment">// that performs the function calls.</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>w <span class="token operator">*</span>goWorker<span class="token punctuation">)</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	w<span class="token punctuation">.</span>pool<span class="token punctuation">.</span><span class="token function">addRunning</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+	<span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">defer</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			w<span class="token punctuation">.</span>pool<span class="token punctuation">.</span><span class="token function">addRunning</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+			w<span class="token punctuation">.</span>pool<span class="token punctuation">.</span>workerCache<span class="token punctuation">.</span><span class="token function">Put</span><span class="token punctuation">(</span>w<span class="token punctuation">)</span>
+			<span class="token keyword">if</span> p <span class="token operator">:=</span> <span class="token function">recover</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> p <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+				<span class="token keyword">if</span> ph <span class="token operator">:=</span> w<span class="token punctuation">.</span>pool<span class="token punctuation">.</span>options<span class="token punctuation">.</span>PanicHandler<span class="token punctuation">;</span> ph <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+					<span class="token function">ph</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+				<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+					w<span class="token punctuation">.</span>pool<span class="token punctuation">.</span>options<span class="token punctuation">.</span>Logger<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;worker exits from panic: %v\n%s\n&quot;</span><span class="token punctuation">,</span> p<span class="token punctuation">,</span> debug<span class="token punctuation">.</span><span class="token function">Stack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">}</span>
+			
+			w<span class="token punctuation">.</span>pool<span class="token punctuation">.</span>cond<span class="token punctuation">.</span><span class="token function">Signal</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		<span class="token keyword">for</span> f <span class="token operator">:=</span> <span class="token keyword">range</span> w<span class="token punctuation">.</span>task <span class="token punctuation">{</span>
+			<span class="token keyword">if</span> f <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+				<span class="token keyword">return</span>
+			<span class="token punctuation">}</span>
+			<span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">if</span> ok <span class="token operator">:=</span> w<span class="token punctuation">.</span>pool<span class="token punctuation">.</span><span class="token function">revertWorker</span><span class="token punctuation">(</span>w<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token operator">!</span>ok <span class="token punctuation">{</span>
+				<span class="token keyword">return</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h5 id="revertworker方法"><a href="#revertworker方法" class="header-anchor">#</a> revertWorker方法</h5> <p><code>revertWorker</code>方法用于将一个工作单元（worker）放回到goroutine池中，以实现goroutine的复用。</p> <ul><li><p>在<code>revertWorker</code>方法中，首先检查goroutine池的容量和当前运行的goroutine数量，如果当前运行的goroutine数量已经超过了池的容量，或者池已经关闭，那么就直接返回false，表示工作单元没有被放回到池中。</p></li> <li><p>如果池的容量还没有满，那么就更新工作单元的<code>lastUsed</code>字段，表示这个工作单元最后一次被使用的时间。</p></li> <li><p>然后尝试将工作单元插入到工作队列中<code>p.workers</code>。</p></li> <li><p>如果插入成功，那么就使用<code>p.cond.Signal()</code>通知可能正在等待可用工作单元的其他goroutine，然后返回true。如果插入失败，那么就返回false。</p></li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Pool<span class="token punctuation">)</span> <span class="token function">revertWorker</span><span class="token punctuation">(</span>worker <span class="token operator">*</span>goWorker<span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> capacity <span class="token operator">:=</span> p<span class="token punctuation">.</span><span class="token function">Cap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">(</span>capacity <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> p<span class="token punctuation">.</span><span class="token function">Running</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> capacity<span class="token punctuation">)</span> <span class="token operator">||</span> p<span class="token punctuation">.</span><span class="token function">IsClosed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		p<span class="token punctuation">.</span>cond<span class="token punctuation">.</span><span class="token function">Broadcast</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+
+	worker<span class="token punctuation">.</span>lastUsed <span class="token operator">=</span> p<span class="token punctuation">.</span><span class="token function">nowTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> p<span class="token punctuation">.</span><span class="token function">IsClosed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> err <span class="token operator">:=</span> p<span class="token punctuation">.</span>workers<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>worker<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+
+	p<span class="token punctuation">.</span>cond<span class="token punctuation">.</span><span class="token function">Signal</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">return</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h4 id="pool-release方法"><a href="#pool-release方法" class="header-anchor">#</a> pool.Release方法</h4> <p><code>Release</code>方法用于关闭goroutine池并释放工作队列。</p> <ul><li><p>首先使用<code>atomic.CompareAndSwapInt32</code>函数尝试将池的状态从<code>OPENED</code>改为<code>CLOSED</code>。如果改变状态成功，那么就继续后续的操作；否则，直接返回。</p></li> <li><p>然后，如果池有设置清理函数（<code>stopPurge</code>），那么就调用这个函数来停止清理操作，并将<code>stopPurge</code>设置为nil。</p></li> <li><p>同样，也会调用<code>stopTicktock</code>函数来停止定时操作，并将<code>stopTicktock</code>设置为nil。</p></li> <li><p>接着，使用<code>p.workers.reset()</code>函数来清空工作队列。这个操作需要在锁的保护下进行，以确保在清空工作队列的过程中，不会有其他goroutine修改工作队列。</p></li> <li><p>最后，使用<code>p.cond.Broadcast()</code>函数来唤醒可能正在等待可用工作单元的goroutine。这是因为，在<code>retrieveWorker</code>方法中，如果工作队列为空，那么goroutine会阻塞等待可用的工作单元。当关闭池时，需要唤醒这些阻塞的goroutine，防止它们无限期地等待。</p></li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Pool<span class="token punctuation">)</span> <span class="token function">Release</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> <span class="token operator">!</span>atomic<span class="token punctuation">.</span><span class="token function">CompareAndSwapInt32</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">.</span>state<span class="token punctuation">,</span> OPENED<span class="token punctuation">,</span> CLOSED<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">if</span> p<span class="token punctuation">.</span>stopPurge <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		p<span class="token punctuation">.</span><span class="token function">stopPurge</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		p<span class="token punctuation">.</span>stopPurge <span class="token operator">=</span> <span class="token boolean">nil</span>
+	<span class="token punctuation">}</span>
+	p<span class="token punctuation">.</span><span class="token function">stopTicktock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	p<span class="token punctuation">.</span>stopTicktock <span class="token operator">=</span> <span class="token boolean">nil</span>
+
+	p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	p<span class="token punctuation">.</span>workers<span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	p<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	
+	p<span class="token punctuation">.</span>cond<span class="token punctuation">.</span><span class="token function">Broadcast</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="连接池"><a href="#连接池" class="header-anchor">#</a> 连接池</h2> <h3 id="连接池原理"><a href="#连接池原理" class="header-anchor">#</a> 连接池原理</h3> <p>连接池（Connection Pool）是一种创建和管理数据库连接的技术，主要用于提高对数据库的访问性能。当一个应用程序需要访问数据库时，从连接池中获取一个已经创建好的连接，使用完毕后再将其归还给连接池，而不是直接关闭。这种方式可以避免频繁地创建和关闭连接，从而提高系统的性能和响应速度。</p> <p>连接池的实现原理：</p> <ol><li>初始化连接池：在连接池启动时，会根据配置参数创建一定数量的初始连接，并将这些连接存放在连接池中。这些连接被称为“空闲连接”。</li> <li>获取连接：当应用程序需要访问数据库时，会向连接池请求一个连接。连接池会检查是否有空闲连接，如果有，则分配一个空闲连接给应用程序；如果没有空闲连接，且当前连接数未达到最大连接数，连接池会创建一个新的连接并分配给应用程序；如果已达到最大连接数，则应用程序需要等待，直到有连接被归还。</li> <li>使用连接：应用程序获得连接后，可以进行数据库操作，如查询、插入、更新等。在使用过程中，连接池会保持与数据库的连接，直到应用程序完成操作。</li> <li>归还连接：应用程序完成数据库操作后，需要将连接归还给连接池。连接池会将该连接标记为空闲状态，以便其他应用程序使用。</li> <li>连接维护：连接池会定期检查空闲连接的有效性，对于无效的连接将予以关闭并创建新的连接。此外，连接池还会根据空闲连接的数量和使用情况进行动态调整，如关闭一些不再需要的空闲连接，或在高峰时期增加连接数。</li> <li>关闭连接池：当应用程序关闭或不再需要连接池时，连接池会释放所有连接资源，并关闭与数据库的连接。</li></ol> <p>Java、Python和Golang等编程语言中都有各自的数据库连接池实现，如Java的Apache DBCP、C3P0、HikariCP和Druid；Python的SQLAlchemy、DBUtils和PooledDB；以及Golang的database/sql、sqlx和GORM。这些连接池实现提供了丰富的配置选项，支持多种数据库，并可与各种框架集成使用，以提高应用程序对数据库的访问性能。</p> <p>下面我们通过分析golang的database/sql源码来了解数据库连接池的原理。</p> <h3 id="database-sql介绍"><a href="#database-sql介绍" class="header-anchor">#</a> database/sql介绍</h3> <p>Golang的<code>database/sql</code>库是Go标准库中用于与SQL数据库进行交互的库。它提供了一组通用的接口和方法，用于执行SQL查询、操作数据以及管理数据库连接。<code>database/sql</code>库与各种数据库驱动程序兼容，例如MySQL、PostgreSQL、SQLite等，使得在Go中使用不同类型的数据库变得非常简单。</p> <p><code>database/sql</code>库的主要组件包括：</p> <ul><li><p><code>DB</code>：<code>DB</code>类型表示一个数据库连接池，它是与数据库进行交互的主要入口。你可以使用<code>sql.Open()</code>函数创建一个新的<code>DB</code>实例，该函数接受数据库驱动名称和数据源名称（例如连接字符串）作为参数。</p></li> <li><p><code>Tx</code>：<code>Tx</code>类型表示一个数据库事务。你可以使用<code>DB.Begin()</code>方法开始一个新的事务，然后使用<code>Tx</code>实例执行查询和操作数据。在完成事务后，可以使用<code>Tx.Commit()</code>方法提交事务，或者使用<code>Tx.Rollback()</code>方法回滚事务。</p></li> <li><p><code>Stmt</code>：<code>Stmt</code>类型表示一个预处理的SQL语句。你可以使用<code>DB.Prepare()</code>或<code>Tx.Prepare()</code>方法创建一个新的<code>Stmt</code>实例。使用预处理语句可以提高查询性能，特别是当需要多次执行相同的查询时。预处理语句还可以防止SQL注入攻击。</p></li> <li><p><code>Rows</code>：<code>Rows</code>类型表示查询结果集。你可以使用<code>DB.Query()</code>、<code>Tx.Query()</code>或<code>Stmt.Query()</code>方法执行查询并返回一个<code>Rows</code>实例。然后可以使用<code>Rows.Next()</code>方法遍历结果集，以及使用<code>Rows.Scan()</code>方法将结果集中的数据赋值给变量。</p></li> <li><p><code>Result</code>：<code>Result</code>类型表示执行插入、更新或删除操作的结果。你可以使用<code>DB.Exec()</code>、<code>Tx.Exec()</code>或<code>Stmt.Exec()</code>方法执行操作并返回一个<code>Result</code>实例。然后可以使用<code>Result.RowsAffected()</code>方法获取受影响的行数，以及使用<code>Result.LastInsertId()</code>方法获取插入操作的自增ID。</p></li></ul> <h3 id="database-sql实现原理"><a href="#database-sql实现原理" class="header-anchor">#</a> database/sql实现原理</h3> <h4 id="使用示例-2"><a href="#使用示例-2" class="header-anchor">#</a> 使用示例</h4> <p>如下是一个调用database/sql库进行mysql查询的操作，这里通过<code>SetMaxOpenConns</code>设置了连接池最大为1，但是这里有两个查询，而且第一个查询结束后没有主动关闭连接，实际运行可以发现在第二个<code>db.Query</code>查询时会卡主。如果第一个查询接受后使用<code>rows.Close()</code>主动关闭释放连接，则第二个查询就可以正常进行。</p> <p>下面我们通过这里的代码来分析<code>database/sql</code>的连接池原理。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	db <span class="token string">&quot;database/sql&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token boolean">_</span> <span class="token string">&quot;github.com/go-sql-driver/mysql&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	db<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">Open</span><span class="token punctuation">(</span><span class="token string">&quot;mysql&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;root:123@/test?charset=utf8&amp;parseTime=True&amp;loc=Local&quot;</span><span class="token punctuation">)</span>
+
+	db<span class="token punctuation">.</span><span class="token function">SetMaxOpenConns</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+	rows<span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span><span class="token string">&quot;select * from users&quot;</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;query error&quot;</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">//rows.Close()</span>
+	row<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span><span class="token string">&quot;select * from test&quot;</span><span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>row<span class="token punctuation">,</span> rows<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>下图是database/sql的原理图：</p> <img src="/assets/img/4 池化技术-database-sql原理图.b7b43919.png" alt="image-20240118124809030" style="zoom:67%;"> <h4 id="db-open调用链"><a href="#db-open调用链" class="header-anchor">#</a> db.Open调用链</h4> <p>这里，<code>db.Open()</code>函数主要是创建DB对象，DB类结构如下，其中有几个比较重要的成员：</p> <ul><li>freeConn数组是一个连接池，每个连接都有一个创建时间，freeConn是按照旧到新依次排序。</li> <li>connRequests存储那些没有分配到连接的请求，这些请求会处于阻塞装填。connRequests是map结构，value是channel类型用来传递和接收信号，一旦有新的连接创建，就会通过该channel发送信号通知这些请求。</li> <li>numOpen表示已经创建了的连接数量</li> <li>maxOpen表示设置的最大连接数，一旦连接数超过maxOpen则会阻塞等待或抛异常报错，如果&lt;=0表示没有限制。</li> <li>openerCh是一个channel类型成员，它的用来接收信号创建新的连接。这里DB对象会创建一个协程来运行<code>connectionOpener</code>方法进行信号监听，一旦检测到信号则调用<code>openNewConnection</code>方法创建新链接。</li> <li>maxLifetime用于设置一个连接在连接池中最大的存活时间。当连接在池中存在的时间超过这个值时，连接将被关闭并从池中移除。这可以防止连接因长时间不活动而变得不稳定。设置一个合适的 <code>maxLifetime</code> 值可以确保连接池中的连接始终是新的和稳定的</li> <li>maxIdleTime用于设置连接的最长空闲时间。当连接在池中空闲的时间超过这个值时，连接将被关闭并从池中移除。这有助于确保连接池不会因为闲置的连接而浪费资源。</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">type</span> DB <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	<span class="token comment">// Total time waited for new connections.</span>
+	waitDuration atomic<span class="token punctuation">.</span>Int64
+
+	connector driver<span class="token punctuation">.</span>Connector
+	<span class="token comment">// numClosed is an atomic counter which represents a total number of</span>
+	<span class="token comment">// closed connections. Stmt.openStmt checks it before cleaning closed</span>
+	<span class="token comment">// connections in Stmt.css.</span>
+	numClosed atomic<span class="token punctuation">.</span>Uint64
+
+	mu           sync<span class="token punctuation">.</span>Mutex    <span class="token comment">// protects following fields</span>
+	freeConn     <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>driverConn <span class="token comment">// free connections ordered by returnedAt oldest to newest</span>
+	connRequests <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">uint64</span><span class="token punctuation">]</span><span class="token keyword">chan</span> connRequest
+	nextRequest  <span class="token builtin">uint64</span> <span class="token comment">// Next key to use in connRequests.</span>
+	numOpen      <span class="token builtin">int</span>    <span class="token comment">// number of opened and pending open connections</span>
+	<span class="token comment">// Used to signal the need for new connections</span>
+	<span class="token comment">// a goroutine running connectionOpener() reads on this chan and</span>
+	<span class="token comment">// maybeOpenNewConnections sends on the chan (one send per needed connection)</span>
+	<span class="token comment">// It is closed during db.Close(). The close tells the connectionOpener</span>
+	<span class="token comment">// goroutine to exit.</span>
+	openerCh          <span class="token keyword">chan</span> <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+	closed            <span class="token builtin">bool</span>
+	dep               <span class="token keyword">map</span><span class="token punctuation">[</span>finalCloser<span class="token punctuation">]</span>depSet
+	lastPut           <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token operator">*</span>driverConn<span class="token punctuation">]</span><span class="token builtin">string</span> <span class="token comment">// stacktrace of last conn's put; debug only</span>
+	maxIdleCount      <span class="token builtin">int</span>                    <span class="token comment">// zero means defaultMaxIdleConns; negative means 0</span>
+	maxOpen           <span class="token builtin">int</span>                    <span class="token comment">// &lt;= 0 means unlimited</span>
+	maxLifetime       time<span class="token punctuation">.</span>Duration          <span class="token comment">// maximum amount of time a connection may be reused</span>
+	maxIdleTime       time<span class="token punctuation">.</span>Duration          <span class="token comment">// maximum amount of time a connection may be idle before being closed</span>
+	cleanerCh         <span class="token keyword">chan</span> <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+	waitCount         <span class="token builtin">int64</span> <span class="token comment">// Total number of connections waited for.</span>
+	maxIdleClosed     <span class="token builtin">int64</span> <span class="token comment">// Total number of connections closed due to idle count.</span>
+	maxIdleTimeClosed <span class="token builtin">int64</span> <span class="token comment">// Total number of connections closed due to idle time.</span>
+	maxLifetimeClosed <span class="token builtin">int64</span> <span class="token comment">// Total number of connections closed due to max connection lifetime limit.</span>
+
+	stop <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// stop cancels the connection opener.</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="db-open方法"><a href="#db-open方法" class="header-anchor">#</a> db.Open方法</h5> <p>Open函数：用于打开一个数据库连接。</p> <p>参数：</p> <ul><li>driverName：数据库驱动名称，如&quot;mysql&quot;、&quot;postgres&quot;等。</li> <li>dataSourceName：数据源名称，包含了数据库连接所需的相关信息，如用户名、密码、数据库地址等。</li></ul> <p>返回值：</p> <ul><li>*DB：一个指向DB结构体的指针，表示数据库连接。</li> <li>error：错误信息，如果成功打开连接，则为nil。</li></ul> <p>函数过程：</p> <ul><li>首先，获取已注册的数据库驱动（drivers）中的driverName对应的驱动（driveri）。</li> <li>如果驱动实现了DriverContext接口，则调用OpenConnector方法创建一个连接器（connector），并使用OpenDB函数创建数据库连接。</li> <li>如果驱动没有实现DriverContext接口，则创建一个dsnConnector结构体，并使用OpenDB函数创建数据库连接。</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token function">Open</span><span class="token punctuation">(</span>driverName<span class="token punctuation">,</span> dataSourceName <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>DB<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	driversMu<span class="token punctuation">.</span><span class="token function">RLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	driveri<span class="token punctuation">,</span> ok <span class="token operator">:=</span> drivers<span class="token punctuation">[</span>driverName<span class="token punctuation">]</span>
+	driversMu<span class="token punctuation">.</span><span class="token function">RUnlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> <span class="token operator">!</span>ok <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> fmt<span class="token punctuation">.</span><span class="token function">Errorf</span><span class="token punctuation">(</span><span class="token string">&quot;sql: unknown driver %q (forgotten import?)&quot;</span><span class="token punctuation">,</span> driverName<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">if</span> driverCtx<span class="token punctuation">,</span> ok <span class="token operator">:=</span> driveri<span class="token punctuation">.</span><span class="token punctuation">(</span>driver<span class="token punctuation">.</span>DriverContext<span class="token punctuation">)</span><span class="token punctuation">;</span> ok <span class="token punctuation">{</span>
+		connector<span class="token punctuation">,</span> err <span class="token operator">:=</span> driverCtx<span class="token punctuation">.</span><span class="token function">OpenConnector</span><span class="token punctuation">(</span>dataSourceName<span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+		<span class="token punctuation">}</span>
+		<span class="token keyword">return</span> <span class="token function">OpenDB</span><span class="token punctuation">(</span>connector<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">nil</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span> <span class="token function">OpenDB</span><span class="token punctuation">(</span>dsnConnector<span class="token punctuation">{</span>dsn<span class="token punctuation">:</span> dataSourceName<span class="token punctuation">,</span> driver<span class="token punctuation">:</span> driveri<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="opendb方法"><a href="#opendb方法" class="header-anchor">#</a> OpenDB方法</h5> <p>OpenDB函数：用于根据给定的连接器（driver.Connector）创建一个数据库连接。</p> <p>参数：</p> <ul><li>c：一个实现了driver.Connector接口的连接器。</li></ul> <p>返回值：</p> <ul><li>*DB：一个指向DB结构体的指针，表示数据库连接。</li></ul> <p>函数过程：</p> <ul><li>创建一个可取消的上下文（ctx）。</li> <li>初始化一个DB结构体，包括连接器（connector）、连接请求通道（openerCh）、最后使用的连接（lastPut）、连接请求映射（connRequests）和停止函数（stop）。</li> <li>启动一个协程，调用db.connectionOpener方法，用于处理连接请求。</li> <li>返回DB结构体的指针。</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token function">OpenDB</span><span class="token punctuation">(</span>c driver<span class="token punctuation">.</span>Connector<span class="token punctuation">)</span> <span class="token operator">*</span>DB <span class="token punctuation">{</span>
+	ctx<span class="token punctuation">,</span> cancel <span class="token operator">:=</span> context<span class="token punctuation">.</span><span class="token function">WithCancel</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">Background</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	db <span class="token operator">:=</span> <span class="token operator">&amp;</span>DB<span class="token punctuation">{</span>
+		connector<span class="token punctuation">:</span>    c<span class="token punctuation">,</span>
+		openerCh<span class="token punctuation">:</span>     <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> connectionRequestQueueSize<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		lastPut<span class="token punctuation">:</span>      <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token operator">*</span>driverConn<span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		connRequests<span class="token punctuation">:</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">uint64</span><span class="token punctuation">]</span><span class="token keyword">chan</span> connRequest<span class="token punctuation">)</span><span class="token punctuation">,</span>
+		stop<span class="token punctuation">:</span>         cancel<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">go</span> db<span class="token punctuation">.</span><span class="token function">connectionOpener</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span>
+
+	<span class="token keyword">return</span> db
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="db-connectionopener方法"><a href="#db-connectionopener方法" class="header-anchor">#</a> db.connectionOpener方法</h5> <p>在OpenDB中创建新的goroutine协程来执行<code>connectionOpener</code>方法进行信号监听，<code>db.openerCh</code>接收到信号会调用<code>db.openNewConnection</code>方法创建新连接。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>db <span class="token operator">*</span>DB<span class="token punctuation">)</span> <span class="token function">connectionOpener</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		<span class="token keyword">select</span> <span class="token punctuation">{</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>ctx<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			<span class="token keyword">return</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>db<span class="token punctuation">.</span>openerCh<span class="token punctuation">:</span>
+			db<span class="token punctuation">.</span><span class="token function">openNewConnection</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="db-opennewconnection方法"><a href="#db-opennewconnection方法" class="header-anchor">#</a> db.openNewConnection方法</h5> <p>这个方法的主要功能是打开一个新的数据库连接。以下是这个方法的详细解释：</p> <ol><li>调用数据库连接器（db.connector）的Connect方法来创建一个新的连接（ci）。注意，在调用此方法之前，maybeOpenNewConnections方法已经将数据库的打开连接数（db.numOpen）加一。如果连接失败或在返回之前关闭，这个函数必须执行db.numOpen--。</li> <li>获取数据库的锁（db.mu.Lock()），并在函数返回之前解锁（defer db.mu.Unlock()）。</li> <li>检查数据库是否已关闭（db.closed）。如果关闭，且连接创建成功（err == nil），则关闭新创建的连接（ci.Close()），并将打开的连接数减一（db.numOpen--）。</li> <li>如果连接创建失败（err != nil），则将打开的连接数减一（db.numOpen--），并调用putConnDBLocked方法将错误信息传递给等待中的连接请求。然后尝试打开新的连接（db.maybeOpenNewConnections()）。</li> <li>如果连接创建成功（err == nil），则创建一个新的driverConn对象（dc），并将其与数据库关联。调用putConnDBLocked方法尝试将新创建的连接放回空闲连接池或满足一个等待中的连接请求。如果操作成功，则将新创建的连接添加到数据库的依赖关系中（db.addDepLocked(dc, dc)）。否则，将打开的连接数减一（db.numOpen--），并关闭新创建的连接（ci.Close()）。</li></ol> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>db <span class="token operator">*</span>DB<span class="token punctuation">)</span> <span class="token function">openNewConnection</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	ci<span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span>connector<span class="token punctuation">.</span><span class="token function">Connect</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span>
+	db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">defer</span> db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> db<span class="token punctuation">.</span>closed <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			ci<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+		db<span class="token punctuation">.</span>numOpen<span class="token operator">--</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		db<span class="token punctuation">.</span>numOpen<span class="token operator">--</span>
+		db<span class="token punctuation">.</span><span class="token function">putConnDBLocked</span><span class="token punctuation">(</span><span class="token boolean">nil</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+		db<span class="token punctuation">.</span><span class="token function">maybeOpenNewConnections</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	dc <span class="token operator">:=</span> <span class="token operator">&amp;</span>driverConn<span class="token punctuation">{</span>
+		db<span class="token punctuation">:</span>         db<span class="token punctuation">,</span>
+		createdAt<span class="token punctuation">:</span>  <span class="token function">nowFunc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		returnedAt<span class="token punctuation">:</span> <span class="token function">nowFunc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		ci<span class="token punctuation">:</span>         ci<span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> db<span class="token punctuation">.</span><span class="token function">putConnDBLocked</span><span class="token punctuation">(</span>dc<span class="token punctuation">,</span> err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		db<span class="token punctuation">.</span><span class="token function">addDepLocked</span><span class="token punctuation">(</span>dc<span class="token punctuation">,</span> dc<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+		db<span class="token punctuation">.</span>numOpen<span class="token operator">--</span>
+		ci<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="db-putconndblocked方法"><a href="#db-putconndblocked方法" class="header-anchor">#</a> db.putConnDBLocked方法</h5> <p>这个方法的主要功能是将一个数据库连接（*driverConn）放回到空闲连接池中，或者满足一个等待中的连接请求（connRequest）。以下是这个方法的详细解释：</p> <ol><li>检查数据库是否已关闭（db.closed）。如果是，则返回false。</li> <li>检查当前打开的连接数（db.numOpen）是否超过了最大允许的连接数（db.maxOpen）。如果超过了，则返回false。</li> <li>检查是否有等待中的连接请求（db.connRequests）。如果有，则从等待队列中取出一个请求，将当前的连接（dc）分配给它，并从等待队列中移除这个请求。如果分配的连接没有错误（err == nil），则将连接标记为正在使用（dc.inUse = true）。将连接和错误信息发送给请求者，然后返回true。</li> <li>如果没有等待中的连接请求，且当前连接没有错误（err == nil）并且数据库没有关闭（!db.closed），则尝试将连接放回空闲连接池（db.freeConn）。如果空闲连接池的大小没有超过最大允许的空闲连接数（db.maxIdleConnsLocked()），则将连接添加到空闲连接池中，并启动清理程序（db.startCleanerLocked()），然后返回true。否则，将数据库的最大空闲关闭计数器（db.maxIdleClosed）加一。</li> <li>如果以上条件都不满足，则返回false。</li></ol> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>db <span class="token operator">*</span>DB<span class="token punctuation">)</span> <span class="token function">putConnDBLocked</span><span class="token punctuation">(</span>dc <span class="token operator">*</span>driverConn<span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token builtin">bool</span> f<span class="token punctuation">{</span>
+	<span class="token keyword">if</span> db<span class="token punctuation">.</span>closed <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> db<span class="token punctuation">.</span>maxOpen <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> db<span class="token punctuation">.</span>numOpen <span class="token operator">&gt;</span> db<span class="token punctuation">.</span>maxOpen <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> c <span class="token operator">:=</span> <span class="token function">len</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>connRequests<span class="token punctuation">)</span><span class="token punctuation">;</span> c <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		<span class="token keyword">var</span> req <span class="token keyword">chan</span> connRequest
+		<span class="token keyword">var</span> reqKey <span class="token builtin">uint64</span>
+		<span class="token keyword">for</span> reqKey<span class="token punctuation">,</span> req <span class="token operator">=</span> <span class="token keyword">range</span> db<span class="token punctuation">.</span>connRequests <span class="token punctuation">{</span>
+			<span class="token keyword">break</span>
+		<span class="token punctuation">}</span>
+		<span class="token function">delete</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>connRequests<span class="token punctuation">,</span> reqKey<span class="token punctuation">)</span> 
+		<span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			dc<span class="token punctuation">.</span>inUse <span class="token operator">=</span> <span class="token boolean">true</span>
+		<span class="token punctuation">}</span>
+		req <span class="token operator">&lt;-</span> connRequest<span class="token punctuation">{</span>
+			conn<span class="token punctuation">:</span> dc<span class="token punctuation">,</span>
+			err<span class="token punctuation">:</span>  err<span class="token punctuation">,</span>
+		<span class="token punctuation">}</span>
+		<span class="token keyword">return</span> <span class="token boolean">true</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>db<span class="token punctuation">.</span>closed <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> db<span class="token punctuation">.</span><span class="token function">maxIdleConnsLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token function">len</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>freeConn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			db<span class="token punctuation">.</span>freeConn <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>freeConn<span class="token punctuation">,</span> dc<span class="token punctuation">)</span>
+			db<span class="token punctuation">.</span><span class="token function">startCleanerLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span> <span class="token boolean">true</span>
+		<span class="token punctuation">}</span>
+		db<span class="token punctuation">.</span>maxIdleClosed<span class="token operator">++</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="db-query调用链"><a href="#db-query调用链" class="header-anchor">#</a> db.Query调用链</h4> <p>接下来分析调用db.Query方法查询时的方法链路。</p> <div class="language-go extra-class"><pre class="language-go"><code>rows<span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span><span class="token string">&quot;select * from users&quot;</span><span class="token punctuation">)</span>
+</code></pre></div><p>通过db.Query函数的调用，我们可以看到最终它是通过调用<code>db.query</code>方法实现。</p> <h5 id="db-query"><a href="#db-query" class="header-anchor">#</a> db.query()</h5> <p>如下可以看到<code>query</code>方法调用两个函数：</p> <ul><li>db.conn：获取连接。这里的连接可能是新创建的、也可能是连接池缓存的</li> <li>db.queryDC：查询结果并返回。注意：这里使用<code>dc.releaseConn</code>方法进行传参，在<code>rows.Close()</code>调用时会用到。</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>db <span class="token operator">*</span>DB<span class="token punctuation">)</span> <span class="token function">query</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">,</span> query <span class="token builtin">string</span><span class="token punctuation">,</span> args <span class="token punctuation">[</span><span class="token punctuation">]</span>any<span class="token punctuation">,</span> strategy connReuseStrategy<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>Rows<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	dc<span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">conn</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> strategy<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">return</span> db<span class="token punctuation">.</span><span class="token function">queryDC</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> dc<span class="token punctuation">,</span> dc<span class="token punctuation">.</span>releaseConn<span class="token punctuation">,</span> query<span class="token punctuation">,</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="db-conn方法"><a href="#db-conn方法" class="header-anchor">#</a> db.conn方法</h5> <p>它的主要功能是获取一个新的或者缓存的数据库连接（*driverConn），这个方法会根据连接复用策略、当前打开的连接数和上下文等因素来决定是使用空闲连接池中的连接、等待新的连接还是创建新的连接。</p> <p>以下是这个方法的详细解释：</p> <ol><li>获取数据库的锁（db.mu.Lock()），并检查数据库是否已关闭（db.closed）。如果关闭，则解锁并返回错误（errDBClosed）。</li> <li>检查上下文（ctx）是否已过期。如果过期，则解锁并返回上下文错误（ctx.Err()）。</li> <li>获取数据库的最大寿命（db.maxLifetime），并尝试从空闲连接池（db.freeConn）中获取一个连接。如果连接复用策略（strategy）允许使用缓存连接且空闲连接池中有可用连接，则取出一个连接并将其标记为正在使用（conn.inUse = true）。</li> <li>检查连接是否过期（conn.expired(lifetime)）。如果过期，则更新数据库的最大寿命关闭计数器（db.maxLifetimeClosed++），解锁，并关闭连接，返回错误（driver.ErrBadConn）。</li> <li>重置连接的会话（conn.resetSession(ctx)）。如果重置失败且错误为BadConn，则关闭连接并返回错误。</li> <li>如果当前打开的连接数（db.numOpen）超过了最大允许的连接数（db.maxOpen），则将当前的连接请求（connRequest）添加到等待队列（db.connRequests）中，并增加等待计数器（db.waitCount）。解锁数据库并等待新的连接或上下文过期。</li> <li>如果上下文过期，则从等待队列中移除当前请求，并更新等待时长（db.waitDuration）。检查是否有新的连接返回，如果有，则将其放回连接池。</li> <li>如果从等待队列中收到了新的连接（ret.conn），则检查连接是否过期。如果过期，则更新数据库的最大寿命关闭计数器（db.maxLifetimeClosed++），关闭连接并返回错误（driver.ErrBadConn）。</li> <li>重置连接的会话（ret.conn.resetSession(ctx)）。如果重置失败且错误为BadConn，则关闭连接并返回错误。</li> <li>如果当前打开的连接数（db.numOpen）未超过最大允许的连接数（db.maxOpen），则创建一个新的连接（db.connector.Connect(ctx)）。如果连接失败，则减少打开的连接数（db.numOpen--），尝试打开新的连接（db.maybeOpenNewConnections()），解锁数据库并返回错误。</li> <li>创建一个新的driverConn对象（dc），将其与数据库关联，并将其标记为正在使用（dc.inUse = true）。解锁数据库并返回新的连接。</li></ol> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>db <span class="token operator">*</span>DB<span class="token punctuation">)</span> <span class="token function">conn</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">,</span> strategy connReuseStrategy<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>driverConn<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> db<span class="token punctuation">.</span>closed <span class="token punctuation">{</span>
+		db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> errDBClosed
+	<span class="token punctuation">}</span>
+	<span class="token comment">// 检测ctx是否过期</span>
+	<span class="token keyword">select</span> <span class="token punctuation">{</span>
+	<span class="token keyword">default</span><span class="token punctuation">:</span>
+	<span class="token keyword">case</span> <span class="token operator">&lt;-</span>ctx<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> ctx<span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	lifetime <span class="token operator">:=</span> db<span class="token punctuation">.</span>maxLifetime
+
+	last <span class="token operator">:=</span> <span class="token function">len</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>freeConn<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span>
+	<span class="token keyword">if</span> strategy <span class="token operator">==</span> cachedOrNewConn <span class="token operator">&amp;&amp;</span> last <span class="token operator">&gt;=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		<span class="token comment">// 从连接池获取连接</span>
+		conn <span class="token operator">:=</span> db<span class="token punctuation">.</span>freeConn<span class="token punctuation">[</span>last<span class="token punctuation">]</span>
+		db<span class="token punctuation">.</span>freeConn <span class="token operator">=</span> db<span class="token punctuation">.</span>freeConn<span class="token punctuation">[</span><span class="token punctuation">:</span>last<span class="token punctuation">]</span>
+		conn<span class="token punctuation">.</span>inUse <span class="token operator">=</span> <span class="token boolean">true</span>
+    
+    <span class="token comment">// 连接过期，抛错误</span>
+		<span class="token keyword">if</span> conn<span class="token punctuation">.</span><span class="token function">expired</span><span class="token punctuation">(</span>lifetime<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			db<span class="token punctuation">.</span>maxLifetimeClosed<span class="token operator">++</span>
+			db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			conn<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> driver<span class="token punctuation">.</span>ErrBadConn
+		<span class="token punctuation">}</span>
+		db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		<span class="token comment">// 重置session</span>
+		<span class="token keyword">if</span> err <span class="token operator">:=</span> conn<span class="token punctuation">.</span><span class="token function">resetSession</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">;</span> errors<span class="token punctuation">.</span><span class="token function">Is</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> driver<span class="token punctuation">.</span>ErrBadConn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			conn<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+		<span class="token punctuation">}</span>
+
+		<span class="token keyword">return</span> conn<span class="token punctuation">,</span> <span class="token boolean">nil</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 当前连接超过设置的最大值</span>
+	<span class="token keyword">if</span> db<span class="token punctuation">.</span>maxOpen <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> db<span class="token punctuation">.</span>numOpen <span class="token operator">&gt;=</span> db<span class="token punctuation">.</span>maxOpen <span class="token punctuation">{</span>
+		<span class="token comment">// 每个等待连接的请求通过创建nextRequestKeyLocked变量标识，</span>
+    <span class="token comment">// 同时通过关联chan通道来时刻监听等待新连接创建的新号</span>
+		req <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> connRequest<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+		reqKey <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">nextRequestKeyLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		db<span class="token punctuation">.</span>connRequests<span class="token punctuation">[</span>reqKey<span class="token punctuation">]</span> <span class="token operator">=</span> req
+		db<span class="token punctuation">.</span>waitCount<span class="token operator">++</span>
+		db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		waitStart <span class="token operator">:=</span> <span class="token function">nowFunc</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+		<span class="token keyword">select</span> <span class="token punctuation">{</span>
+		<span class="token keyword">case</span> <span class="token operator">&lt;-</span>ctx<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			<span class="token comment">// ctx过期，移除该等待的请求</span>
+			db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token function">delete</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>connRequests<span class="token punctuation">,</span> reqKey<span class="token punctuation">)</span>
+			db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+			db<span class="token punctuation">.</span>waitDuration<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token function">int64</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span><span class="token function">Since</span><span class="token punctuation">(</span>waitStart<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+      <span class="token comment">// 检查是否有新的连接返回，如果有则放入连接池</span>
+			<span class="token keyword">select</span> <span class="token punctuation">{</span>
+			<span class="token keyword">default</span><span class="token punctuation">:</span>
+			<span class="token keyword">case</span> ret<span class="token punctuation">,</span> ok <span class="token operator">:=</span> <span class="token operator">&lt;-</span>req<span class="token punctuation">:</span>
+				<span class="token keyword">if</span> ok <span class="token operator">&amp;&amp;</span> ret<span class="token punctuation">.</span>conn <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+					db<span class="token punctuation">.</span><span class="token function">putConn</span><span class="token punctuation">(</span>ret<span class="token punctuation">.</span>conn<span class="token punctuation">,</span> ret<span class="token punctuation">.</span>err<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">}</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> ctx<span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">case</span> ret<span class="token punctuation">,</span> ok <span class="token operator">:=</span> <span class="token operator">&lt;-</span>req<span class="token punctuation">:</span>
+      <span class="token comment">// 阻塞等待，进入等待队列</span>
+			db<span class="token punctuation">.</span>waitDuration<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token function">int64</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span><span class="token function">Since</span><span class="token punctuation">(</span>waitStart<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+			<span class="token keyword">if</span> <span class="token operator">!</span>ok <span class="token punctuation">{</span>
+				<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> errDBClosed
+			<span class="token punctuation">}</span>
+			<span class="token comment">// 有新连接，但是连接已过期，抛错误</span>
+			<span class="token keyword">if</span> strategy <span class="token operator">==</span> cachedOrNewConn <span class="token operator">&amp;&amp;</span> ret<span class="token punctuation">.</span>err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token operator">&amp;&amp;</span> ret<span class="token punctuation">.</span>conn<span class="token punctuation">.</span><span class="token function">expired</span><span class="token punctuation">(</span>lifetime<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+				db<span class="token punctuation">.</span>maxLifetimeClosed<span class="token operator">++</span>
+				db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+				ret<span class="token punctuation">.</span>conn<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+				<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> driver<span class="token punctuation">.</span>ErrBadConn
+			<span class="token punctuation">}</span>
+			<span class="token keyword">if</span> ret<span class="token punctuation">.</span>conn <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+				<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> ret<span class="token punctuation">.</span>err
+			<span class="token punctuation">}</span>
+
+			<span class="token comment">// 重置session</span>
+			<span class="token keyword">if</span> err <span class="token operator">:=</span> ret<span class="token punctuation">.</span>conn<span class="token punctuation">.</span><span class="token function">resetSession</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">;</span> errors<span class="token punctuation">.</span><span class="token function">Is</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> driver<span class="token punctuation">.</span>ErrBadConn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				ret<span class="token punctuation">.</span>conn<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+				<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+			<span class="token punctuation">}</span>
+			<span class="token keyword">return</span> ret<span class="token punctuation">.</span>conn<span class="token punctuation">,</span> ret<span class="token punctuation">.</span>err
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+  <span class="token comment">// 创建新的连接并立即返回</span>
+	db<span class="token punctuation">.</span>numOpen<span class="token operator">++</span>
+	db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	ci<span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span>connector<span class="token punctuation">.</span><span class="token function">Connect</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		db<span class="token punctuation">.</span>numOpen<span class="token operator">--</span> 
+		db<span class="token punctuation">.</span><span class="token function">maybeOpenNewConnections</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+	<span class="token punctuation">}</span>
+	db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	dc <span class="token operator">:=</span> <span class="token operator">&amp;</span>driverConn<span class="token punctuation">{</span>
+		db<span class="token punctuation">:</span>         db<span class="token punctuation">,</span>
+		createdAt<span class="token punctuation">:</span>  <span class="token function">nowFunc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		returnedAt<span class="token punctuation">:</span> <span class="token function">nowFunc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		ci<span class="token punctuation">:</span>         ci<span class="token punctuation">,</span>
+		inUse<span class="token punctuation">:</span>      <span class="token boolean">true</span><span class="token punctuation">,</span>
+	<span class="token punctuation">}</span>
+	db<span class="token punctuation">.</span><span class="token function">addDepLocked</span><span class="token punctuation">(</span>dc<span class="token punctuation">,</span> dc<span class="token punctuation">)</span>
+	db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">return</span> dc<span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="rows-close调用链"><a href="#rows-close调用链" class="header-anchor">#</a> rows.Close调用链</h4> <p>前面在调用<code>db.Query</code>方法时，我们看到其调用的方法<code>query</code>通过调用如下方法并传递<code>dc.releaseConn</code>关闭连接方法给Rows对象。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">return</span> db<span class="token punctuation">.</span><span class="token function">queryDC</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> dc<span class="token punctuation">,</span> dc<span class="token punctuation">.</span>releaseConn<span class="token punctuation">,</span> query<span class="token punctuation">,</span> args<span class="token punctuation">)</span>
+
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>db <span class="token operator">*</span>DB<span class="token punctuation">)</span> <span class="token function">queryDC</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> txctx context<span class="token punctuation">.</span>Context<span class="token punctuation">,</span> dc <span class="token operator">*</span>driverConn<span class="token punctuation">,</span> releaseConn <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token builtin">error</span><span class="token punctuation">)</span><span class="token punctuation">,</span> query <span class="token builtin">string</span><span class="token punctuation">,</span> args <span class="token punctuation">[</span><span class="token punctuation">]</span>any<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>Rows<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token operator">...</span>
+		rows <span class="token operator">:=</span> <span class="token operator">&amp;</span>Rows<span class="token punctuation">{</span>
+				dc<span class="token punctuation">:</span>          dc<span class="token punctuation">,</span>
+				releaseConn<span class="token punctuation">:</span> releaseConn<span class="token punctuation">,</span>
+				rowsi<span class="token punctuation">:</span>       rowsi<span class="token punctuation">,</span>
+			<span class="token punctuation">}</span>
+		<span class="token operator">...</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><p>所以，当我们在调用<code>rows.Close()</code>方法时，实际上是在调用<code>dc.releaseConn</code>方法，所以接下来我们研究该方法。</p> <h5 id="dc-releaseconn方法"><a href="#dc-releaseconn方法" class="header-anchor">#</a> dc.releaseConn方法</h5> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>dc <span class="token operator">*</span>driverConn<span class="token punctuation">)</span> <span class="token function">releaseConn</span><span class="token punctuation">(</span>err <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	dc<span class="token punctuation">.</span>db<span class="token punctuation">.</span><span class="token function">putConn</span><span class="token punctuation">(</span>dc<span class="token punctuation">,</span> err<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>releaseConn方法通过调用<code>db.putConn</code>释放连接。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// 释放连接</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>db <span class="token operator">*</span>DB<span class="token punctuation">)</span> <span class="token function">putConn</span><span class="token punctuation">(</span>dc <span class="token operator">*</span>driverConn<span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">,</span> resetSession <span class="token builtin">bool</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> <span class="token operator">!</span>errors<span class="token punctuation">.</span><span class="token function">Is</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> driver<span class="token punctuation">.</span>ErrBadConn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> <span class="token operator">!</span>dc<span class="token punctuation">.</span><span class="token function">validateConnection</span><span class="token punctuation">(</span>resetSession<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			err <span class="token operator">=</span> driver<span class="token punctuation">.</span>ErrBadConn
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+	db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token operator">...</span>
+	added <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">putConnDBLocked</span><span class="token punctuation">(</span>dc<span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+	db<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">Unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token operator">...</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>putConn方法通过调用<code>db.putConnDBLocked</code>方法实现：</p> <h5 id="db-putconndblocked方法-2"><a href="#db-putconndblocked方法-2" class="header-anchor">#</a> db.putConnDBLocked方法</h5> <p>它的主要功能是将一个数据库连接（*driverConn）放回到空闲连接池中，或者满足一个等待中的连接请求（connRequest）。该方法返回一个布尔值，表示操作是否成功。</p> <p>以下是这个方法的详细解释：</p> <ol><li>首先检查数据库是否已关闭（db.closed），如果是，则直接返回false。</li> <li>然后检查当前打开的连接数（db.numOpen）是否超过了最大允许的连接数（db.maxOpen），如果超过了，则返回false。</li> <li>接下来检查是否有等待中的连接请求（db.connRequests）。如果有，则从等待队列中取出一个请求，将当前的连接（dc）分配给它，并从等待队列中移除这个请求。如果分配的连接没有错误（err == nil），则将连接标记为正在使用（dc.inUse = true）。将连接和错误信息发送给请求者，然后返回true。</li> <li>如果没有等待中的连接请求，且当前连接没有错误（err == nil）并且数据库没有关闭（!db.closed），则尝试将连接放回空闲连接池（db.freeConn）。如果空闲连接池的大小没有超过最大允许的空闲连接数（db.maxIdleConnsLocked()），则将连接添加到空闲连接池中，并启动清理程序（db.startCleanerLocked()），然后返回true。否则，将数据库的最大空闲关闭计数器（db.maxIdleClosed）加一。</li> <li>如果以上条件都不满足，则返回false。</li></ol> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>db <span class="token operator">*</span>DB<span class="token punctuation">)</span> <span class="token function">putConnDBLocked</span><span class="token punctuation">(</span>dc <span class="token operator">*</span>driverConn<span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+  <span class="token comment">// db已关闭，返回失败</span>
+	<span class="token keyword">if</span> db<span class="token punctuation">.</span>closed <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+  
+  <span class="token comment">// 当前连接数超过最大上限，返回失败</span>
+	<span class="token keyword">if</span> db<span class="token punctuation">.</span>maxOpen <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> db<span class="token punctuation">.</span>numOpen <span class="token operator">&gt;</span> db<span class="token punctuation">.</span>maxOpen <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+  
+  <span class="token comment">// 有等待连接的请求，把该连接返回给当前等待的请求</span>
+	<span class="token keyword">if</span> c <span class="token operator">:=</span> <span class="token function">len</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>connRequests<span class="token punctuation">)</span><span class="token punctuation">;</span> c <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		<span class="token keyword">var</span> req <span class="token keyword">chan</span> connRequest
+		<span class="token keyword">var</span> reqKey <span class="token builtin">uint64</span>
+		<span class="token keyword">for</span> reqKey<span class="token punctuation">,</span> req <span class="token operator">=</span> <span class="token keyword">range</span> db<span class="token punctuation">.</span>connRequests <span class="token punctuation">{</span>
+			<span class="token keyword">break</span>
+		<span class="token punctuation">}</span>
+    
+    <span class="token comment">// 将当前请求从等待队列移除</span>
+		<span class="token function">delete</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>connRequests<span class="token punctuation">,</span> reqKey<span class="token punctuation">)</span> 
+		<span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			dc<span class="token punctuation">.</span>inUse <span class="token operator">=</span> <span class="token boolean">true</span>
+		<span class="token punctuation">}</span>
+		req <span class="token operator">&lt;-</span> connRequest<span class="token punctuation">{</span>
+			conn<span class="token punctuation">:</span> dc<span class="token punctuation">,</span>
+			err<span class="token punctuation">:</span>  err<span class="token punctuation">,</span>
+		<span class="token punctuation">}</span>
+		<span class="token keyword">return</span> <span class="token boolean">true</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>db<span class="token punctuation">.</span>closed <span class="token punctuation">{</span>
+    <span class="token comment">// 没有等待请求，则将连接放回连接池</span>
+		<span class="token keyword">if</span> db<span class="token punctuation">.</span><span class="token function">maxIdleConnsLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token function">len</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>freeConn<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			db<span class="token punctuation">.</span>freeConn <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>db<span class="token punctuation">.</span>freeConn<span class="token punctuation">,</span> dc<span class="token punctuation">)</span>
+      
+      <span class="token comment">// 调用startCleanerLocked定时清理过期的连接</span>
+			db<span class="token punctuation">.</span><span class="token function">startCleanerLocked</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span> <span class="token boolean">true</span>
+		<span class="token punctuation">}</span>
+		db<span class="token punctuation">.</span>maxIdleClosed<span class="token operator">++</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>如下是DB对象、driverConn对象和Rows对象之间释放连接函数的引用关系：</p> <img src="/assets/img/4 池化技术-rows.Close.7943f0b7.png" alt="image-20240118130015195" style="zoom:67%;"> <h2 id="对象池"><a href="#对象池" class="header-anchor">#</a> 对象池</h2> <h3 id="对象池原理"><a href="#对象池原理" class="header-anchor">#</a> 对象池原理</h3> <p>对象池（Object Pool）是一种软件设计模式，用于预先创建并缓存一组对象，以供多个客户端共享和重复使用，而无需每次都创建和销毁对象。</p> <p>对象池的实现原理通常包括以下步骤：</p> <ol><li>初始化：在对象池创建时，会预先创建一定数量的对象，并将它们保存在池中。</li> <li>获取对象：当客户端需要使用对象时，会从对象池中请求一个对象。如果对象池中有空闲的对象，那么就直接返回一个；如果对象池为空，那么就创建一个新的对象并返回。在某些实现中，如果对象池已满且没有空闲对象，那么请求可能会被阻塞，直到有对象变为可用。</li> <li>使用对象：客户端在获取对象后，可以使用它来执行各种操作。这些操作应该不会影响对象被其他客户端重复使用。</li> <li>释放对象：当客户端完成对对象的使用后，应该将对象返回到对象池中，以便其他客户端使用。在返回对象时，可能需要进行一些清理操作，例如重置对象的状态。</li> <li>销毁：在对象池不再需要时，应该销毁对象池，包括池中的所有对象。</li></ol> <p>对象池的主要优点是可以减少对象创建和销毁的开销，提高性能。特别是对于创建和销毁成本较高的对象，如数据库连接、线程和大型图形对象等，使用对象池可以带来显著的性能提升。</p> <p>下面我们介绍Go语言中的sync.Pool对象池来进行分析。</p> <h3 id="sync-pool介绍"><a href="#sync-pool介绍" class="header-anchor">#</a> sync.Pool介绍</h3> <p>sync.Pool是Go语言中的一个对象池，用于存储和检索临时对象，以减轻垃圾收集器的压力并提高内存分配的效率。sync.Pool适用于在多个goroutine之间共享和重用的临时对象，例如缓冲区、临时变量等。sync.Pool是线程安全的，可以被多个goroutine同时使用。</p> <p>sync.Pool的实现原理主要包括以下几个方面：</p> <ol><li>基于P (Processor)的本地缓存：sync.Pool为每个P（Go语言的调度实体）维护一个本地缓存（local pool），从而减少锁竞争。当goroutine从Pool获取或归还对象时，会优先操作与其关联的P的本地缓存。这样，即使有多个goroutine并发访问Pool，也可以保持较低的锁竞争。</li> <li>每个P的本地缓存包含一个私有对象（private）和一个共享对象列表（shared）：当goroutine需要从Pool获取对象时，首先尝试获取私有对象，如果私有对象不存在，则尝试从共享列表中获取。当归还对象时，如果私有对象为空，则将其设置为私有对象，否则将其添加到共享列表。</li> <li>垃圾回收时的清理策略：在垃圾回收过程中，sync.Pool会自动清理其中的对象。为了尽量保留有用的对象，sync.Pool实现了一种双层缓存策略。在每次垃圾回收时，sync.Pool会将当前的本地缓存（local pool）置为“受害者”（victim），并创建新的本地缓存。在下一次垃圾回收之前，从Pool获取对象时，如果当前的本地缓存为空，会尝试从“受害者”缓存中获取。这样，在一定程度上减少了有用对象被清理的可能性。</li> <li>可定制的构造函数：通过为Pool的New字段指定一个函数，可以在获取对象时自动创建新对象，以防Pool为空。这样，用户无需关心对象的创建过程，只需关注对象的使用和归还。需要注意的是，New函数应该是无状态的，以保证线程安全。</li></ol> <h3 id="sync-pool实现原理"><a href="#sync-pool实现原理" class="header-anchor">#</a> sync.Pool实现原理</h3> <h4 id="使用示例-3"><a href="#使用示例-3" class="header-anchor">#</a> 使用示例</h4> <p>下面是sync.Pool的简单使用方法，我们通过分析下面代码调用来了解sync.Pool的实现原理。</p> <p>备注：当前源码的golang版本是v1.20.3</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;fmt&quot;</span>
+	<span class="token string">&quot;sync&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">type</span> Obj <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	Name <span class="token builtin">string</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 创建一个Pool实例，指定New函数以在需要时创建新对象。</span>
+<span class="token keyword">var</span> pool <span class="token operator">=</span> sync<span class="token punctuation">.</span>Pool<span class="token punctuation">{</span>
+	New<span class="token punctuation">:</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token function">new</span><span class="token punctuation">(</span>Obj<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  
+  <span class="token comment">// 从Pool中获取对象</span>
+	obj <span class="token operator">:=</span> pool<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token operator">*</span>Obj<span class="token punctuation">)</span>
+	obj<span class="token punctuation">.</span>Name <span class="token operator">=</span> <span class="token string">&quot;test123&quot;</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span>
+
+  <span class="token comment">// 使用对象完成任务后，将对象归还给Pool</span>
+	pool<span class="token punctuation">.</span><span class="token function">Put</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span>
+	obj2 <span class="token operator">:=</span> pool<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token operator">*</span>Obj<span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>obj2<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><p>上面的代码输出结果如下，可以看到obj2复用的是前面创建的obj的对象缓存。</p> <div class="language- extra-class"><pre class="language-text"><code>&amp;{test123}
+&amp;{test123}
+</code></pre></div><h4 id="主要结构体"><a href="#主要结构体" class="header-anchor">#</a> 主要结构体</h4> <p>下图是sync.Pool里几个比较重要的结构体关系图，下面我们将围绕sync.Pool的Get和Put操作来分析对象池的实现原理。</p> <img src="/assets/img/12 池化技术-sync.Pool关系图.c98d0f37.png" alt="image-20240120085735848" style="zoom:67%;"> <h5 id="pool结构体-2"><a href="#pool结构体-2" class="header-anchor">#</a> Pool结构体</h5> <p>首先我们看下sync.Pool类结构</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">type</span> Pool <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	noCopy noCopy
+
+	local     unsafe<span class="token punctuation">.</span>Pointer 
+	localSize <span class="token builtin">uintptr</span>        
+
+	victim     unsafe<span class="token punctuation">.</span>Pointer 
+	victimSize <span class="token builtin">uintptr</span>        
+
+	New <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> any
+<span class="token punctuation">}</span>
+</code></pre></div><p>结构体的各个字段含义如下：</p> <ul><li><p><code>noCopy noCopy</code>：这是一个空结构体，用于阻止Pool结构体被复制。在Go中，如果结构体包含一个noCopy类型的字段，则在编译时会触发一个检查，如果发现有复制操作，将产生一个编译警告。</p></li> <li><p><code>local unsafe.Pointer</code>：这是一个指向本地缓存数组的指针，其大小为<code>runtime.GOMAXPROCS(0)</code>的poolLocal数组（见下面的pinSlow源码），每个P（处理器）都有一个固定大小的本地缓存，通过其ID关联一个槽位上的poolLocal。通过维护每个P的本地缓存，sync.Pool可以减少锁竞争，提高性能。</p></li> <li><p><code>localSize uintptr</code>：这是一个无符号整数，表示本地缓存数组的大小。</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Pool<span class="token punctuation">)</span> <span class="token function">pinSlow</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>poolLocal<span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token operator">...</span>
+
+	size <span class="token operator">:=</span> runtime<span class="token punctuation">.</span><span class="token function">GOMAXPROCS</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+	local <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span>poolLocal<span class="token punctuation">,</span> size<span class="token punctuation">)</span>
+	atomic<span class="token punctuation">.</span><span class="token function">StorePointer</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">.</span>local<span class="token punctuation">,</span> unsafe<span class="token punctuation">.</span><span class="token function">Pointer</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>local<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// store-release</span>
+	<span class="token function">runtime_StoreReluintptr</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">.</span>localSize<span class="token punctuation">,</span> <span class="token function">uintptr</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>     <span class="token comment">// store-release</span>
+	<span class="token keyword">return</span> <span class="token operator">&amp;</span>local<span class="token punctuation">[</span>pid<span class="token punctuation">]</span><span class="token punctuation">,</span> pid
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li><p><code>victim unsafe.Pointer</code>：这是一个指向上一轮垃圾回收周期中的本地缓存数组的指针。在每次垃圾回收时，当前的本地缓存会被置为“受害者”缓存，并创建新的本地缓存。这种双层缓存策略可以在一定程度上减少有用对象被清理的可能性。</p></li> <li><p><code>victimSize uintptr</code>：这是一个无符号整数，表示“受害者”缓存数组的大小。</p></li> <li><p><code>New func() any</code>：这是一个可选的函数，用于在Get方法返回nil时生成一个新的值。这样，用户无需关心对象的创建过程，只需关注对象的使用和归还。需要注意的是，New函数应该是无状态的，以保证线程安全。此函数在与Get方法并发调用时不可更改。</p></li></ul> <h5 id="poollocal结构体"><a href="#poollocal结构体" class="header-anchor">#</a> poolLocal结构体</h5> <p>poolLocal结构体包含以下两个部分：</p> <ul><li><code>poolLocalInternal</code>：这是一个内部结构体，用于存储与每个P（处理器）相关的本地缓存。它包含一个私有对象（private）和一个共享对象列表（shared）。见下面介绍。</li> <li><code>pad [128 - unsafe.Sizeof(poolLocalInternal{})%128]byte</code>：这是一个字节填充数组，用于防止“伪共享”（false sharing）。伪共享是指多个处理器同时访问同一个缓存行中的不同数据，导致性能下降的现象。通过在poolLocal结构体中添加填充字节，可以确保不同处理器的poolLocal结构体位于不同的缓存行中，从而避免伪共享问题。</li></ul> <blockquote><p>伪共享</p></blockquote> <p>伪共享（False Sharing）是一种多线程程序中的性能降低现象，它发生在多个线程并发访问同一个CPU缓存行中的不同数据时。</p> <p>现代计算机中，CPU不是直接从主内存中读取数据，而是先将数据加载到更接近CPU的缓存中，然后从缓存中读取数据。这是因为CPU的速度远高于主内存，直接从主内存读取数据会导致CPU大量时间等待数据，降低性能。为了提高性能，CPU会将数据按照一定大小（通常为64字节或128字节）的块，也就是“缓存行”（Cache Line），加载到缓存中。</p> <p>当多个线程在同一缓存行的不同位置读写数据时，即使它们访问的是不同的数据，由于缓存系统是以缓存行为单位进行数据交换的，一个线程对缓存行的写操作会使整个缓存行失效，导致其他线程需要重新从主内存中加载数据，这就是伪共享。由于需要频繁地加载数据，伪共享会导致程序性能大幅度下降。</p> <h5 id="poollocalinternal结构体"><a href="#poollocalinternal结构体" class="header-anchor">#</a> poolLocalInternal结构体</h5> <p>poolLocalInternal结构体包含以下两个部分：</p> <ol><li><code>private any</code>：这是一个私有对象，只能被对应的P（处理器）使用。当goroutine需要从Pool获取对象时，首先尝试获取这个私有对象，如果私有对象不存在，则尝试从共享列表中获取。当归还对象时，如果私有对象为空，则将其设置为私有对象。</li> <li><code>shared poolChain</code>：这是一个共享对象列表。本地的P可以在列表头部添加或移除对象，任何P都可以从列表尾部移除对象。这是一个无锁设计的数据结构，可以有效地在多个P之间共享对象，减少锁竞争。</li></ol> <h5 id="poolchain结构体"><a href="#poolchain结构体" class="header-anchor">#</a> poolChain结构体</h5> <p>poolChain结构体是poolDequeue的动态大小版本，它是一个双向链表队列，其中每个链表元素（poolDequeue）的大小是前一个元素的两倍。当一个poolDequeue填满时，poolChain会分配一个新的poolDequeue，并只将对象推送到最新的poolDequeue中。从链表的另一端弹出对象，当一个poolDequeue被耗尽时，它将从链表中移除。</p> <img src="/assets/img/12 池化技术-双向链表队列.cfc7e486.png" alt="image-20240120093129842" style="zoom:67%;"> <p>poolChain结构体包含以下两个部分：</p> <ol><li><code>head *poolChainElt</code>：这是一个指向poolDequeue的指针，用于推送（push）对象。这个字段只被生产者访问，因此不需要同步。</li> <li><code>tail *poolChainElt</code>：这是一个指向poolDequeue的指针，用于从尾部弹出（popTail）对象。这个字段会被消费者访问，因此读写操作必须是原子的。</li></ol> <h5 id="poolchainelt结构体"><a href="#poolchainelt结构体" class="header-anchor">#</a> poolChainElt结构体</h5> <p>poolChainElt结构体是poolChain双向链表的元素，包含以下部分：</p> <ol><li><code>poolDequeue</code>：这是一个固定大小的双端队列，用于存储对象。poolDequeue实现了无锁的push和pop操作，可以高效地在多个P之间共享对象。</li> <li><code>next, prev *poolChainElt</code>：这是指向相邻poolChainElt的指针，用于实现poolChain的双向链表结构，如上图所示。next指针由生产者原子写入，由消费者原子读取，它只会从nil转变为非nil。prev指针由消费者原子写入，由生产者原子读取，它只会从非nil转变为nil。</li></ol> <h5 id="pooldequeue结构体"><a href="#pooldequeue结构体" class="header-anchor">#</a> poolDequeue结构体</h5> <p>poolDequeue结构体是一个无锁的、固定大小的单生产者、多消费者队列。单个生产者可以从队列头部进行推送（push）和弹出（pop）操作，而消费者可以从队列尾部进行弹出操作。</p> <p>poolDequeue结构体包含以下两个部分：</p> <ol><li><code>headTail uint64</code>：这是一个64位整数，将32位头索引和32位尾索引打包在一起。头索引和尾索引都是模vals长度减1的索引。尾索引是队列中最旧数据的索引，头索引是下一个要填充的槽位的索引。在范围[tail, head)内的槽位由消费者拥有。消费者在将槽位设置为nil之前，仍然拥有该槽位，此时所有权才会传递给生产者。头索引存储在最高有效位中，这样我们可以原子地对其进行加法操作，溢出是无害的。</li> <li><code>vals []eface</code>：这是一个interface{}值的环形缓冲区，存储在dequeue中。它的大小必须是2的幂。如果槽位为空，则vals[i].typ为nil，否则为非nil。一个槽位仍在使用中，直到尾索引移动到它之外，并且typ被设置为nil。消费者会原子地将其设置为nil，生产者会原子地读取它。</li></ol> <h4 id="sync-get方法"><a href="#sync-get方法" class="header-anchor">#</a> sync.Get方法</h4> <p>在Go语言的<code>sync.Pool</code>中，<code>Get()</code>函数的主要功能是从池中选择并移除一个任意项，然后返回给调用者。如果池中没有可用的项，且<code>Pool</code>的<code>New</code>字段不为<code>nil</code>，则<code>Get()</code>会返回调用<code>New</code>函数的结果。</p> <p>以下是<code>Get()</code>函数的源码分析：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Pool<span class="token punctuation">)</span> <span class="token function">Get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> any <span class="token punctuation">{</span>
+	<span class="token comment">// 如果启用了数据竞争检测，则禁用它，以防止在后续操作中产生误报。</span>
+	<span class="token keyword">if</span> race<span class="token punctuation">.</span>Enabled <span class="token punctuation">{</span>
+		race<span class="token punctuation">.</span><span class="token function">Disable</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 调用pin函数获取当前P的本地缓存和ID。</span>
+	l<span class="token punctuation">,</span> pid <span class="token operator">:=</span> p<span class="token punctuation">.</span><span class="token function">pin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 尝试获取本地缓存中的私有对象，并将私有对象设置为nil。</span>
+	x <span class="token operator">:=</span> l<span class="token punctuation">.</span>private
+	l<span class="token punctuation">.</span>private <span class="token operator">=</span> <span class="token boolean">nil</span>
+
+	<span class="token comment">// 如果私有对象为空，则尝试从本地缓存的共享列表中弹出对象。</span>
+	<span class="token comment">// 如果共享列表也为空，则调用getSlow函数从其他P的本地缓存或victim缓存中获取对象。</span>
+	<span class="token keyword">if</span> x <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		x<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">=</span> l<span class="token punctuation">.</span>shared<span class="token punctuation">.</span><span class="token function">popHead</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> x <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			x <span class="token operator">=</span> p<span class="token punctuation">.</span><span class="token function">getSlow</span><span class="token punctuation">(</span>pid<span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 释放当前P，允许其他goroutine使用。</span>
+	<span class="token function">runtime_procUnpin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token comment">// 如果启用了数据竞争检测，则重新启用它，并对返回的对象进行数据竞争检测。</span>
+	<span class="token keyword">if</span> race<span class="token punctuation">.</span>Enabled <span class="token punctuation">{</span>
+		race<span class="token punctuation">.</span><span class="token function">Enable</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> x <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			race<span class="token punctuation">.</span><span class="token function">Acquire</span><span class="token punctuation">(</span><span class="token function">poolRaceAddr</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 如果所有尝试都未能获取对象，且Pool的New字段不为nil，则调用New函数创建新对象。</span>
+	<span class="token keyword">if</span> x <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token operator">&amp;&amp;</span> p<span class="token punctuation">.</span>New <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		x <span class="token operator">=</span> p<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 返回获取到的对象。</span>
+	<span class="token keyword">return</span> x
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="poolchain-pophead方法"><a href="#poolchain-pophead方法" class="header-anchor">#</a> poolChain.popHead方法</h5> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>c <span class="token operator">*</span>poolChain<span class="token punctuation">)</span> <span class="token function">popHead</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>any<span class="token punctuation">,</span> <span class="token builtin">bool</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 获取poolChain的头部元素（poolChainElt结构体）。</span>
+	d <span class="token operator">:=</span> c<span class="token punctuation">.</span>head
+  
+   <span class="token comment">// 在一个循环中，对每个poolChainElt进行操作。</span>
+	<span class="token keyword">for</span> d <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 尝试从poolChainElt的头部弹出一个元素。</span>
+		<span class="token keyword">if</span> val<span class="token punctuation">,</span> ok <span class="token operator">:=</span> d<span class="token punctuation">.</span><span class="token function">popHead</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> ok <span class="token punctuation">{</span>
+      <span class="token comment">// 如果弹出成功，则返回弹出的元素和true。</span>
+			<span class="token keyword">return</span> val<span class="token punctuation">,</span> ok
+		<span class="token punctuation">}</span>
+		
+    <span class="token comment">// 如果poolChainElt为空，则尝试获取前一个poolChainElt。这是因为前一个poolChainElt可能仍有未被消费的元素。</span>
+		d <span class="token operator">=</span> <span class="token function">loadPoolChainElt</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>d<span class="token punctuation">.</span>prev<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="loadpoolchainelt方法"><a href="#loadpoolchainelt方法" class="header-anchor">#</a> loadPoolChainElt方法</h5> <p><code>loadPoolChainElt</code>函数的功能是原子地加载<code>**poolChainElt</code>类型的指针，并返回一个<code>*poolChainElt</code>类型的指针。这个函数主要用于在多线程环境下安全地读取<code>poolChainElt</code>结构体的指针，避免数据竞争和不一致问题。</p> <div class="language- extra-class"><pre class="language-text"><code>func loadPoolChainElt(pp **poolChainElt) *poolChainElt {
+	return (*poolChainElt)(atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(pp))))
+}
+</code></pre></div><h5 id="pooldequeue-pophead-方法"><a href="#pooldequeue-pophead-方法" class="header-anchor">#</a> poolDequeue.popHead()方法</h5> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>d <span class="token operator">*</span>poolDequeue<span class="token punctuation">)</span> <span class="token function">popHead</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>any<span class="token punctuation">,</span> <span class="token builtin">bool</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 定义一个*eface类型的变量，用于存储要弹出的元素。</span>
+	<span class="token keyword">var</span> slot <span class="token operator">*</span>eface 
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 原子地加载headTail的值。</span>
+		ptrs <span class="token operator">:=</span> atomic<span class="token punctuation">.</span><span class="token function">LoadUint64</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>d<span class="token punctuation">.</span>headTail<span class="token punctuation">)</span> 
+    
+    <span class="token comment">// 获取head和tail索引。</span>
+		head<span class="token punctuation">,</span> tail <span class="token operator">:=</span> d<span class="token punctuation">.</span><span class="token function">unpack</span><span class="token punctuation">(</span>ptrs<span class="token punctuation">)</span> 
+		<span class="token keyword">if</span> tail <span class="token operator">==</span> head <span class="token punctuation">{</span>
+      <span class="token comment">// 如果队列为空，则返回nil和false。</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> <span class="token boolean">false</span> 
+		<span class="token punctuation">}</span>
+
+
+		head<span class="token operator">--</span> <span class="token comment">// 去除后需要将head元素移出，形成新的head索引</span>
+		ptrs2 <span class="token operator">:=</span> d<span class="token punctuation">.</span><span class="token function">pack</span><span class="token punctuation">(</span>head<span class="token punctuation">,</span> tail<span class="token punctuation">)</span> <span class="token comment">// 打包新的head和tail值。</span>
+		<span class="token keyword">if</span> atomic<span class="token punctuation">.</span><span class="token function">CompareAndSwapUint64</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>d<span class="token punctuation">.</span>headTail<span class="token punctuation">,</span> ptrs<span class="token punctuation">,</span> ptrs2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 即用新的ptrs2更新d.headTail值。</span>
+      <span class="token comment">// 如果原子地更新headTail的值成功，则我们成功地重新获得了槽位。</span>
+			slot <span class="token operator">=</span> <span class="token operator">&amp;</span>d<span class="token punctuation">.</span>vals<span class="token punctuation">[</span>head<span class="token operator">&amp;</span><span class="token function">uint32</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>d<span class="token punctuation">.</span>vals<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">]</span> 
+			<span class="token keyword">break</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+  <span class="token comment">// 将slot转换为*any类型，并获取其值。</span>
+	val <span class="token operator">:=</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token operator">*</span>any<span class="token punctuation">)</span><span class="token punctuation">(</span>unsafe<span class="token punctuation">.</span><span class="token function">Pointer</span><span class="token punctuation">(</span>slot<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+	<span class="token keyword">if</span> val <span class="token operator">==</span> <span class="token function">dequeueNil</span><span class="token punctuation">(</span><span class="token boolean">nil</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 如果val等于dequeueNil(nil)，则将val设置为nil。</span>
+		val <span class="token operator">=</span> <span class="token boolean">nil</span> 
+	<span class="token punctuation">}</span>
+
+	<span class="token operator">*</span>slot <span class="token operator">=</span> eface<span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token comment">// 将槽位清零。</span>
+	<span class="token keyword">return</span> val<span class="token punctuation">,</span> <span class="token boolean">true</span> <span class="token comment">// 返回弹出的值和true。</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="pool-getslow方法"><a href="#pool-getslow方法" class="header-anchor">#</a> Pool.getSlow方法</h5> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Pool<span class="token punctuation">)</span> <span class="token function">getSlow</span><span class="token punctuation">(</span>pid <span class="token builtin">int</span><span class="token punctuation">)</span> any <span class="token punctuation">{</span>
+  <span class="token comment">// 使用load-acquire模式加载p.localSize的值。</span>
+	size <span class="token operator">:=</span> <span class="token function">runtime_LoadAcquintptr</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">.</span>localSize<span class="token punctuation">)</span> 
+  <span class="token comment">// 使用load-consume模式加载p.local的值。</span>
+	locals <span class="token operator">:=</span> p<span class="token punctuation">.</span>local
+	<span class="token comment">// 遍历所有的本地缓存。</span>
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token function">int</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+		<span class="token comment">// 获取一个本地缓存。</span>
+		l <span class="token operator">:=</span> <span class="token function">indexLocal</span><span class="token punctuation">(</span>locals<span class="token punctuation">,</span> <span class="token punctuation">(</span>pid<span class="token operator">+</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">%</span><span class="token function">int</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+		 <span class="token comment">// 尝试从本地缓存的共享列表中弹出一个元素。</span>
+		<span class="token keyword">if</span> x<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> l<span class="token punctuation">.</span>shared<span class="token punctuation">.</span><span class="token function">popTail</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> x <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> x <span class="token comment">// 如果弹出成功，则返回弹出的元素。</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 原子地加载p.victimSize的值。</span>
+	size <span class="token operator">=</span> atomic<span class="token punctuation">.</span><span class="token function">LoadUintptr</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">.</span>victimSize<span class="token punctuation">)</span>
+  <span class="token comment">// 如果当前P的ID大于或等于victimSize，则返回nil。</span>
+	<span class="token keyword">if</span> <span class="token function">uintptr</span><span class="token punctuation">(</span>pid<span class="token punctuation">)</span> <span class="token operator">&gt;=</span> size <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span>
+	<span class="token punctuation">}</span>
+
+  <span class="token comment">// 加载p.victim的值。</span>
+	locals <span class="token operator">=</span> p<span class="token punctuation">.</span>victim
+
+  <span class="token comment">// 获取victim缓存中的一个本地缓存。</span>
+	l <span class="token operator">:=</span> <span class="token function">indexLocal</span><span class="token punctuation">(</span>locals<span class="token punctuation">,</span> pid<span class="token punctuation">)</span>
+  <span class="token comment">// 尝试获取本地缓存的私有对象。</span>
+	<span class="token keyword">if</span> x <span class="token operator">:=</span> l<span class="token punctuation">.</span>private<span class="token punctuation">;</span> x <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		l<span class="token punctuation">.</span>private <span class="token operator">=</span> <span class="token boolean">nil</span>
+    <span class="token comment">// 如果获取成功，则返回获取到的对象。</span>
+		<span class="token keyword">return</span> x
+	<span class="token punctuation">}</span>
+
+  <span class="token comment">// 遍历所有的victim本地缓存。</span>
+	<span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token function">int</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 获取一个victim本地缓存。</span>
+		l <span class="token operator">:=</span> <span class="token function">indexLocal</span><span class="token punctuation">(</span>locals<span class="token punctuation">,</span> <span class="token punctuation">(</span>pid<span class="token operator">+</span>i<span class="token punctuation">)</span><span class="token operator">%</span><span class="token function">int</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment">// 尝试从victim本地缓存的共享列表中弹出一个元素。</span>
+		<span class="token keyword">if</span> x<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> l<span class="token punctuation">.</span>shared<span class="token punctuation">.</span><span class="token function">popTail</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> x <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 如果弹出成功，则返回弹出的元素。</span>
+			<span class="token keyword">return</span> x
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 将p.victimSize原子地设置为0，表示victim缓存为空。</span>
+	atomic<span class="token punctuation">.</span><span class="token function">StoreUintptr</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token punctuation">.</span>victimSize<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// 如果所有尝试都失败，则返回nil。</span>
+	<span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h5 id="pooldequeue-poptail方法"><a href="#pooldequeue-poptail方法" class="header-anchor">#</a> poolDequeue.popTail方法</h5> <p>代码功能如下：</p> <ul><li><code>popTail</code> 函数是 Golang 中 <code>sync.Pool</code> 中并发双端队列实现的一部分。</li> <li>用于移除并返回队列尾部的元素。</li> <li>函数使用无限循环，直到成功获取插槽。</li> <li>利用原子操作（<code>Load</code> 和 <code>CompareAndSwap</code>）确保在并发环境中的线程安全性。</li> <li>代码检查队列是否为空，如果是，则返回 false。</li> <li>如果成功获取插槽，则从插槽中提取值，检查是否为特殊的 sentinel 值（<code>dequeueNil</code>），然后通知 <code>pushHead</code> 插槽不再使用。</li> <li>清零插槽对于避免留下可能使对象生命周期不必要延长的引用至关重要。</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// popTail 移除并返回队列尾部的元素。</span>
+<span class="token comment">// 如果队列为空，则返回 false。可以被任意数量的消费者调用。</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>d <span class="token operator">*</span>poolDequeue<span class="token punctuation">)</span> <span class="token function">popTail</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>any<span class="token punctuation">,</span> <span class="token builtin">bool</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 声明一个变量来存储指向空接口的指针。</span>
+	<span class="token keyword">var</span> slot <span class="token operator">*</span>eface
+	
+	<span class="token comment">// 使用无限循环重复尝试，直到操作成功。</span>
+	<span class="token keyword">for</span> <span class="token punctuation">{</span>
+		<span class="token comment">// 从原子变量加载当前头尾指针。</span>
+		ptrs <span class="token operator">:=</span> d<span class="token punctuation">.</span>headTail<span class="token punctuation">.</span><span class="token function">Load</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		head<span class="token punctuation">,</span> tail <span class="token operator">:=</span> d<span class="token punctuation">.</span><span class="token function">unpack</span><span class="token punctuation">(</span>ptrs<span class="token punctuation">)</span>
+		
+		<span class="token comment">// 检查队列是否为空。</span>
+		<span class="token keyword">if</span> tail <span class="token operator">==</span> head <span class="token punctuation">{</span>
+			<span class="token comment">// 队列为空。</span>
+			<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> <span class="token boolean">false</span>
+		<span class="token punctuation">}</span>
+
+		<span class="token comment">// 确认头尾（用于上面的推测性检查）并递增尾部。如果成功，我们就拥有尾部的插槽。</span>
+		ptrs2 <span class="token operator">:=</span> d<span class="token punctuation">.</span><span class="token function">pack</span><span class="token punctuation">(</span>head<span class="token punctuation">,</span> tail<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> d<span class="token punctuation">.</span>headTail<span class="token punctuation">.</span><span class="token function">CompareAndSwap</span><span class="token punctuation">(</span>ptrs<span class="token punctuation">,</span> ptrs2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token comment">// 成功获取插槽。</span>
+			slot <span class="token operator">=</span> <span class="token operator">&amp;</span>d<span class="token punctuation">.</span>vals<span class="token punctuation">[</span>tail<span class="token operator">&amp;</span><span class="token function">uint32</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>d<span class="token punctuation">.</span>vals<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+			<span class="token keyword">break</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 我们现在拥有插槽。</span>
+	val <span class="token operator">:=</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token operator">*</span>any<span class="token punctuation">)</span><span class="token punctuation">(</span>unsafe<span class="token punctuation">.</span><span class="token function">Pointer</span><span class="token punctuation">(</span>slot<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	
+	<span class="token comment">// 检查值是否为特殊的 dequeueNil 标志。</span>
+	<span class="token keyword">if</span> val <span class="token operator">==</span> <span class="token function">dequeueNil</span><span class="token punctuation">(</span><span class="token boolean">nil</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		val <span class="token operator">=</span> <span class="token boolean">nil</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 通知 pushHead 我们已经完成对此插槽的使用。清零插槽也很重要，以防止留下可能使对象生命周期比必要更长的引用。</span>
+	<span class="token comment">//</span>
+	<span class="token comment">// 我们首先写入 val，然后通过原子方式写入 typ，发布我们已完成对此插槽的使用。</span>
+	slot<span class="token punctuation">.</span>val <span class="token operator">=</span> <span class="token boolean">nil</span>
+	atomic<span class="token punctuation">.</span><span class="token function">StorePointer</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>slot<span class="token punctuation">.</span>typ<span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+	<span class="token comment">// 此时，pushHead 拥有该插槽。</span>
+
+	<span class="token comment">// 返回获取的值并指示成功。</span>
+	<span class="token keyword">return</span> val<span class="token punctuation">,</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h4 id="sync-put方法"><a href="#sync-put方法" class="header-anchor">#</a> sync.Put方法</h4> <p>如下是Put方法的源码：</p> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// Put 将 x 添加到池中。</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>p <span class="token operator">*</span>Pool<span class="token punctuation">)</span> <span class="token function">Put</span><span class="token punctuation">(</span>x any<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 如果 x 为 nil，则直接返回。</span>
+	<span class="token keyword">if</span> x <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token comment">// 如果启用了竞态检测，以概率 1/4 随机丢弃 x，这是为了模拟竞态检测时的不确定性。。</span>
+	<span class="token keyword">if</span> race<span class="token punctuation">.</span>Enabled <span class="token punctuation">{</span>
+		<span class="token keyword">if</span> <span class="token function">runtime_randn</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+			<span class="token comment">// 随机将 x 丢弃。</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+		<span class="token comment">// 释放竞态检测的合并，禁用竞态检测。</span>
+		race<span class="token punctuation">.</span><span class="token function">ReleaseMerge</span><span class="token punctuation">(</span><span class="token function">poolRaceAddr</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		race<span class="token punctuation">.</span><span class="token function">Disable</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token comment">// 获取锁定的 P（处理器）并返回它的本地池。</span>
+	l<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> p<span class="token punctuation">.</span><span class="token function">pin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	
+	<span class="token comment">// 如果本地池为空，则将 x 存储在本地池中。</span>
+	<span class="token keyword">if</span> l<span class="token punctuation">.</span>private <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		l<span class="token punctuation">.</span>private <span class="token operator">=</span> x
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+		<span class="token comment">// 如果本地池非空，则将 x 推送到共享池的头部。</span>
+		l<span class="token punctuation">.</span>shared<span class="token punctuation">.</span><span class="token function">pushHead</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token comment">// 解锁 P。</span>
+	<span class="token function">runtime_procUnpin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	
+	<span class="token comment">// 如果启用了竞态检测，则重新启用竞态检测。</span>
+	<span class="token keyword">if</span> race<span class="token punctuation">.</span>Enabled <span class="token punctuation">{</span>
+		race<span class="token punctuation">.</span><span class="token function">Enable</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h5 id="poolchain-pushhead方法"><a href="#poolchain-pushhead方法" class="header-anchor">#</a> poolChain.pushHead方法</h5> <p>代码功能如下：</p> <ul><li><code>pushHead</code> 方法用于将元素 <code>val</code> 推送到同步池链表的头部。</li> <li>如果链表为空，则初始化一个链表元素，初始大小为 8，并设置链表头部和尾部。</li> <li>尝试将元素推送到当前链表元素的头部，如果成功则直接返回。</li> <li>如果当前链表元素已满，则分配一个新元素，大小为当前的两倍（最大不超过 <code>dequeueLimit</code>）。</li> <li>创建新的链表元素，连接到当前链表元素的前面，将新链表元素设置为链表头部。</li> <li>将当前链表元素的下一个元素指向新创建的元素，然后将元素推送到新创建的链表元素的头部。</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// pushHead 方法用于将元素 val 推送到链表头部。</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>c <span class="token operator">*</span>poolChain<span class="token punctuation">)</span> <span class="token function">pushHead</span><span class="token punctuation">(</span>val any<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 获取链表头部元素。</span>
+	d <span class="token operator">:=</span> c<span class="token punctuation">.</span>head
+	
+	<span class="token comment">// 如果链表为空，则初始化链表。</span>
+	<span class="token keyword">if</span> d <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token comment">// 初始化大小为 8 的链表元素。</span>
+		<span class="token keyword">const</span> initSize <span class="token operator">=</span> <span class="token number">8</span> <span class="token comment">// 必须是2的幂</span>
+		d <span class="token operator">=</span> <span class="token function">new</span><span class="token punctuation">(</span>poolChainElt<span class="token punctuation">)</span>
+		d<span class="token punctuation">.</span>vals <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span>eface<span class="token punctuation">,</span> initSize<span class="token punctuation">)</span>
+		c<span class="token punctuation">.</span>head <span class="token operator">=</span> d
+		<span class="token comment">// 将尾部指向当前链表元素。</span>
+		<span class="token function">storePoolChainElt</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>c<span class="token punctuation">.</span>tail<span class="token punctuation">,</span> d<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 尝试将元素推送到当前链表元素的头部。</span>
+	<span class="token keyword">if</span> d<span class="token punctuation">.</span><span class="token function">pushHead</span><span class="token punctuation">(</span>val<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 当前链表元素已满。分配一个大小为当前的两倍的新元素。</span>
+	newSize <span class="token operator">:=</span> <span class="token function">len</span><span class="token punctuation">(</span>d<span class="token punctuation">.</span>vals<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span>
+	<span class="token keyword">if</span> newSize <span class="token operator">&gt;=</span> dequeueLimit <span class="token punctuation">{</span>
+		<span class="token comment">// 不能再扩大了。</span>
+		newSize <span class="token operator">=</span> dequeueLimit
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 创建新的链表元素，连接到当前链表元素的前面。</span>
+	d2 <span class="token operator">:=</span> <span class="token operator">&amp;</span>poolChainElt<span class="token punctuation">{</span>prev<span class="token punctuation">:</span> d<span class="token punctuation">}</span>
+	d2<span class="token punctuation">.</span>vals <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span>eface<span class="token punctuation">,</span> newSize<span class="token punctuation">)</span>
+	c<span class="token punctuation">.</span>head <span class="token operator">=</span> d2
+	<span class="token comment">// 将当前链表元素的下一个元素指向新创建的元素。</span>
+	<span class="token function">storePoolChainElt</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>d<span class="token punctuation">.</span>next<span class="token punctuation">,</span> d2<span class="token punctuation">)</span>
+	<span class="token comment">// 将元素推送到新创建的链表元素的头部。</span>
+	d2<span class="token punctuation">.</span><span class="token function">pushHead</span><span class="token punctuation">(</span>val<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h5 id="pooldequeue-pushhead方法"><a href="#pooldequeue-pushhead方法" class="header-anchor">#</a> poolDequeue.pushHead方法</h5> <p>代码功能如下：</p> <ul><li><code>pushHead</code> 方法用于在同步池的双端队列的头部添加元素 <code>val</code>。</li> <li>如果队列已满，则返回 false。该方法只能由单个生产者调用。</li> <li>首先加载头尾指针。</li> <li>检查队列是否已满，如果满则直接返回 false。</li> <li>获取头部槽位，即队列中的第一个位置。</li> <li>检查头部槽位是否已经被 <code>popTail</code> 释放。如果是，则说明另一个 goroutine 仍在清理尾部，因此队列实际上仍然是满的，返回 false。</li> <li>如果头部槽位是空闲的，将元素 <code>val</code> 存储到槽位中，如果 <code>val</code> 为 nil，则使用特殊的 <code>dequeueNil</code> 标志。</li> <li>增加头部指针，这样就完成了对头部的操作，并且充当了写入槽位的存储屏障。</li> <li>操作成功，返回 true。</li></ul> <div class="language-go extra-class"><pre class="language-go"><code><span class="token comment">// pushHead 在队列头部添加元素 val。如果队列已满，则返回 false。此方法只能由单个生产者调用。</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>d <span class="token operator">*</span>poolDequeue<span class="token punctuation">)</span> <span class="token function">pushHead</span><span class="token punctuation">(</span>val any<span class="token punctuation">)</span> <span class="token builtin">bool</span> <span class="token punctuation">{</span>
+	<span class="token comment">// 加载头尾指针。</span>
+	ptrs <span class="token operator">:=</span> d<span class="token punctuation">.</span>headTail<span class="token punctuation">.</span><span class="token function">Load</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	head<span class="token punctuation">,</span> tail <span class="token operator">:=</span> d<span class="token punctuation">.</span><span class="token function">unpack</span><span class="token punctuation">(</span>ptrs<span class="token punctuation">)</span>
+	
+	<span class="token comment">// 检查队列是否已满。</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>tail<span class="token operator">+</span><span class="token function">uint32</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>d<span class="token punctuation">.</span>vals<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">&lt;&lt;</span>dequeueBits<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">==</span> head <span class="token punctuation">{</span>
+		<span class="token comment">// 队列已满。</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token comment">// 获取头部槽位。</span>
+	slot <span class="token operator">:=</span> <span class="token operator">&amp;</span>d<span class="token punctuation">.</span>vals<span class="token punctuation">[</span>head<span class="token operator">&amp;</span><span class="token function">uint32</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>d<span class="token punctuation">.</span>vals<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+
+	<span class="token comment">// 检查头部槽位是否已被 popTail 释放。</span>
+	typ <span class="token operator">:=</span> atomic<span class="token punctuation">.</span><span class="token function">LoadPointer</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>slot<span class="token punctuation">.</span>typ<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> typ <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token comment">// 另一个 goroutine 仍在清理尾部，因此</span>
+		<span class="token comment">// 队列实际上仍然是满的。</span>
+		<span class="token keyword">return</span> <span class="token boolean">false</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token comment">// 头部槽位空闲，因此我们拥有它。</span>
+	<span class="token keyword">if</span> val <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		val <span class="token operator">=</span> <span class="token function">dequeueNil</span><span class="token punctuation">(</span><span class="token boolean">nil</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token operator">*</span><span class="token punctuation">(</span><span class="token operator">*</span>any<span class="token punctuation">)</span><span class="token punctuation">(</span>unsafe<span class="token punctuation">.</span><span class="token function">Pointer</span><span class="token punctuation">(</span>slot<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">=</span> val
+
+	<span class="token comment">// 增加头部。这将所有权传递给 popTail，</span>
+	<span class="token comment">// 并充当写入槽位的存储屏障。</span>
+	d<span class="token punctuation">.</span>headTail<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> dequeueBits<span class="token punctuation">)</span>
+	
+	<span class="token comment">// 操作成功，返回 true。</span>
+	<span class="token keyword">return</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/11.6-异步化技术.html" class="prev">
+        11.6 异步化技术
+      </a></span> <span class="next"><a href="/11.8-分布式锁.html">
+        11.8 分布式锁
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/27.a66d9ab9.js" defer></script>
+  </body>
+</html>

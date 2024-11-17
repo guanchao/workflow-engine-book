@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/26.be3c6fce.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第二部份：流程引擎实现</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第三部份：流程引擎进阶</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/9-流程分析.html" class="active sidebar-link">9 流程分析</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/9-流程分析.html#运行前流程结构分析" class="sidebar-link">运行前流程结构分析</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/9-流程分析.html#流程没有起始和结束" class="sidebar-link">流程没有起始和结束</a></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#存在无法执行的任务" class="sidebar-link">存在无法执行的任务</a></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#存在任务阻塞" class="sidebar-link">存在任务阻塞</a></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#存在无尽的任务循环" class="sidebar-link">存在无尽的任务循环</a></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#在达到结束状态后-仍有任务在执行" class="sidebar-link">在达到结束状态后，仍有任务在执行</a></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#并行分支不同步" class="sidebar-link">并行分支不同步</a></li></ul></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#运行中流程记录分析" class="sidebar-link">运行中流程记录分析</a></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#运行后历史数据分析" class="sidebar-link">运行后历史数据分析</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/9-流程分析.html#控制流视角" class="sidebar-link">控制流视角</a></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#数据视角" class="sidebar-link">数据视角</a></li><li class="sidebar-sub-header"><a href="/9-流程分析.html#资源视角" class="sidebar-link">资源视角</a></li></ul></li></ul></li><li><a href="/10-云原生工作流.html" class="sidebar-link">10 云原生工作流</a></li><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading"><span>11 多引擎分布式系统实现</span> <span class="arrow right"></span></p> <!----></section></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>流程分析分以下三个阶段，每个阶段分析的数据都不一样。</p> <ul><li>运行前。分析流程结构的合理性。</li> <li>运行中。分析当前的执行状况。</li> <li>运行后。分析历史数据，找到的瓶颈所在并进行优化。</li></ul> <h2 id="运行前流程结构分析"><a href="#运行前流程结构分析" class="header-anchor">#</a> 运行前流程结构分析</h2> <p>在工作流管理系统中，流程定义是一个关键步骤，它决定了工作流的执行路径和处理逻辑。然而，在定义流程的过程中，经常会出现一些错误，这些错误可能会导致工作流的执行出现问题，甚至导致工作流的失败。以下是一些常见的流程定义错误：</p> <h3 id="流程没有起始和结束"><a href="#流程没有起始和结束" class="header-anchor">#</a> 流程没有起始和结束</h3> <p>正常一个流程至少要有一个起始节点和一个结束节点，没有起始节点，就无法知道流程从哪里开始执行，没有结束节点，流程就不知道要执行到哪里才是结束。前面我们介绍基于Petri网的工作流网的定义中就有一个：必须包含一个起点和终点，这里也是一样的要求。</p> <p>例如下面缺少一个起始节点。</p> <img src="/assets/img/9 缺少起始和结束节点.b2a239bf.png" alt="image-20240328223249665" style="zoom:50%;"> <h3 id="存在无法执行的任务"><a href="#存在无法执行的任务" class="header-anchor">#</a> 存在无法执行的任务</h3> <p>这种情况通常被称为&quot;死任务&quot;，即任务在任何情况下都无法被执行。这可能是因为任务的输入条件永远无法满足，或者任务的执行逻辑存在问题。例如下图的任务C就是一个孤单的任务。</p> <img src="/assets/img/9 永远无法执行的任务.e430b32e.png" alt="image-20240328221234830" style="zoom:50%;"> <h3 id="存在任务阻塞"><a href="#存在任务阻塞" class="header-anchor">#</a> 存在任务阻塞</h3> <p>这种情况通常被称为&quot;死锁&quot;，即任务在到达结束状态前发生了阻塞，无法继续执行。这可能是因为任务之间的依赖关系设置不正确，或者任务的执行逻辑存在问题。例如下面的任务E就会一直阻塞，因为前面的AND Join需要任务B和任务C都完成才能满足条件继续执行。但是XOR Split只有一个分支会执行，这就意味着任务B和任务C要么都不执行，要么只有一个分支执行，所以AND Join永远无法满足条件。</p> <img src="/assets/img/9 存在任务阻塞.086b48b1.png" alt="image-20240328224157338" style="zoom:50%;"> <h3 id="存在无尽的任务循环"><a href="#存在无尽的任务循环" class="header-anchor">#</a> 存在无尽的任务循环</h3> <p>这种情况通常是任务被引入了无休止的循环中，无法达到结束状态。这可能是因为任务之间的依赖关系设置不正确。例如下面的任务A、B、C就进入了死循环，永远无法结束。</p> <img src="/assets/img/9 死循环任务.2a831850.png" alt="image-20240328221436068" style="zoom:50%;"> <h3 id="在达到结束状态后-仍有任务在执行"><a href="#在达到结束状态后-仍有任务在执行" class="header-anchor">#</a> 在达到结束状态后，仍有任务在执行</h3> <p>这种情况可能是因为工作流的结束条件设置不正确。正常的流程在执行到结束节点时，其他所有运行中的节点都应该已经结束才对。这就有点像Linux操作系统中的孤儿进程，即一个父进程退出结束了，而它的一个或多个子进程如果还在运行，那么这些子进程将成为孤儿进程。</p> <p>例如下面出现并行的任务B和任务C，但是没有对分支进行合并，导致执行完任务B结束后，任务C依然可能还在执行。</p> <img src="/assets/img/9 并行分支不汇聚.f66c7561.png" alt="image-20240328221641637" style="zoom:50%;"> <h3 id="并行分支不同步"><a href="#并行分支不同步" class="header-anchor">#</a> 并行分支不同步</h3> <p>正常的流程，并行分支是有多少个分支出去，最终这些分支都要汇聚到一起，即保证这些分支是同步的，否则无法控制子分支的结束，这就造成了流程执行的不可控局面出现，可能会出现资源泄漏之类的问题。</p> <p>这有点像我们写多线程时，在开启多个子线程任务后，一般都会有一个Join或Wait的等待所有子线程执行结束的步骤，保证这些子线程能正常结束，否则子线程就时不可控的因素。</p> <blockquote><p>Golang并发控制：</p></blockquote> <div class="language-go extra-class"><pre class="language-go"><code><span class="token keyword">package</span> main
+ 
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">&quot;fmt&quot;</span>
+    <span class="token string">&quot;time&quot;</span>
+    <span class="token string">&quot;sync&quot;</span>
+<span class="token punctuation">)</span>
+ 
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> wg sync<span class="token punctuation">.</span>WaitGroup
+ 
+    wg<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment">//设置计数器，数值即为goroutine的个数</span>
+    <span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">defer</span> wg<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">//goroutine执行结束后将计数器减1</span>
+        <span class="token comment">//Do something</span>
+        time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+ 
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Goroutine 1 finished!&quot;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ 
+    <span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">defer</span> wg<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">//goroutine执行结束后将计数器减1</span>
+        <span class="token comment">//Do something</span>
+        time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">*</span>time<span class="token punctuation">.</span>Second<span class="token punctuation">)</span>
+ 
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Goroutine 2 finished!&quot;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ 
+    wg<span class="token punctuation">.</span><span class="token function">Wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">//主goroutine阻塞等待计数器变为0</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">&quot;All Goroutine finished!&quot;</span><span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>python的多线程同步：</p></blockquote> <p>在 Python 中使用多线程时，可以通过 <code>threading</code> 模块创建和管理线程，并使用 <code>join()</code> 方法等待子线程结束。</p> <p>通过这种方式，你可以有效地管理多线程任务，并确保在继续执行主程序之前，所有子线程都已完成。</p> <p>以下是一个简单的示例，演示了如何创建多个线程并等待它们完成。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">import</span> threading
+<span class="token keyword">import</span> time
+
+<span class="token comment"># 定义一个线程要执行的函数</span>
+<span class="token keyword">def</span> <span class="token function">worker</span><span class="token punctuation">(</span>thread_id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;线程 </span><span class="token interpolation"><span class="token punctuation">{</span>thread_id<span class="token punctuation">}</span></span><span class="token string"> 开始工作&quot;</span></span><span class="token punctuation">)</span>
+    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># 模拟耗时操作</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;线程 </span><span class="token interpolation"><span class="token punctuation">{</span>thread_id<span class="token punctuation">}</span></span><span class="token string"> 工作完成&quot;</span></span><span class="token punctuation">)</span>
+
+<span class="token comment"># 创建一个线程列表</span>
+threads <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+<span class="token comment"># 创建并启动多个线程</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    thread <span class="token operator">=</span> threading<span class="token punctuation">.</span>Thread<span class="token punctuation">(</span>target<span class="token operator">=</span>worker<span class="token punctuation">,</span> args<span class="token operator">=</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    threads<span class="token punctuation">.</span>append<span class="token punctuation">(</span>thread<span class="token punctuation">)</span>
+    thread<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 等待所有子线程结束</span>
+<span class="token keyword">for</span> thread <span class="token keyword">in</span> threads<span class="token punctuation">:</span>
+    thread<span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;所有线程已完成&quot;</span><span class="token punctuation">)</span>
+</code></pre></div><p>例如下面的任务B和任务C没有合并分支。</p> <img src="/assets/img/9 并行分支不汇聚.f66c7561.png" alt="image-20240328221641637" style="zoom:50%;"> <h2 id="运行中流程记录分析"><a href="#运行中流程记录分析" class="header-anchor">#</a> 运行中流程记录分析</h2> <p>在执行时生成的流程实例中，可以分析出以下有用信息或指标：</p> <ol><li>流程执行时间：通过分析流程实例的开始和结束时间，可以计算出流程的执行时间，从而了解流程的效率。</li> <li>任务执行情况：流程实例中包含了各个任务的执行情况，可以了解每个任务的完成情况、执行时间、执行人等信息，有助于分析任务的效率和质量。</li> <li>节点流转路径：通过流程实例中的节点信息，可以了解流程在执行过程中的流转路径，以便分析流程的合理性和优化流程设计。</li> <li>异常情况：流程实例中可能包含异常情况，例如任务超时、流程终止等，通过分析这些异常情况，可以找到流程的瓶颈和潜在问题。</li> <li>参与者信息：流程实例中包含了参与者的信息，例如执行人、审批人等，有助于分析参与者的工作负荷和协作情况。</li></ol> <h2 id="运行后历史数据分析"><a href="#运行后历史数据分析" class="header-anchor">#</a> 运行后历史数据分析</h2> <p>通过分析历史的运行记录数据，将流程的历史运行数据进行量化和可视化，来了解流程的表现情况，从而揭示流程中运行的瓶颈以及有待改进的地方。通过数据驱动的方法进行流程优化，帮助管理者有效地改进当前的资源分配决策。</p> <p>这里的流程分析可以从不同的视角来进行，例如：控制流视角、数据视角、资源视角等。</p> <p>控制流视角可以解释流程整体的运行状况能让管理者一目了然发现瓶颈所在；数据视角可以查看到流程运行时的上下面数据以及运行时的数据；资源视角以人的角度来分析，可以看到每个员工的任务安排（即甘特图）。</p> <p>下面我们分别从最主要的控制流视角、数据视角和资源视角三个来介绍。</p> <blockquote><p>业务流程的三个模式</p></blockquote> <ul><li><p><strong>控制流视角：</strong></p> <p>控制流模式关注的是业务流程中的任务集合以及这些任务之间的流转关系。这包括三个方面：</p> <ul><li><strong>功能视角：</strong> 描述组成业务流程的各项活动。</li> <li><strong>控制视角：</strong> 描述这些活动之间的路由，即活动执行的顺序。</li> <li><strong>行为视角：</strong> 描述个别活动实际上如何被进行。</li></ul></li> <li><p><strong>数据视角：</strong></p> <p>数据模式关注的是在执行业务流程时所需的信息，即“运行时的工作数据”。</p></li> <li><p><strong>资源视角：</strong></p> <p>资源模式关注的是实际执行业务流程的人员和设施，以及他们运作的组织背景和彼此之间的各种关系。这包含了两点：</p> <ul><li><strong>资源视角：</strong> 确定实际执行业务流程的人员和设施。</li> <li><strong>组织视角：</strong> 描述人员和物理资源如何被利用以完成业务流程，以及它们之间的关系。</li></ul></li></ul> <p>总体而言，这三个模式为业务流程提供了全面的描述，涵盖了控制的执行流程、所涉及的数据以及执行人员和资源。通过这些模式，企业能够更好地理解、管理和优化其业务流程。它们提供了一个多维度的视角，帮助企业在制定和优化业务流程时考虑到不同方面的需求和关注点。</p> <p>如下是三种模式的对应工具和技术：</p> <img src="/assets/img/2 流程的三个维度.7c275774.png" alt="image-20240130231851920" style="zoom:50%;"> <h3 id="控制流视角"><a href="#控制流视角" class="header-anchor">#</a> 控制流视角</h3> <h4 id="时间瓶颈分析"><a href="#时间瓶颈分析" class="header-anchor">#</a> 时间瓶颈分析</h4> <p>在业务流程中，如果想分析人工任务的瓶颈所在，则需要如下图一样，通过分析历史的数据，得到每个人工任务节点的平均执行时间，并在展示时以颜色深浅的方式更友好的方式展现给管理者，让管理者能够一眼就看出流程的时间瓶颈卡点所在。</p> <p>同时，在前面任务节点的生命周期，我们知道，一个需要分配人工资源的任务，在进入【已开始】状态之前，有一个等待人员分配和就绪的时间，在下图的展示中，标注在箭头连线上。</p> <p>这样就可以非常直观地看到流程中所有环节的平均耗时，快速定位到时那个节点出现了瓶颈。</p> <img src="/assets/img/9 控制流视角-时间瓶颈分析.13c176b8.png" alt="image-20240306204701498" style="zoom:67%;"> <p>在这个视角下可以监控分析下面几个关键的指标：</p> <ul><li><p>流程（案例Case）统计</p> <ul><li>流程的最小耗时（min）</li> <li>流程的中位数耗时（median）</li> <li>流程的平均耗时（average）</li> <li>流程的最大耗时（max）</li></ul></li> <li><p>任务统计</p> <p>监控分析流程中各个任务节点的统计数据（注意：下面的指标是流程中每个任务节点都有的数据）</p> <ul><li>任务的最小耗时（min）</li> <li>任务的中位数耗时（median）</li> <li>任务的平均耗时（average）</li> <li>任务的最大耗时（max）</li></ul></li> <li><p>资源统计</p> <p>更近一步，由于流程中同一个任务节点可能分配给不同的人员处理，不同人员之间的能力差异会导致任务执行耗时不同。通过对流程中任务进一步分析人员的执行情况，可以看到哪个员工处理时长久导致整体耗时变长，从而进行优化。</p> <ul><li>每个人员的最小耗时（min）</li> <li>每个人员的中位数耗时（median）</li> <li>每个人员的平均耗时（average）</li> <li>每个人员的最大耗时（max）</li></ul></li> <li><p>资源分配耗时统计</p> <p>如上图中我们可以看到任务在人员就绪之前，有一个资源分配，即人员分配调度的过程，这里面也会产生一定的耗时，也是流程中需要关注的一个瓶颈所在。</p></li></ul> <h4 id="空间瓶颈分析"><a href="#空间瓶颈分析" class="header-anchor">#</a> 空间瓶颈分析</h4> <p>这里的空间指的是流程中哪个任务出现了堆积，导致瓶颈问题产生，也就是分析流程中哪个位置出现了问题。</p> <p>如下图，就可以一目了然看到流程中哪个任务堆积了大量任务，可以及时进行改善。</p> <ul><li><p>流程（案例Case）统计</p> <ul><li>已完成的流程实例数量和百分比</li> <li>未完成的流程数量和百分比</li></ul></li> <li><p>任务统计</p> <p>监控分析流程中各个任务节点的统计数据（注意：下面的指标是流程中每个任务节点都有的数据）</p> <ul><li>已完成的任务数量和百分比</li> <li>未完成的任务数量和百分比</li></ul></li></ul> <img src="/assets/img/9 控制流视角-数量分析.7c4725f6.png" alt="image-20240306204956527" style="zoom:67%;"> <h3 id="数据视角"><a href="#数据视角" class="header-anchor">#</a> 数据视角</h3> <p>数据视角下可以把前面自定义的变量历史数据统一进行展示，这里实际上是变相支持用户自己设计一套监控指标，给系统预留了一个拓展空间。</p> <p>流程中每个任务节点如果设置了自定义变量后，在查看历史数据时，都可以看到一个表格数据，表格会展示历史每次运行后的变量值。</p> <img src="/assets/img/9 数据视角.fec471ed.png" alt="image-20240306232312291" style="zoom:50%;"> <p>同时，每一个运行中的流程实例，都记录了运行时的上下文数据，即运行时产生的数据。</p> <h3 id="资源视角"><a href="#资源视角" class="header-anchor">#</a> 资源视角</h3> <p>资源视角下每个员工都可以看到自己过去、现在和未来的任务排期（甘特图），而站在管理者角度，则可以看到所有员工的任务排期，让管理者对项目进度有整体的把握。</p> <p>当然这里的任务甘特图是基于前面引擎的资源调度能力规划的。</p> <img src="/assets/img/9 资源视角.33d2b8ad.png" alt="image-20240306201609238" style="zoom:67%;"> <p>备注：这里资源默认指人非自动化机器。</p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">4/6/2024, 8:27:42 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/8-分布式Crontab任务调度.html" class="prev">
+        8 分布式Crontab任务调度
+      </a></span> <span class="next"><a href="/10-云原生工作流.html">
+        10 云原生工作流
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/26.be3c6fce.js" defer></script>
+  </body>
+</html>

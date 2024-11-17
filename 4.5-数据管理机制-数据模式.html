@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/53.b6798440.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/19.08beb14f.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第二部份：流程引擎实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>4 流程引擎的核心组件</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/4.1-WFMC工作流参考模型.html" class="sidebar-link">4.1 WFMC工作流参考模型</a></li><li><section class="sidebar-group collapsable is-sub-group depth-2"><p class="sidebar-heading"><span>4.2 任务调度机制</span> <span class="arrow right"></span></p> <!----></section></li><li><a href="/4.3-工作流模式-控制流模式.html" class="sidebar-link">4.3 工作流模式-控制流模式</a></li><li><a href="/4.4-资源调度机制-资源模式.html" class="sidebar-link">4.4 资源调度机制-资源模式</a></li><li><a href="/4.5-数据管理机制-数据模式.html" class="active sidebar-link">4.5 数据管理机制-数据模式</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#数据可见性" class="sidebar-link">数据可见性</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#数据交互-流程内" class="sidebar-link">数据交互（流程内）</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#数据传输-流程外" class="sidebar-link">数据传输（流程外）</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#流程与外部环境之间的数据传输" class="sidebar-link">流程与外部环境之间的数据传输</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#流程与流程之间的数据传输" class="sidebar-link">流程与流程之间的数据传输</a></li></ul></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#基于数据的路由" class="sidebar-link">基于数据的路由</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#基础语法支持" class="sidebar-link">基础语法支持</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#通配符语法支持" class="sidebar-link">通配符语法支持</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#转义字符语法支持" class="sidebar-link">转义字符语法支持</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#数组语法支持" class="sidebar-link">数组语法支持</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#查询语法支持" class="sidebar-link">查询语法支持</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#修饰符语法支持" class="sidebar-link">修饰符语法支持</a></li><li class="sidebar-sub-header"><a href="/4.5-数据管理机制-数据模式.html#自定义修饰符" class="sidebar-link">自定义修饰符</a></li></ul></li></ul></li><li><a href="/4.6-异常处理机制-异常处理模式.html" class="sidebar-link">4.6 异常处理机制-异常处理模式</a></li><li><a href="/4.7-引擎执行模式.html" class="sidebar-link">4.7 引擎执行模式</a></li></ul></section></li><li><a href="/5-事件驱动机制.html" class="sidebar-link">5 事件驱动机制</a></li><li><a href="/6-核心表结构与接口设计.html" class="sidebar-link">6 核心表结构与接口设计</a></li><li><a href="/7-权限系统设计.html" class="sidebar-link">7 权限系统设计</a></li><li><a href="/8-分布式Crontab任务调度.html" class="sidebar-link">8 分布式Crontab任务调度</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>数据管理机制就是流程管理里面的信息流，它描述了如何在业务流程执行过程定义和管理数据。它们可分为四种：</p> <ul><li><p>数据可见性：与流程中数据元素的范围和可见性有关的模式。</p></li> <li><p>数据交互（流程内）：这种模式侧重于流程中任务之间的数据通信方式。</p></li> <li><p>数据传输（流程外）：这种模式考虑了数据元素在流程之间实际传输的方式，以及流程与外部环境之间的传输机制。</p></li> <li><p>基于数据的路由：描述数据元素影响流程其他方面运行的方式的模式，特别是控制流视角。</p></li></ul> <h2 id="数据可见性"><a href="#数据可见性" class="header-anchor">#</a> 数据可见性</h2> <p>数据可见性模式定义了数据元素与其可见区域的范围。数据元素通常是在流程的上下文中定义的，这种绑定通常定义了数据元素对其他流程可见并能被其他流程使用的范围。这一组有八种不同的模式，它们描述了不同程度的数据范围，具体如下：</p> <ul><li><p>环境数据（Environment Data）：</p> <p>其数据元素也叫环境变量。对应于在流程上下文之外定义但在执行过程中可在流程内访问的数据元素。环境数据元素有可能被不同流程的不同流程实例下的不同实例访问。也就是说所有流程产生的流程实例都可以访问数据元素。它的生命周期与用户相同。下图通过数据元素evar展示了环境数据模式，流程X和流程Y的所有流程实例里的任务实例都可以访问evar。</p></li> <li><p>流程数据（Process Data）：</p> <p>其数据元素也叫流程变量。对应的数据元素在给定流程实例的所有任务中都可访问。下图通过数据元素 pvar 展示了流程数据，流程实例B里的两个任务实例_1和任务实例_2都可以访问pvar。</p></li> <li><p>任务数据（Task Data）：</p> <p>其数据元素也叫局部变量。相当于在特定任务上下文中定义的数据元素。它通常只能在给定的任务实例中访问，生命周期与绑定它的任务实例相同。图 2.8 中与任务 A 相关联的变量 tvar 就说明了任务数据模式，该变量只能在该任务上下文中访问。例如脚本任务重的变量只在当前任务实例生效。</p></li></ul> <img src="/assets/img/4 数据模式的可见性类别.8eeab327.png" alt="image-20231220202443960" style="zoom:67%;"> <h2 id="数据交互-流程内"><a href="#数据交互-流程内" class="header-anchor">#</a> 数据交互（流程内）</h2> <p>流程内的任务之间可以通过以下两种方式实现数据通信：</p> <ul><li>流程变量：流程实例可以通过前面介绍的pvar变量进行读写来实现通信。</li> <li>基于数据的路由：另一种更灵活的方式是通过下面第四节介绍的变量表达式方式实现对流程实例中任意一个任务输入、输出数据的引用。</li></ul> <h2 id="数据传输-流程外"><a href="#数据传输-流程外" class="header-anchor">#</a> 数据传输（流程外）</h2> <h3 id="流程与外部环境之间的数据传输"><a href="#流程与外部环境之间的数据传输" class="header-anchor">#</a> 流程与外部环境之间的数据传输</h3> <p>在工作流中，流程与外部环境的数据传输方式主要有以下几种：</p> <ul><li>数据库传输：这是最常见的数据传输方式。流程和外部环境通过共享数据库来传输数据。流程可以查询数据库中的数据，也可以将处理结果写入数据库。</li> <li>文件传输：流程和外部环境可以通过共享文件系统来传输数据。流程可以读取文件中的数据，也可以将处理结果写入文件。</li> <li>消息队列传输：流程和外部环境可以通过消息队列来传输数据。流程可以向消息队列发送消息，也可以从消息队列接收消息。</li> <li>API调用：流程可以通过调用外部环境提供的API接口来获取数据或者传输数据。</li> <li>邮件传输：流程可以通过发送邮件的方式，将数据传输给外部环境。</li> <li>Web服务：流程可以通过调用外部环境提供的Web服务来获取数据或者传输数据。</li></ul> <p>以上就是流程与外部环境的主要数据传输方式，实际应用中，可能会根据具体需求，选择一种或者多种方式进行数据传输。</p> <h3 id="流程与流程之间的数据传输"><a href="#流程与流程之间的数据传输" class="header-anchor">#</a> 流程与流程之间的数据传输</h3> <p>流程与流程之间传输数据也跟上面类似，主要通过以下方式：</p> <ul><li>数据库：流程之间可以通过共享数据库来传输数据。一个流程在数据库中写入数据，另一个流程从数据库中读取数据。</li> <li>消息队列：流程之间也可以通过消息队列来传输数据。一个流程发送消息到队列，另一个流程从队列中接收消息。</li> <li>API调用：流程之间可以通过API调用来传输数据。一个流程调用另一个流程的API，将数据作为参数传入。</li> <li>文件交换：流程之间可以通过文件交换来传输数据。一个流程生成一个文件，另一个流程读取这个文件。</li> <li>环境变量：在同一个系统中，流程之间可以通过环境变量来传输数据，一个流程写入环境变量，另一个流程读取环境变量。</li> <li>Web服务：流程之间可以通过服务调用来传输数据。一个流程提供一个服务，然后其他流程通过调用这个服务来获取数据。</li> <li>子流程调用：通过子流程任务调用传输数据，父流程可以给子流程传递参数，子流程可以把执行结果输出返回给父流程（注意这里必须是同步方式执行子流程）</li></ul> <p>下图是流程与外部环境、流程与流程之间以及流程内任务之间的数据传输方式：</p> <img src="/assets/img/4 数据模式-数据交互.47251633.png" alt="image-20231221085856343" style="zoom:67%;"> <h2 id="基于数据的路由"><a href="#基于数据的路由" class="header-anchor">#</a> 基于数据的路由</h2> <p>前面我们用JSON的方式定义了流程模型，流程中每个任务的数据结构如下，例如Crontab触发器：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">&quot;instId&quot;</span><span class="token operator">:</span> <span class="token string">&quot;xxx&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;crontab触发器&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;crontab周期任务&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;template&quot;</span><span class="token operator">:</span> <span class="token string">&quot;crontab&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;positions&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;connections&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;expr&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;label&quot;</span><span class="token operator">:</span> <span class="token string">&quot;expr&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;string&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;value&quot;</span><span class="token operator">:</span> <span class="token string">&quot;*/1 * * * *&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;default&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;required&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;errorHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;loopHandler&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;timeout&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;isIgnore&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;runtimes&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">&quot;parameters&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">&quot;expr&quot;</span><span class="token operator">:</span> <span class="token string">&quot;*/1 * * * *&quot;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;output&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;startAt&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2023-12-01 21:03:11&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;endAt&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2023-12-01 21:03:11&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;error&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;status&quot;</span><span class="token operator">:</span> <span class="token string">&quot;done&quot;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>每个任务的数据分为定义数据和运行时数据。</p> <ul><li>定义数据：就是最外层的parameters字段，这里定义了任务包含的入参字段。</li> <li>运行时数据：存储在runtimes字段，该字段是一个数组，因为每个任务可能被多次运行，即创建多个任务实例，所以运行时数据会产生多条。每个运行时数据会把运行时的parameters以及输出结果、发生时间给记录下来，运行时的parameters和定义时的parameters可能不一样，因为定义的入参parameters可能是一个变量表达式而非常量，只有在运行时才知道具体的数值。</li></ul> <p>这里，我们可以看到每个任务实例都有一个instId来标识区分，所以流程中我们可以通过如下的变量表达式来定位引用任务实例的定义数据和运行时数据。</p> <blockquote><p>定义数据引用</p></blockquote> <div class="language-ini extra-class"><pre class="language-ini"><code><span class="token comment"># 引用某个入参定义的label</span>
+{{instId.parameters.key.label}}
+
+<span class="token comment"># 引用某个入参定义的type</span>
+{{instId.parameters.key.type}}
+
+<span class="token comment"># 引用某个入参定义的value</span>
+{{instId.parameters.key.value}}
+
+<span class="token comment"># 引用某个入参定义的default</span>
+{{instId.parameters.key.default}}
+</code></pre></div><blockquote><p>运行时数据引用</p></blockquote> <div class="language-ini extra-class"><pre class="language-ini"><code><span class="token comment"># 引用某个入参第一次运行时的value值</span>
+{{instId.runtimes.0.parameters.key}}
+
+<span class="token comment"># 引用某个入参第二次运行时的value值</span>
+{{instId.runtimes.1.parameters.key}}
+
+<span class="token comment"># 引用任务实例第一次运行时的输出结果</span>
+{{instId.runtimes.0.output}}
+
+<span class="token comment"># 引用任务实例第一次运行时的开始时间</span>
+{{instId.runtimes.0.startAt}}
+
+<span class="token comment"># 引用任务实例第一次运行时的结束时间</span>
+{{instId.runtimes.0.endAt}}
+
+<span class="token comment"># 引用任务实例第一次运行时的错误信息</span>
+{{instId.runtimes.0.error}}
+
+<span class="token comment"># 引用任务实例第一次运行时的装填</span>
+{{instId.runtimes.0.status}}
+</code></pre></div><p>前面两个是任务数据的引用，如果想引用数据可见性中提到的环境数据和全局数据，则可以通过如下的语法实现：</p> <div class="language-ini extra-class"><pre class="language-ini"><code><span class="token comment"># 环境数据引用</span>
+{{env.var}}
+
+<span class="token comment"># 全局数据引用</span>
+{{process.var}}   
+</code></pre></div><p>上面只是变量表达式语法的简单使用，在实际运行环境里，任务实例的输出结果可能更复杂，可能是一个复杂的Json嵌套结构，例如Output输出的是一个嵌套的Json结构：</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">&quot;first&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Tom&quot;</span><span class="token punctuation">,</span> <span class="token property">&quot;last&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Anderson&quot;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;age&quot;</span><span class="token operator">:</span><span class="token number">37</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;children&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;Sara&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;Alex&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;Jack&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;fav.movie&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Deer Hunter&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;friends&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span><span class="token property">&quot;first&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Dale&quot;</span><span class="token punctuation">,</span> <span class="token property">&quot;last&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Murphy&quot;</span><span class="token punctuation">,</span> <span class="token property">&quot;age&quot;</span><span class="token operator">:</span> <span class="token number">44</span><span class="token punctuation">,</span> <span class="token property">&quot;nets&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;ig&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;fb&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;tw&quot;</span><span class="token punctuation">]</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span><span class="token property">&quot;first&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Roger&quot;</span><span class="token punctuation">,</span> <span class="token property">&quot;last&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Craig&quot;</span><span class="token punctuation">,</span> <span class="token property">&quot;age&quot;</span><span class="token operator">:</span> <span class="token number">68</span><span class="token punctuation">,</span> <span class="token property">&quot;nets&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;fb&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;tw&quot;</span><span class="token punctuation">]</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span><span class="token property">&quot;first&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Jane&quot;</span><span class="token punctuation">,</span> <span class="token property">&quot;last&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Murphy&quot;</span><span class="token punctuation">,</span> <span class="token property">&quot;age&quot;</span><span class="token operator">:</span> <span class="token number">47</span><span class="token punctuation">,</span> <span class="token property">&quot;nets&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;ig&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;tw&quot;</span><span class="token punctuation">]</span><span class="token punctuation">}</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;vals&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token string">&quot;data&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token string">&quot;0&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token number">0</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token string">&quot;1&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token number">1</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token string">&quot;true&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token property">&quot;b&quot;</span><span class="token operator">:</span> <span class="token null keyword">null</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> <span class="token property">&quot;a&quot;</span><span class="token operator">:</span> <span class="token number">11</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>下面样一些特性，我会议上面这个Json输出结果为例子。</p> <h3 id="基础语法支持"><a href="#基础语法支持" class="header-anchor">#</a> 基础语法支持</h3> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.name.last}}          &gt;&gt; &quot;Anderson&quot;
+{{instId.runtimes.0.output.age}}                &gt;&gt; 37
+{{instId.runtimes.0.output.children}}           &gt;&gt; [&quot;Sara&quot;,&quot;Alex&quot;,&quot;Jack&quot;]
+{{instId.runtimes.0.output.children.#}}         &gt;&gt; 3
+{{instId.runtimes.0.output.children.0}}         &gt;&gt; &quot;Sara&quot;
+{{instId.runtimes.0.output.children.1}}         &gt;&gt; &quot;Alex&quot;
+{{instId.runtimes.0.output.friends.#.first}}    &gt;&gt; [&quot;Dale&quot;,&quot;Roger&quot;,&quot;Jane&quot;]
+{{instId.runtimes.0.output.friends.1.last}}     &gt;&gt; &quot;Craig&quot;
+</code></pre></div><h3 id="通配符语法支持"><a href="#通配符语法支持" class="header-anchor">#</a> 通配符语法支持</h3> <p>表达式里面可以通过<code>*</code>通配符匹配任何字符串，或者通过<code>?</code>通配符匹配一个字符串。</p> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.child*.2}}          &gt;&gt; &quot;Jack&quot;
+{{instId.runtimes.0.output.c?ildren.0}}        &gt;&gt; &quot;Sara&quot;
+</code></pre></div><h3 id="转义字符语法支持"><a href="#转义字符语法支持" class="header-anchor">#</a> 转义字符语法支持</h3> <p>像一些特殊字符，例如：<code>.</code>、<code>*</code>、<code>?</code>，可以用<code>\</code>来转义。</p> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.fav\.movie}}          &gt;&gt; &quot;Deer Hunter&quot;
+</code></pre></div><h3 id="数组语法支持"><a href="#数组语法支持" class="header-anchor">#</a> 数组语法支持</h3> <p>使用<code>#</code>字符可以深入挖掘JSON数组，<code>#</code>本身表示数组长度，也可以通过<code>#</code>获取对象数组中的某个字段列表。</p> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.friends.#}}          &gt;&gt; 3
+{{instId.runtimes.0.output.friends.#.age}}      &gt;&gt; [44,68,47]
+</code></pre></div><h3 id="查询语法支持"><a href="#查询语法支持" class="header-anchor">#</a> 查询语法支持</h3> <p>可以使用 <code>#(...)</code>查询数组的第一个匹配项，或使用 <code>#(...)#</code>查找所有匹配项。查询支持 <code>==、!=、&lt;、&lt;=、&gt;、&gt;=</code>比较运算符，以及简单模式匹配 <code>%</code>（类似）和<code>!%</code>（不类似）运算符。</p> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.friends.#(last==&quot;Murphy&quot;).first}}    &gt;&gt; &quot;Dale&quot;
+{{instId.runtimes.0.output.friends.#(last==&quot;Murphy&quot;)#.first}}   &gt;&gt; [&quot;Dale&quot;,&quot;Jane&quot;]
+{{instId.runtimes.0.output.friends.#(age&gt;45)#.last}}            &gt;&gt; [&quot;Craig&quot;,&quot;Murphy&quot;]
+{{instId.runtimes.0.output.friends.#(first%&quot;D*&quot;).last}}         &gt;&gt; &quot;Murphy&quot;
+{{instId.runtimes.0.output.friends.#(first!%&quot;D*&quot;).last}}        &gt;&gt; &quot;Craig&quot;
+</code></pre></div><p>如果要查询非对象数组，例如：</p> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.children.#(!%&quot;*a*&quot;)}}    &gt;&gt; &quot;Alex&quot;
+{{instId.runtimes.0.output.children.#(%&quot;*a*&quot;)#}}    &gt;&gt; [&quot;Sara&quot;,&quot;Jack&quot;]
+</code></pre></div><p>甚至可以支持一些嵌套查询的语法：</p> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.friends.#(nets.#(==&quot;fb&quot;))#.first}}    &gt;&gt; [&quot;Dale&quot;,&quot;Roger&quot;]
+</code></pre></div><p><code>~</code>（波形符）运算符会在比较之前将值转换为布尔值。</p> <p>例如，要查询所有 true 、 false 和null值：</p> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.vals.#(b==~true)#.a}}     &gt;&gt; [2,6,7,8]
+{{instId.runtimes.0.output.vals.#(b==~false)#.a}}    &gt;&gt; [3,4,5,9,10,11]
+{{instId.runtimes.0.output.vals.#(b==~null)#.a}}     &gt;&gt; [10,11]
+</code></pre></div><h3 id="修饰符语法支持"><a href="#修饰符语法支持" class="header-anchor">#</a> 修饰符语法支持</h3> <p>修饰符类似于把一些常用的操作，例如数组反转、移除空格等操作包装成一个函数调用的方式使用，例如：</p> <ul><li><code>@reverse</code>: 反转数组成员</li> <li><code>@trim</code>: 删除json中的所有空格</li> <li><code>@keys</code>: 返回对象的key列表</li> <li><code>@values</code>: 返回对象的value列表</li> <li><code>@tostr</code>: 将json转换成字符串</li> <li><code>@fromstr</code>: 将字符串转换成json</li></ul> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.children|@reverse}}           &gt;&gt; [&quot;Jack&quot;,&quot;Alex&quot;,&quot;Sara&quot;]
+{{instId.runtimes.0.output.children|@reverse|0}}         &gt;&gt; &quot;Jack&quot;
+</code></pre></div><h3 id="自定义修饰符"><a href="#自定义修饰符" class="header-anchor">#</a> 自定义修饰符</h3> <p>如果一些内置的修饰符不满足需求，引擎甚至可以支持用户自定义修饰符，提高引擎的变量表达式的语法拓展性。</p> <p>例如，实现字符串大小写转换的修饰符。</p> <div class="language-go extra-class"><pre class="language-go"><code>engine<span class="token punctuation">.</span><span class="token function">AddModifier</span><span class="token punctuation">(</span><span class="token string">&quot;case&quot;</span><span class="token punctuation">,</span> <span class="token keyword">func</span><span class="token punctuation">(</span>json<span class="token punctuation">,</span> arg <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> arg <span class="token operator">==</span> <span class="token string">&quot;upper&quot;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> strings<span class="token punctuation">.</span><span class="token function">ToUpper</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">if</span> arg <span class="token operator">==</span> <span class="token string">&quot;lower&quot;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> strings<span class="token punctuation">.</span><span class="token function">ToLower</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> json
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+</code></pre></div><p>使用：</p> <div class="language- extra-class"><pre class="language-text"><code>{{instId.runtimes.0.output.children.@case:upper}}                  &gt;&gt; [&quot;SARA&quot;,&quot;ALEX&quot;,&quot;JACK&quot;]
+{{instId.runtimes.0.output.children.@case:lower.@reverse}}         &gt;&gt; [&quot;jack&quot;,&quot;alex&quot;,&quot;sara&quot;]
+</code></pre></div><p>前面介绍的所有语法，都是实现了对数据元素的读操作，并不涉及修改，如果想要实现对数据元素的写操作，可以结合前面设计的【变量读写】任务类型来实现对数据元素读写操作。</p></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">9/12/2024, 11:20:51 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/4.4-资源调度机制-资源模式.html" class="prev">
+        4.4 资源调度机制-资源模式
+      </a></span> <span class="next"><a href="/4.6-异常处理机制-异常处理模式.html">
+        4.6 异常处理机制-异常处理模式
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/53.b6798440.js" defer></script>
+  </body>
+</html>

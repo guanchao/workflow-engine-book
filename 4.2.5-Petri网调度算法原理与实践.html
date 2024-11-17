@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>流程引擎原理与实践</title>
+    <meta name="generator" content="VuePress 1.9.10">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?925c3dadc75643902ba1d4bef48fa406";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script></script>
+    <link rel="icon" href="/favicon.png">
+    <meta name="description" content="国内首本从工程角度系统性介绍流程引擎的技术体系">
+    <meta name="baidu-site-verification" content="codeva-c7FETTq8fo">
+    <meta name="keywords" content="开源电子书，工作流技术体系，流程引擎技术体系，工作流，流程引擎，事件驱动机制，权限系统设计，云原生工作流，Crontab工作流，工作流系统架构，流程建模，DAG，FSM，WFMC，BPMN，BPM，Airflow，OsWorkflow，Petri">
+    
+    <link rel="preload" href="/assets/css/0.styles.8f3dca9f.css" as="style"><link rel="preload" href="/assets/js/app.b8820ad2.js" as="script"><link rel="preload" href="/assets/js/2.a6c4a04f.js" as="script"><link rel="preload" href="/assets/js/1.04b49174.js" as="script"><link rel="preload" href="/assets/js/19.08beb14f.js" as="script"><link rel="prefetch" href="/assets/js/10.01c85a43.js"><link rel="prefetch" href="/assets/js/11.36ba8367.js"><link rel="prefetch" href="/assets/js/12.49270403.js"><link rel="prefetch" href="/assets/js/13.9964bf6f.js"><link rel="prefetch" href="/assets/js/14.1ffdb2cc.js"><link rel="prefetch" href="/assets/js/15.3ec6e020.js"><link rel="prefetch" href="/assets/js/16.223f06e4.js"><link rel="prefetch" href="/assets/js/17.49a0611a.js"><link rel="prefetch" href="/assets/js/18.5e539e58.js"><link rel="prefetch" href="/assets/js/20.2fd50ddb.js"><link rel="prefetch" href="/assets/js/21.94815126.js"><link rel="prefetch" href="/assets/js/22.7335372f.js"><link rel="prefetch" href="/assets/js/23.efd43c2e.js"><link rel="prefetch" href="/assets/js/24.33511251.js"><link rel="prefetch" href="/assets/js/25.9103752e.js"><link rel="prefetch" href="/assets/js/26.be3c6fce.js"><link rel="prefetch" href="/assets/js/27.a66d9ab9.js"><link rel="prefetch" href="/assets/js/28.db24d1a7.js"><link rel="prefetch" href="/assets/js/29.e639cc41.js"><link rel="prefetch" href="/assets/js/3.8ee85a39.js"><link rel="prefetch" href="/assets/js/30.9f96cad1.js"><link rel="prefetch" href="/assets/js/31.76245b5d.js"><link rel="prefetch" href="/assets/js/32.01a0bbd7.js"><link rel="prefetch" href="/assets/js/33.6cb05ad6.js"><link rel="prefetch" href="/assets/js/34.370a24a6.js"><link rel="prefetch" href="/assets/js/35.83692dfe.js"><link rel="prefetch" href="/assets/js/36.c783d15a.js"><link rel="prefetch" href="/assets/js/37.ac210fe0.js"><link rel="prefetch" href="/assets/js/38.07dc64eb.js"><link rel="prefetch" href="/assets/js/39.4ef28dca.js"><link rel="prefetch" href="/assets/js/4.9d17ba4d.js"><link rel="prefetch" href="/assets/js/40.a8fcb556.js"><link rel="prefetch" href="/assets/js/41.98d7d1f0.js"><link rel="prefetch" href="/assets/js/42.e31dd182.js"><link rel="prefetch" href="/assets/js/43.822702b0.js"><link rel="prefetch" href="/assets/js/44.50c68594.js"><link rel="prefetch" href="/assets/js/45.4e32699e.js"><link rel="prefetch" href="/assets/js/46.09f04e77.js"><link rel="prefetch" href="/assets/js/47.35c13096.js"><link rel="prefetch" href="/assets/js/48.99dfb60f.js"><link rel="prefetch" href="/assets/js/49.e1984c48.js"><link rel="prefetch" href="/assets/js/5.5682b71e.js"><link rel="prefetch" href="/assets/js/50.4242e15e.js"><link rel="prefetch" href="/assets/js/51.bdee7514.js"><link rel="prefetch" href="/assets/js/52.3b23c6f4.js"><link rel="prefetch" href="/assets/js/53.b6798440.js"><link rel="prefetch" href="/assets/js/54.ac356f09.js"><link rel="prefetch" href="/assets/js/55.79840f1c.js"><link rel="prefetch" href="/assets/js/56.343306c2.js"><link rel="prefetch" href="/assets/js/57.90f7511a.js"><link rel="prefetch" href="/assets/js/58.59457ff7.js"><link rel="prefetch" href="/assets/js/59.a05e2b0c.js"><link rel="prefetch" href="/assets/js/6.6aa986f5.js"><link rel="prefetch" href="/assets/js/60.7d6e698d.js"><link rel="prefetch" href="/assets/js/61.d1952570.js"><link rel="prefetch" href="/assets/js/62.a15b1cb5.js"><link rel="prefetch" href="/assets/js/63.69030ee5.js"><link rel="prefetch" href="/assets/js/64.a60b63a8.js"><link rel="prefetch" href="/assets/js/65.c1986cb9.js"><link rel="prefetch" href="/assets/js/66.e5747c76.js"><link rel="prefetch" href="/assets/js/67.c7de5e6a.js"><link rel="prefetch" href="/assets/js/68.96f4e3c6.js"><link rel="prefetch" href="/assets/js/69.db66370e.js"><link rel="prefetch" href="/assets/js/7.1fb8aaeb.js"><link rel="prefetch" href="/assets/js/70.8962d544.js"><link rel="prefetch" href="/assets/js/71.695bacdf.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.7bd035a8.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.8f3dca9f.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/favicon.png" alt="流程引擎原理与实践" class="logo"> <span class="site-name can-hide">流程引擎原理与实践</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="目录" class="dropdown-title"><span class="title">目录</span> <span class="arrow down"></span></button> <button type="button" aria-label="目录" class="mobile-dropdown-title"><span class="title">目录</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/1-引言.html" class="nav-link">
+  1 引言
+</a></li><li class="dropdown-item"><!----> <a href="/2-概念.html" class="nav-link">
+  2 概念
+</a></li><li class="dropdown-item"><!----> <a href="/3-流程建模和解析.html" class="nav-link">
+  3 流程建模和解析
+</a></li><li class="dropdown-item"><!----> <a href="/4-流程引擎的核心组件.html" class="nav-link">
+  4 流程引擎的核心组件
+</a></li><li class="dropdown-item"><!----> <a href="/5-事件驱动机制.html" class="nav-link">
+  5 事件驱动机制
+</a></li><li class="dropdown-item"><!----> <a href="/6-核心表结构与接口设计.html" class="nav-link">
+  6 核心表结构与接口设计
+</a></li><li class="dropdown-item"><!----> <a href="/7-权限系统设计.html" class="nav-link">
+  7 权限系统设计
+</a></li><li class="dropdown-item"><!----> <a href="/8-分布式Crontab任务调度.html" class="nav-link">
+  8 分布式Crontab任务调度
+</a></li><li class="dropdown-item"><!----> <a href="/9-流程分析.html" class="nav-link">
+  9 流程分析
+</a></li><li class="dropdown-item"><!----> <a href="/10-云原生工作流.html" class="nav-link">
+  10 云原生工作流
+</a></li><li class="dropdown-item"><!----> <a href="/11-多引擎分布式系统实现.html" class="nav-link">
+  11 多引擎分布式系统实现
+</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="帮助" class="dropdown-title"><span class="title">帮助</span> <span class="arrow down"></span></button> <button type="button" aria-label="帮助" class="mobile-dropdown-title"><span class="title">帮助</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/about.html" class="nav-link">
+  关于
+</a></li><li class="dropdown-item"><!----> <a href="/sponsor.html" class="nav-link">
+  打赏赞助
+</a></li></ul></div></div><div class="nav-item"><a href="https://github.com/guanchao/workflow-engine-book" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第一部份：流程引擎基础</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>第二部份：流程引擎实现</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><section class="sidebar-group collapsable is-sub-group depth-1"><p class="sidebar-heading open"><span>4 流程引擎的核心组件</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/4.1-WFMC工作流参考模型.html" class="sidebar-link">4.1 WFMC工作流参考模型</a></li><li><section class="sidebar-group collapsable is-sub-group depth-2"><p class="sidebar-heading open"><span>4.2 任务调度机制</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/4.2.1-DAG调度算法原理与实践.html" class="sidebar-link">4.2.1 DAG调度算法原理与实践</a></li><li><a href="/4.2.2-开源Airflow DAG调度算法剖析.html" class="sidebar-link">4.2.2 开源Airflow DAG调度算法剖析</a></li><li><a href="/4.2.3-FSM调度算法原理与实践.html" class="sidebar-link">4.2.3 FSM调度算法原理与实践</a></li><li><a href="/4.2.4-开源OSWorkflow FSM调度算法剖析.html" class="sidebar-link">4.2.4 开源OSWorkflow FSM调度算法剖析</a></li><li><a href="/4.2.5-Petri网调度算法原理与实践.html" class="active sidebar-link">4.2.5 Petri网调度算法原理与实践</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/4.2.5-Petri网调度算法原理与实践.html#petri网、工作流网与令牌机制" class="sidebar-link">Petri网、工作流网与令牌机制</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/4.2.5-Petri网调度算法原理与实践.html#petri网基本概念、" class="sidebar-link">Petri网基本概念、</a></li><li class="sidebar-sub-header"><a href="/4.2.5-Petri网调度算法原理与实践.html#工作流网基本概念" class="sidebar-link">工作流网基本概念</a></li></ul></li><li class="sidebar-sub-header"><a href="/4.2.5-Petri网调度算法原理与实践.html#petri网算法实现步骤" class="sidebar-link">Petri网算法实现步骤</a></li><li class="sidebar-sub-header"><a href="/4.2.5-Petri网调度算法原理与实践.html#petri网令牌机制实践-单线程版本" class="sidebar-link">Petri网令牌机制实践（单线程版本）</a></li><li class="sidebar-sub-header"><a href="/4.2.5-Petri网调度算法原理与实践.html#petri网令牌机制实践-多线程版本" class="sidebar-link">Petri网令牌机制实践（多线程版本）</a></li></ul></li><li><a href="/4.2.6-开源YAWL Petri网调度算法剖析.html" class="sidebar-link">4.2.6 开源YAWL Petri网调度算法剖析</a></li></ul></section></li><li><a href="/4.3-工作流模式-控制流模式.html" class="sidebar-link">4.3 工作流模式-控制流模式</a></li><li><a href="/4.4-资源调度机制-资源模式.html" class="sidebar-link">4.4 资源调度机制-资源模式</a></li><li><a href="/4.5-数据管理机制-数据模式.html" class="sidebar-link">4.5 数据管理机制-数据模式</a></li><li><a href="/4.6-异常处理机制-异常处理模式.html" class="sidebar-link">4.6 异常处理机制-异常处理模式</a></li><li><a href="/4.7-引擎执行模式.html" class="sidebar-link">4.7 引擎执行模式</a></li></ul></section></li><li><a href="/5-事件驱动机制.html" class="sidebar-link">5 事件驱动机制</a></li><li><a href="/6-核心表结构与接口设计.html" class="sidebar-link">6 核心表结构与接口设计</a></li><li><a href="/7-权限系统设计.html" class="sidebar-link">7 权限系统设计</a></li><li><a href="/8-分布式Crontab任务调度.html" class="sidebar-link">8 分布式Crontab任务调度</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>第三部份：流程引擎进阶</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><p>​	实际上，工作流引擎的许多概念和机制都可以通过Petri网来描述和理解。例如，工作流引擎中的任务可以对应到Petri网中的变迁，工作流引擎中的工作流程可以对应到Petri网中的一系列转移和库所。通过Petri网，我们可以更好地理解和分析工作流引擎的行为，包括并发性、同步性、互斥性等。</p> <h2 id="petri网、工作流网与令牌机制"><a href="#petri网、工作流网与令牌机制" class="header-anchor">#</a> Petri网、工作流网与令牌机制</h2> <h3 id="petri网基本概念、"><a href="#petri网基本概念、" class="header-anchor">#</a> Petri网基本概念、</h3> <p>Petri网由库所（place）、变迁（transition）、有向弧（arc）和令牌（token）组成，形式上是一个有向双重图。</p> <img src="/assets/img/3.1 petri网的基础元素.0ef45b99.png" alt="image-20240130232152375" style="zoom:50%;"> <img src="/assets/img/4 petrinet-demo.5f93721f.png" alt="image-20240313194427717" style="zoom:50%;"> <h4 id="结构"><a href="#结构" class="header-anchor">#</a> 结构</h4> <p>Petri网的元素：</p> <ul><li><p><strong>库所</strong>（Place）圆形节点，表示系统的状态或资源，是一个被动的组件，可以存储令牌。</p></li> <li><p><strong>变迁</strong>（Transition）方形节点，表示系统中可能发生的事件或动作，每个变迁都会导致令牌的转移。</p></li> <li><p><strong>有向弧</strong>（Arc）是库所和变迁之间的有向弧，表示状态和事件之间的依赖关系。弧线上的数字代表要消耗的令牌数（为了避免混乱，当数字为1时默认不显示）。有向弧只允许库所指向变迁或者变迁指向库所。</p> <img src="/assets/img/4 petrinet-arch.212e7044.png" alt="image-20240313200218975" style="zoom:33%;"></li> <li><p><strong>令牌</strong>（Token）是库所中的动态对象，可以从一个库所移动到另一个库所。</p></li></ul> <p>打个比方：token就像电流，transition就像设备，arc是电线，电流（token）根据电线（arc）经过设备（transition），设备就会有反应（例如：灯亮了、风扇动了等）</p> <h4 id="规则"><a href="#规则" class="header-anchor">#</a> 规则</h4> <ul><li>有向弧是有方向的</li> <li>两个库所之间或两个变迁之间不允许有弧</li> <li>库所可以拥有任意数量的令牌</li></ul> <h4 id="行为"><a href="#行为" class="header-anchor">#</a> 行为</h4> <p>如果一个变迁的每个<strong>输入库所</strong>（input place）都拥有令牌时，该变迁即为<strong>被允许（enable）</strong>。一个变迁被允许时，变迁将<strong>发生</strong>（fire），<strong>输入库所</strong>（input place）的令牌被消耗，同时为<strong>输出库所</strong>（output place）产生令牌。</p> <p>例如前面的例子：我们看到当库所Storage只有1个令牌时，变迁Distribute是没有被激活的。当库所Storage有2个令牌时，满足了变迁发生所需的令牌数，此时变迁Distribute被激活了。</p> <img src="/assets/img/4 petrinet-demo-5.33fee95f.png" alt="image-20240313194514121" style="zoom:50%;"> <h4 id="并发和汇聚-split-join"><a href="#并发和汇聚-split-join" class="header-anchor">#</a> 并发和汇聚 split-join</h4> <p>表达并行发生的事件通常是必要的。下图的网络展示了如何将单个顺序进程分为两个并行运行然后同步的分支。</p> <img src="/assets/img/4 petrinet-split-join-1.db5e7365.png" alt="image-20240313195009633" style="zoom:50%;"> <p>当令牌通过变迁T1以后，会复制同样分支个数的令牌给库所P1和P4，</p> <img src="/assets/img/4 petrinet-split-join-2.e22f3f7a.png" alt="image-20240313195125379" style="zoom:50%;"> <p>并且只有当库所P2和P5都拥有令牌时，变迁T0才能被激活。</p> <img src="/assets/img/4 petrinet-split-join-3.cff61242.png" alt="image-20240313195327580" style="zoom:50%;"> <p>两个令牌经过变迁T0后又被合并会一个令牌传递给P3。</p> <img src="/assets/img/4 petrinet-split-join-4.68ee2ba1.png" alt="image-20240313195427084" style="zoom:50%;"> <h4 id="例子"><a href="#例子" class="header-anchor">#</a> 例子</h4> <p>如下图，库所A开始时拥有2个令牌，可以看到这是变迁1是被允许发生的（绿色），而其他变迁2和3此时是不允许发生（灰色）。</p> <img src="/assets/img/4 petrinet-demo-1.579715ba.png" alt="image-20240313193500111" style="zoom:50%;"> <p>当变迁1发生后，库所A的一个令牌会移动到库所B，此时变迁1和2都处于允许状态，因为他们的输入库所都拥有令牌。</p> <img src="/assets/img/4 petrinet-demo-2.ae7b77dd.png" alt="image-20240313193626571" style="zoom:50%;"> <p>当变迁2发生以后，库所B的令牌就移动到库所C，导致变迁3变成激活的，而变迁2由于输入库所B没有令牌，所以不被允许变迁。</p> <img src="/assets/img/4 petrinet-demo-3.490bc1e0.png" alt="image-20240313193800321" style="zoom:50%;"> <p>接下来变迁3发生后，库所C的令牌移动到库所D，此时变迁4状态变成激活的，而变迁3无法发生。</p> <img src="/assets/img/4 petrinet-demo-4.822739af.png" alt="image-20240313193859485" style="zoom:50%;"> <p>最后，变迁4发生以后，令牌又回到库所A，变成只有变迁1是激活的。</p> <img src="/assets/img/4 petrinet-demo-1.579715ba.png" alt="image-20240313193500111" style="zoom:50%;"> <h3 id="工作流网基本概念"><a href="#工作流网基本概念" class="header-anchor">#</a> 工作流网基本概念</h3> <p>工作流网（Workflow Net）是一种基于Petri网的建模方法，是一种特殊的Petri网，专门用于描述和分析工作流程系统。它是由荷兰计算机科学家Wil van der Aalst教授于1990年代提出的。工作流网在Petri网的基础上，增加了特定的约束和结构，使其更适合表示工作流程。</p> <img src="/assets/img/3.1 工作流网的基础元素.153f9ed6.png" alt="image-20240130232233617" style="zoom:50%;"> <p>主要包括以下特点：</p> <ul><li>具有唯一的开始库所和结束库所，分别表示工作流程的开始和结束。同时，开始库所没有入边，结束库所没有出边。</li> <li>每个库所和变迁都在开始库所到结束库所的路径上，即不存在孤立的库所。</li> <li>变迁（transition）表示工作流程中的任务或活动。在这里的变迁类型做了更进一步的划分，如上图所示：除了自动化任务，还有人工任务、事件任务以及分支汇聚类型的任务。</li> <li>库所（place）表示工作流程中的状态或条件。</li> <li>有向弧表示任务之间的依赖关系和资源流动。</li></ul> <p>而一个合理的工作流网，需要同时满足以下几个条件：</p> <ul><li>开始库所中的每个Token，最终都会在结束库所中产生一个Token。就是说明工作流网最终一定会结束，没有结束的工作流网是没有意义。</li> <li>当Token出现在结束库所时，其他库所都为空没有Token。</li> <li>在可达图中，每个变迁都能被使能。这保证每个路径都是有意义的。</li></ul> <p>可见，工作流网的特点更接近于我们的本书描述的流程。</p> <h2 id="petri网算法实现步骤"><a href="#petri网算法实现步骤" class="header-anchor">#</a> Petri网算法实现步骤</h2> <p>以下是实现Petri网算法的一般流程：</p> <ol><li>定义Petri网的数据结构，通常包括：
+<ul><li>库所（place）：表示系统的状态，可以包含令牌（token）。</li> <li>变迁（transition）：表示系统中可能发生的事件或操作，它连接输入库所和输出库所。</li> <li>弧（arc）：表示库所和变迁之间的关系，指示令牌如何在库所之间移动。</li></ul></li> <li>初始化Petri网，包括：
+<ul><li>添加库所，并为起始库所分配初始令牌。</li> <li>添加变迁，并定义每个变迁的输入库所、输出库所和关联的操作（可选）。</li></ul></li> <li>执行Petri网，通常包括以下步骤：
+<ul><li>确定当前可执行的变迁：检查所有变迁，确定哪些变迁具有足够的输入令牌来执行。</li> <li>选择一个可执行的变迁：根据某种策略（如优先级、随机选择等）选择一个可执行的变迁。</li> <li>执行所选的变迁：从输入库所中移除令牌，将令牌放入输出库所，并执行关联的操作（可选）。</li> <li>重复执行上述步骤，直到没有可执行的变迁或达到预定义的结束条件。</li></ul></li> <li>分析和验证Petri网的行为：根据实际需求，可以对Petri网的执行结果进行分析和验证，以确保它符合预期的行为。</li></ol> <p>这是一个通用的Petri网算法实现流程。在实际应用中，可能需要根据具体需求对这个流程进行扩展和优化。例如，可以添加更复杂的变迁类型（如带有优先级或抑制弧的变迁），或者实现更高级的分析和验证方法。</p> <h2 id="petri网令牌机制实践-单线程版本"><a href="#petri网令牌机制实践-单线程版本" class="header-anchor">#</a> Petri网令牌机制实践（单线程版本）</h2> <p>在Petri网中，系统的状态由令牌（token）的分布来表示，这些令牌在库所（place）之间按照一定的规则（transition）移动。</p> <p>以下是一个简单的Python实现，定义了一个Petri网，以及一个函数来执行一个变迁。并且定义一个Transition类，这个类可以存储关联的输入和输出库所，以及一个可执行的函数。</p> <p>在这个例子中，我们将创建一个Petri网，它包含多个变迁，以及一个自定义函数，用于在执行变迁时打印信息。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">PetriNet</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>places <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        self<span class="token punctuation">.</span>transitions <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token keyword">def</span> <span class="token function">add_place</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">,</span> tokens<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>places<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> tokens
+
+    <span class="token keyword">def</span> <span class="token function">add_transition</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">,</span> transition<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>transitions<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> transition
+
+    <span class="token keyword">def</span> <span class="token function">execute_transition</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        transition <span class="token operator">=</span> self<span class="token punctuation">.</span>transitions<span class="token punctuation">[</span>name<span class="token punctuation">]</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> transition<span class="token punctuation">.</span>can_execute<span class="token punctuation">(</span>self<span class="token punctuation">.</span>places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;Transition </span><span class="token interpolation"><span class="token punctuation">{</span>name<span class="token punctuation">}</span></span><span class="token string"> cannot be executed due to lack of tokens&quot;</span></span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        transition<span class="token punctuation">.</span>execute<span class="token punctuation">(</span>self<span class="token punctuation">.</span>places<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;Transition </span><span class="token interpolation"><span class="token punctuation">{</span>name<span class="token punctuation">}</span></span><span class="token string"> executed successfully&quot;</span></span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">class</span> <span class="token class-name">Transition</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> inputs<span class="token punctuation">,</span> outputs<span class="token punctuation">,</span> func<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>inputs <span class="token operator">=</span> inputs
+        self<span class="token punctuation">.</span>outputs <span class="token operator">=</span> outputs
+        self<span class="token punctuation">.</span>func <span class="token operator">=</span> func
+
+    <span class="token keyword">def</span> <span class="token function">can_execute</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> place<span class="token punctuation">,</span> tokens <span class="token keyword">in</span> self<span class="token punctuation">.</span>inputs<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># 判断库所的输入令牌数是否足够</span>
+            <span class="token keyword">if</span> places<span class="token punctuation">.</span>get<span class="token punctuation">(</span>place<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> tokens<span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token boolean">False</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+
+    <span class="token keyword">def</span> <span class="token function">execute</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> place<span class="token punctuation">,</span> tokens <span class="token keyword">in</span> self<span class="token punctuation">.</span>inputs<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            places<span class="token punctuation">[</span>place<span class="token punctuation">]</span> <span class="token operator">-=</span> tokens
+        <span class="token keyword">for</span> place<span class="token punctuation">,</span> tokens <span class="token keyword">in</span> self<span class="token punctuation">.</span>outputs<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            places<span class="token punctuation">[</span>place<span class="token punctuation">]</span> <span class="token operator">+=</span> tokens
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>func<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>func<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">print_info</span><span class="token punctuation">(</span>transition_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;Executing transition </span><span class="token interpolation"><span class="token punctuation">{</span>transition_name<span class="token punctuation">}</span></span><span class="token string">&quot;</span></span><span class="token punctuation">)</span>
+
+pn <span class="token operator">=</span> PetriNet<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 添加库所</span>
+pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p1&quot;</span><span class="token punctuation">,</span> tokens<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">)</span>
+pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p3&quot;</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 添加变迁</span>
+t1 <span class="token operator">=</span> Transition<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;p1&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> print_info<span class="token punctuation">(</span><span class="token string">&quot;t1&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+t2 <span class="token operator">=</span> Transition<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&quot;p3&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> print_info<span class="token punctuation">(</span><span class="token string">&quot;t2&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+pn<span class="token punctuation">.</span>add_transition<span class="token punctuation">(</span><span class="token string">&quot;t1&quot;</span><span class="token punctuation">,</span> t1<span class="token punctuation">)</span>
+pn<span class="token punctuation">.</span>add_transition<span class="token punctuation">(</span><span class="token string">&quot;t2&quot;</span><span class="token punctuation">,</span> t2<span class="token punctuation">)</span>
+
+<span class="token comment"># 执行变迁</span>
+pn<span class="token punctuation">.</span>execute_transition<span class="token punctuation">(</span><span class="token string">&quot;t1&quot;</span><span class="token punctuation">)</span>  <span class="token comment"># 输出：Executing transition t1</span>
+                             <span class="token comment">#       Transition t1 executed successfully</span>
+
+pn<span class="token punctuation">.</span>execute_transition<span class="token punctuation">(</span><span class="token string">&quot;t2&quot;</span><span class="token punctuation">)</span>  <span class="token comment"># 输出：Executing transition t2</span>
+                             <span class="token comment">#       Transition t2 executed successfully</span>
+
+pn<span class="token punctuation">.</span>execute_transition<span class="token punctuation">(</span><span class="token string">&quot;t1&quot;</span><span class="token punctuation">)</span>  <span class="token comment"># 输出：Executing transition t1</span>
+                             <span class="token comment">#       Transition t1 executed successfully</span>
+  
+pn<span class="token punctuation">.</span>execute_transition<span class="token punctuation">(</span><span class="token string">&quot;t2&quot;</span><span class="token punctuation">)</span>  <span class="token comment"># 输出：Executing transition t2</span>
+                             <span class="token comment">#       Transition t2 executed successfully</span>
+
+pn<span class="token punctuation">.</span>execute_transition<span class="token punctuation">(</span><span class="token string">&quot;t1&quot;</span><span class="token punctuation">)</span>  <span class="token comment"># 输出：Transition t1 cannot be executed due to lack of tokens</span>
+</code></pre></div><p>在这个例子中，我们创建了一个包含3个库所（p1, p2, p3）和2个变迁（t1, t2）的Petri网。</p> <p>初始时，库所p1有2个令牌。当执行变迁t1时，它会从p1中移除一个令牌，并将其放入p2。执行变迁t2时，它会从p2中移除一个令牌，并将其放入p3。我们还添加了一个自定义函数，用于在执行变迁时打印变迁的名称。在执行过程中，我们可以看到这些函数被正确地调用。最后，当再次尝试执行t1时，由于p1中没有足够的令牌，变迁将无法执行。</p> <p>通过如下命令执行代码：</p> <div class="language- extra-class"><pre class="language-text"><code>python petrinet.py
+</code></pre></div><p>如果一切顺利，你可能会得到如下的输出：</p> <div class="language- extra-class"><pre class="language-text"><code>Executing transition t1
+Transition t1 executed successfully
+Executing transition t2
+Transition t2 executed successfully
+Executing transition t1
+Transition t1 executed successfully
+Executing transition t2
+Transition t2 executed successfully
+Transition t1 cannot be executed due to lack of tokens
+</code></pre></div><p>当然，前面还有一个问题，我们怎么判断这个流程结束了？</p> <p>在Petri网中，流程是否结束通常取决于你的使用场景和定义。一种常见的方法是检查是否还有可以执行的变迁。如果没有任何变迁可以执行，我们可以认为流程已经结束。</p> <p>我们可以在PetriNet类中添加一个方法来检查是否还有可执行的变迁：</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">PetriNet</span><span class="token punctuation">:</span>
+    <span class="token comment"># ...其它方法...</span>
+
+    <span class="token keyword">def</span> <span class="token function">has_executable_transitions</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> transition <span class="token keyword">in</span> self<span class="token punctuation">.</span>transitions<span class="token punctuation">.</span>values<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> transition<span class="token punctuation">.</span>can_execute<span class="token punctuation">(</span>self<span class="token punctuation">.</span>places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token boolean">True</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+</code></pre></div><p>这个方法会检查每一个变迁，看它们是否可以在当前的令牌分布下执行。如果有任何一个变迁可以执行，它就会返回True。如果没有任何变迁可以执行，它就会返回False。</p> <p>然后，在你的主程序中，你可以使用一个循环来持续执行变迁，直到没有可执行的变迁为止：</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">while</span> pn<span class="token punctuation">.</span>has_executable_transitions<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 在这里，你可以选择一个可以执行的变迁来执行</span>
+    <span class="token comment"># 这个选择可能是随机的，也可能是基于某种策略的</span>
+    <span class="token comment"># 在这个例子中，我们只是简单地执行第一个可以执行的变迁</span>
+    <span class="token keyword">for</span> name<span class="token punctuation">,</span> transition <span class="token keyword">in</span> pn<span class="token punctuation">.</span>transitions<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> transition<span class="token punctuation">.</span>can_execute<span class="token punctuation">(</span>pn<span class="token punctuation">.</span>places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            pn<span class="token punctuation">.</span>execute_transition<span class="token punctuation">(</span>name<span class="token punctuation">)</span>
+            <span class="token keyword">break</span>
+</code></pre></div><p>这个循环会持续执行，直到没有可执行的变迁为止，此时我们可以认为流程已经结束。</p> <h2 id="petri网令牌机制实践-多线程版本"><a href="#petri网令牌机制实践-多线程版本" class="header-anchor">#</a> Petri网令牌机制实践（多线程版本）</h2> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">import</span> time
+<span class="token keyword">import</span> threading
+
+<span class="token keyword">class</span> <span class="token class-name">PetriNet</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>places <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        self<span class="token punctuation">.</span>transitions <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token keyword">def</span> <span class="token function">add_place</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">,</span> tokens<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>places<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> tokens
+
+    <span class="token keyword">def</span> <span class="token function">add_transition</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">,</span> transition<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>transitions<span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> transition
+        
+    <span class="token keyword">def</span> <span class="token function">has_executable_transitions</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> transition <span class="token keyword">in</span> self<span class="token punctuation">.</span>transitions<span class="token punctuation">.</span>values<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> transition<span class="token punctuation">.</span>can_execute<span class="token punctuation">(</span>self<span class="token punctuation">.</span>places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token boolean">True</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+    <span class="token keyword">def</span> <span class="token function">execute_transition</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        transition <span class="token operator">=</span> self<span class="token punctuation">.</span>transitions<span class="token punctuation">[</span>name<span class="token punctuation">]</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> transition<span class="token punctuation">.</span>can_execute<span class="token punctuation">(</span>self<span class="token punctuation">.</span>places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;Transition </span><span class="token interpolation"><span class="token punctuation">{</span>name<span class="token punctuation">}</span></span><span class="token string"> cannot be executed due to lack of tokens&quot;</span></span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        transition<span class="token punctuation">.</span>execute<span class="token punctuation">(</span>self<span class="token punctuation">.</span>places<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;Transition </span><span class="token interpolation"><span class="token punctuation">{</span>name<span class="token punctuation">}</span></span><span class="token string"> executed successfully&quot;</span></span><span class="token punctuation">)</span>
+        
+    <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;Init =&gt; </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>places<span class="token punctuation">}</span></span><span class="token string">\n&quot;</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">while</span> self<span class="token punctuation">.</span>has_executable_transitions<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">for</span> name<span class="token punctuation">,</span> transition <span class="token keyword">in</span> self<span class="token punctuation">.</span>transitions<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">if</span> transition<span class="token punctuation">.</span>can_execute<span class="token punctuation">(</span>self<span class="token punctuation">.</span>places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    self<span class="token punctuation">.</span>execute_transition<span class="token punctuation">(</span>name<span class="token punctuation">)</span>
+                    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;After transition=&gt; </span><span class="token interpolation"><span class="token punctuation">{</span>self<span class="token punctuation">.</span>places<span class="token punctuation">}</span></span><span class="token string">\n&quot;</span></span><span class="token punctuation">)</span>
+                    <span class="token keyword">break</span>
+            time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">0.1</span><span class="token punctuation">)</span>  <span class="token comment"># 避免过度占用CPU资源</span>
+        
+
+
+<span class="token keyword">class</span> <span class="token class-name">Transition</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> inputs<span class="token punctuation">,</span> outputs<span class="token punctuation">,</span> func<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>inputs <span class="token operator">=</span> inputs
+        self<span class="token punctuation">.</span>outputs <span class="token operator">=</span> outputs
+        self<span class="token punctuation">.</span>func <span class="token operator">=</span> func
+
+    <span class="token keyword">def</span> <span class="token function">can_execute</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> place<span class="token punctuation">,</span> need_tokens <span class="token keyword">in</span> self<span class="token punctuation">.</span>inputs<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> places<span class="token punctuation">.</span>get<span class="token punctuation">(</span>place<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> need_tokens<span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token boolean">False</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+
+    <span class="token keyword">def</span> <span class="token function">execute</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> places<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> place<span class="token punctuation">,</span> tokens <span class="token keyword">in</span> self<span class="token punctuation">.</span>inputs<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            places<span class="token punctuation">[</span>place<span class="token punctuation">]</span> <span class="token operator">-=</span> tokens
+        <span class="token keyword">for</span> place<span class="token punctuation">,</span> tokens <span class="token keyword">in</span> self<span class="token punctuation">.</span>outputs<span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            places<span class="token punctuation">[</span>place<span class="token punctuation">]</span> <span class="token operator">+=</span> tokens
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>func<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>func<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 使用示例</span>
+<span class="token keyword">def</span> <span class="token function">print_hello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Hello, world!&quot;</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">print_info</span><span class="token punctuation">(</span>transition_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f&quot;Executing transition </span><span class="token interpolation"><span class="token punctuation">{</span>transition_name<span class="token punctuation">}</span></span><span class="token string">&quot;</span></span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pn <span class="token operator">=</span> PetriNet<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 添加库所</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p1&quot;</span><span class="token punctuation">,</span> tokens<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p3&quot;</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 添加变迁</span>
+    <span class="token comment"># t1表示这个迁移要发生，则前置的place必须要有1个token。</span>
+    <span class="token comment"># 同理t2要发生迁移，前置的place也需要有1个token。</span>
+    t1 <span class="token operator">=</span> Transition<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;p1&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> print_info<span class="token punctuation">(</span><span class="token string">&quot;t1&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    t2 <span class="token operator">=</span> Transition<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&quot;p3&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">lambda</span><span class="token punctuation">:</span> print_info<span class="token punctuation">(</span><span class="token string">&quot;t2&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    pn<span class="token punctuation">.</span>add_transition<span class="token punctuation">(</span><span class="token string">&quot;t1&quot;</span><span class="token punctuation">,</span> t1<span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_transition<span class="token punctuation">(</span><span class="token string">&quot;t2&quot;</span><span class="token punctuation">,</span> t2<span class="token punctuation">)</span>
+
+    <span class="token comment"># 创建并启动一个新线程来执行Petri网</span>
+    t <span class="token operator">=</span> threading<span class="token punctuation">.</span>Thread<span class="token punctuation">(</span>target<span class="token operator">=</span>pn<span class="token punctuation">.</span>run<span class="token punctuation">)</span>
+    t<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 在主线程中检查Petri网是否已经结束</span>
+    <span class="token keyword">while</span> t<span class="token punctuation">.</span>is_alive<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Petri net is still running...&quot;</span><span class="token punctuation">)</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Petri net has finished.&quot;</span><span class="token punctuation">)</span>
+    
+
+main<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><p>main函数中创建的Petri网例子如下图所示：</p> <img src="/assets/img/4 petri网举例.84a4e584.png" alt="image-20240313125353884" style="zoom:33%;"> <p>执行命令：</p> <div class="language- extra-class"><pre class="language-text"><code>python petrinet-thread.py
+</code></pre></div><p>如一切顺利，你会得到如下输出：</p> <div class="language- extra-class"><pre class="language-text"><code>Init =&gt; {'p1': 1, 'p2': 0, 'p3': 0}
+
+Executing transition t1
+Transition t1 executed successfully
+After transition=&gt; {'p1': 0, 'p2': 1, 'p3': 0}
+
+Petri net is still running...
+Executing transition t2
+Transition t2 executed successfully
+After transition=&gt; {'p1': 0, 'p2': 0, 'p3': 1}
+
+Petri net has finished.
+</code></pre></div><p>如果我们把p1初始化的令牌改为0，再次运行上面的代码，会发现流程根本不运行，这是因为t1变迁的输入库所p1没有令牌。</p> <blockquote><p>AND Split并发路由</p></blockquote> <p>前面我们代码测试的Petri网都是顺序的，下面我们来测试前面带并发分支的情况：</p> <img src="/assets/img/4 petrinet-split-join-1.db5e7365.png" alt="image-20240313195009633" style="zoom:50%;"> <p>把前面的main函数改成如下的例子，下面的例子Petr网如上图所示。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token comment"># 其他代码...</span>
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token comment"># 示例</span>
+    pn <span class="token operator">=</span> PetriNet<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p0&quot;</span><span class="token punctuation">,</span> tokens<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p1&quot;</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p3&quot;</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p4&quot;</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_place<span class="token punctuation">(</span><span class="token string">&quot;p5&quot;</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># AND split</span>
+    t1 <span class="token operator">=</span> Transition<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;p0&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&quot;p1&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">&quot;p4&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_transition<span class="token punctuation">(</span><span class="token string">&quot;t1&quot;</span><span class="token punctuation">,</span> t1<span class="token punctuation">)</span>
+
+    <span class="token comment"># p1 -&gt; [t2] -&gt; p2</span>
+    t2 <span class="token operator">=</span> Transition<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;p1&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_transition<span class="token punctuation">(</span><span class="token string">&quot;t2&quot;</span><span class="token punctuation">,</span> t2<span class="token punctuation">)</span>
+
+    <span class="token comment"># p4 -&gt; [t3] -&gt; p5</span>
+    t3 <span class="token operator">=</span> Transition<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;p4&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&quot;p5&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_transition<span class="token punctuation">(</span><span class="token string">&quot;t3&quot;</span><span class="token punctuation">,</span> t3<span class="token punctuation">)</span>
+
+    <span class="token comment"># AND join</span>
+    t0 <span class="token operator">=</span> Transition<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">&quot;p2&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">&quot;p5&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">&quot;p3&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    pn<span class="token punctuation">.</span>add_transition<span class="token punctuation">(</span><span class="token string">&quot;t0&quot;</span><span class="token punctuation">,</span> t0<span class="token punctuation">)</span>
+
+    <span class="token comment"># 创建并启动一个新线程来执行Petri网</span>
+    t <span class="token operator">=</span> threading<span class="token punctuation">.</span>Thread<span class="token punctuation">(</span>target<span class="token operator">=</span>pn<span class="token punctuation">.</span>run<span class="token punctuation">)</span>
+    t<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">while</span> t<span class="token punctuation">.</span>is_alive<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Petri net is still running...&quot;</span><span class="token punctuation">)</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Petri net has finished.&quot;</span><span class="token punctuation">)</span>
+</code></pre></div><p>执行如下命令：</p> <div class="language- extra-class"><pre class="language-text"><code>python petrinet-thread.py
+</code></pre></div><p>如一切顺利，会得到如下输出：</p> <div class="language- extra-class"><pre class="language-text"><code>Init =&gt; {'p0': 1, 'p1': 0, 'p2': 0, 'p3': 0, 'p4': 0, 'p5': 0}
+
+Petri net is still running...
+Transition t1 executed successfully
+After transition=&gt; {'p0': 0, 'p1': 1, 'p2': 0, 'p3': 0, 'p4': 1, 'p5': 0}
+
+Transition t2 executed successfully
+After transition=&gt; {'p0': 0, 'p1': 0, 'p2': 1, 'p3': 0, 'p4': 1, 'p5': 0}
+
+Transition t3 executed successfully
+After transition=&gt; {'p0': 0, 'p1': 0, 'p2': 1, 'p3': 0, 'p4': 0, 'p5': 1}
+
+Transition t0 executed successfully
+After transition=&gt; {'p0': 0, 'p1': 0, 'p2': 0, 'p3': 1, 'p4': 0, 'p5': 0}
+
+Petri net has finished.
+</code></pre></div><img src="/assets/img/wechat.50adb4d4.png" style="zoom:15%;"></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">9/12/2024, 11:20:51 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/4.2.4-开源OSWorkflow FSM调度算法剖析.html" class="prev">
+        4.2.4 开源OSWorkflow FSM调度算法剖析
+      </a></span> <span class="next"><a href="/4.2.6-开源YAWL Petri网调度算法剖析.html">
+        4.2.6 开源YAWL Petri网调度算法剖析
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.b8820ad2.js" defer></script><script src="/assets/js/2.a6c4a04f.js" defer></script><script src="/assets/js/1.04b49174.js" defer></script><script src="/assets/js/19.08beb14f.js" defer></script>
+  </body>
+</html>
